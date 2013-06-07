@@ -14,18 +14,18 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Text</th>
+                    <th>Title</th>
                     <th>Sent On</th>
-                    <th>Viewed By <i class="icon-info-sign" data-toggle="tooltip" rel="tooltip" title="Number of users who viewed the details of message"></i></th>
+                    <th>Views <i class="icon-info-sign" data-toggle="tooltip" rel="tooltip" title="Number of users who viewed the details of the message"></i></th>
                 </tr>
             </thead>
             <tbody>
-                <% for @notification in @notifications %>
+                <% for notification in @notifications %>
                     <tr>
-                        <td><%= @notification.id %></td>
-                        <td><%= @notification.text %></td>
-                        <td><%= format_date(@notification.created_at) %></td>
-                        <td><%= link_to "#{@notifications.count} users", :class => "btn btn-success btn-small btn-block" %></td>
+                        <td><%= notification.id %></td>
+                        <td><%= notification.title %></td>
+                        <td><%= format_date(notification.created_at) %></td>
+                        <td><span class="badge"><%= notification.viewedNotifications.count %></span></td>
                     </tr>
                 <% end %>
             </tbody>

@@ -115,7 +115,8 @@ end
 
 # Create test notification1
 not1 = Notification.new(
-    :text => "Notification 1"
+    :title => "Notification 1",
+    :text => "Notification 1 is good but not that good. Lets see what happens."
     )
 testPublisher3 = Publisher.first(:email => "test@test.com")
 not1.publisher = testPublisher3
@@ -131,7 +132,8 @@ end
 
 # Create test notification2
 not2 = Notification.new(
-    :text => "Notification 2"
+    :title => "Notification 2",
+    :text => "Notification 2 is good but not that good. Lets see what happens next."
     )
 testPublisher4 = Publisher.first(:email => "test@test.com")
 not2.publisher = testPublisher4
