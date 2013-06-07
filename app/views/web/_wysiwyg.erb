@@ -1,0 +1,42 @@
+<div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+    <div class="btn-group">
+        <a class="btn btn-primary" data-edit="bold" rel="tooltip" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+        <a class="btn btn-primary" data-edit="italic" rel="tooltip" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+        <a class="btn btn-primary" data-edit="underline" rel="tooltip" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn  btn-primary" data-edit="insertunorderedlist" rel="tooltip" title="Bullet list"><i class="icon-list-ul"></i></a>
+        <a class="btn  btn-primary" data-edit="insertorderedlist" rel="tooltip" title="Number list"><i class="icon-list-ol"></i></a>
+        <a class="btn  btn-primary" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
+        <a class="btn  btn-primary" data-edit="indent" rel="tooltip" title="Indent (Tab)"><i class="icon-indent-right"></i></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn  btn-primary" data-edit="justifyleft" rel="tooltip" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
+        <a class="btn  btn-primary" data-edit="justifycenter" rel="tooltip" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
+        <a class="btn  btn-primary" data-edit="justifyright" rel="tooltip" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
+        <a class="btn  btn-primary" data-edit="justifyfull" rel="tooltip" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-primary dropdown-toggle" id="pictureBtn" rel="tooltip" title="Insert picture (or just drag &amp; drop)"><i class="icon-picture"></i></a>
+        <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 41px; height: 30px;">
+    </div>
+    <div class="btn-group">
+        <a class="btn  btn-primary dropdown-toggle" data-toggle="dropdown" rel="tooltip" title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
+            <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+            <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" rel="tooltip" title="Hyperlink"><i class="icon-link"></i></a>
+        <div class="dropdown-menu input-append">
+            <input class="span2" placeholder="URL" type="text" data-edit="createLink">
+            <button class="btn  btn-primary" type="button">Add</button>
+        </div>
+    </div>
+    <div class="btn-group">
+        <a class="btn  btn-primary" data-edit="undo" rel="tooltip" title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
+        <a class="btn  btn-primary" data-edit="redo" rel="tooltip" title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
+    </div>
+</div>

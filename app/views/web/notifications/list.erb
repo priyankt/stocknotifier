@@ -1,0 +1,35 @@
+<div class="row page-notifications-list">
+    <div class="span12">
+        <h3>Messages</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <% form_tag url(:notifications), :class => 'form-search', :method => 'GET' do %>
+            <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search across messages.." %>
+            <%= submit_tag "Search", :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Text</th>
+                    <th>Sent On</th>
+                    <th>Viewed By <i class="icon-info-sign" data-toggle="tooltip" rel="tooltip" title="Number of users who viewed the details of message"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for @notification in @notifications %>
+                    <tr>
+                        <td><%= @notification.id %></td>
+                        <td><%= @notification.text %></td>
+                        <td><%= format_date(@notification.created_at) %></td>
+                        <td><%= link_to "#{@notifications.count} users", :class => "btn btn-success btn-small btn-block" %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% will_paginate @notifications %>
+    </div>
+</div>

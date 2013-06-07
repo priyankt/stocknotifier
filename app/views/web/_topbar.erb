@@ -1,0 +1,44 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="<%= url_for(:index) %>"><strong>StockNotifier</strong></a>
+      <% if logged_in? %>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i>&nbsp;&nbsp;Users <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="<%= url_for(:new_user) %>">New User</a></li>
+                <li><a href="<%= url_for(:users) %>">View Users</a></li>
+              </ul>
+            </li>
+            <li class="divider-vertical"></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-envelope-alt"></i>&nbsp;&nbsp;Messages <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="<%= url_for(:new_notification) %>">New Message</a></li>
+                <li><a href="<%= url_for(:notifications) %>">View Messages</a></li>
+              </ul>
+            </li>
+            <li class="divider-vertical"></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-heart"></i>&nbsp;&nbsp;Sponsorer <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="<%= url_for(:new_sponsorer) %>">New Sponsorer</a></li>
+                <li><a href="<%= url_for(:sponsorers) %>">View Sponsorers</a></li>
+              </ul>
+            </li>
+            <li class="divider-vertical"></li>
+          </ul>
+          <a href="<%= url_for(:logout) %>" class="btn btn-small btn-primary pull-right">Logout</a>
+        </div><!--/.nav-collapse -->
+      <% end %>
+    </div>
+  </div>
+</div>

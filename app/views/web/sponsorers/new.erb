@@ -1,0 +1,56 @@
+<div class="row page-sponsorers-new">
+    <div class="span12">
+        <h3>New Sponsorer</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <% form_for @sponsorer, :new, :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
+            <%= f.error_messages %>
+            <%= flash_tag(:notice, :class => "alert alert-success") %>
+            
+            <legend>Create New Sponsorer</legend>
+
+            <div class="control-group">
+                <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Full Name" %>
+                <div class="controls">
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "Sponsorer Name", :required => true %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <%= f.label :email, :class => "control-label", :for => "inputEmail", :caption => "Email" %>
+                <div class="controls">
+                    <%= f.email_field :email, :id => "inputEmail", :placeholder => "Sponsorer Email", :required => true %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <%= f.label :phone, :class => "control-label", :for => "inputPhone", :caption => "Phone" %>
+                <div class="controls">
+                    <%= f.text_field :phone, :id => "inputPhone", :placeholder => "Sponsorer phone number" %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <%= f.label :website, :class => "control-label", :for => "inputWebsite", :caption => "Website" %>
+                <div class="controls">
+                    <%= f.text_field :website, :id => "inputwebsite", :placeholder => "Sponsorer Website" %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <%= f.label :address, :class => "control-label", :for => "inputAddress", :caption => "Address" %>
+                <div class="controls">
+                    <%= f.text_area :address, :id => "inputAddress", :placeholder => "Sponsorer Address" %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <%= f.submit "Create", :class => 'btn btn-primary' %>
+                </div>
+            </div>
+
+        <% end %>
+    </div>
+</div>

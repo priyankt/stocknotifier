@@ -1,0 +1,9 @@
+--- 
+:mock: none
+:migration_format: number
+:stylesheet: less
+:renderer: erb
+:script: jquery
+:test: rspec
+:orm: datamapper
+:namespace: StockNotifier

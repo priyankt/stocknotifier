@@ -1,0 +1,39 @@
+<div class="row page-users-list">
+    <div class="span12">
+        <h3>Users</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <% form_tag url(:users), :class => 'form-search', :method => 'GET' do %>
+            <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search users.." %>
+            <%= submit_tag "Search", :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Profession</th>
+                    <th>Active Since</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for user in @users %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.phone %></td>
+                        <td><%= user.city %></td>
+                        <td><%= user.occupation %></td>
+                        <td><%= format_date(user.created_at) %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% will_paginate @users %>
+    </div>
+</div>
