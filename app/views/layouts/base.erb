@@ -3,7 +3,9 @@
   
   <head>
     <meta charset="utf-8">
-    <title>Title of the document</title>
+    <% if content_for?(:title) %>  
+      <%= yield_content :title %>
+    <% end %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Priyank Tiwari">

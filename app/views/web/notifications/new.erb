@@ -1,17 +1,14 @@
-<%# Include datetime picker stylesheet %>
-<% content_for :assets do %>
-    <%= stylesheet_link_tag 'bootstrap-datetimepicker.min' %>
-    <style>
-        .bootstrap-datetimepicker-widget .dropdown-menu {
-            background-color: white !important;
-        }
-    </style>
+<% content_for :title do %>
+  <title>New Message</title>
 <% end %>
-
 <div class="row page-notifications-new">
     <div class="span12">
         <h3>New Message</h3>
         <hr/>
+    </div>
+    <div class="span12">
+        <label><strong>Message Title</strong></label>
+        <input id="title" class="span12" type="text" placeholder="Enter message title here"></input>
     </div>
     <div class="span12">
         <%= partial 'web/wysiwyg' %>
@@ -22,7 +19,7 @@
     <div class="span12">
         <span class="spacer20"></span>
         <div id="datetimepicker" class="input-append">
-            <input id="dttm" type="text" placeholder="Schedule Message"></input>
+            <input id="dttm" type="text" placeholder="Schedule Time"></input>
             <span class="add-on">
                 <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
             </span>
@@ -39,16 +36,38 @@
             $('#editor').wysiwyg();
 
             $('#sendMessage').click(function() {
-                var htmlText = $('#editor').html();
+                var t = $('#editor').html();
+                var htmlText = $.trim(t);
                 console.log(htmlText);
-                confirm("Are you sure you want to send this message?");
+                var title = $('#title').val();
+                
+                if(htmlText.length <= 0 || htmlText == '<br>' || title.length <= 0) {
+                    alert("Please enter Title and Message.");
+                    return false;
+                }
+
+                if(confirm("Are you sure you want to send this message?")) {
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/notifications/new",
+                        dataType: 'json',
+                        data: { text: htmlText, dttm: $('#dttm').val(), title: title }
+                    })
+                    .done(function( msg ) {
+                        alert( "Data Saved: " + msg );
+                    })
+                    .fail(function() { 
+                        alert("Error occured while sending message. Please contact support."); 
+                    });
+                }
             });
 
             $('#datetimepicker').datetimepicker({
                 language: 'en',
                 pickSeconds: false,
                 format: 'dd/MM/yyyy @ hh:mm',
-                //startDate: 
+                //startDate:
             });
         });
     </script>

@@ -3,7 +3,7 @@ class Notification
 
   property :id, Serial
   property :title, String
-  property :text, Text
+  property :text, Text, :length => 5000000
   property :schedule_dttm, DateTime, :lazy => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true

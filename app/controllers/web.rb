@@ -40,7 +40,7 @@ StockNotifier::App.controllers do
         passwd_hash = BCrypt::Engine.hash_secret(passwd, publisher.salt)
         if publisher.passwd == passwd_hash
           session[:publisher] = publisher.id
-          redirect url(:notifications)
+          redirect url(:new_notification)
         else
           flash[:notice] = "Invalid email or password. Please try again."
           redirect url(:login)
@@ -121,6 +121,32 @@ StockNotifier::App.controllers do
   get :new_notification, :map => '/notifications/new' do
     
     render 'web/notifications/new'
+
+  end
+
+  post :new_notification, :map => '/notifications/new' do
+    
+    title = params[:title] if params.has_key?("title")
+    text = params[:text] if params.has_key?("text")
+    dttm = params[:dttm] if params.has_key?("dttm")
+
+    if(title and text)
+      notification = Notification.new(:title => title, :text => text)
+      if !dttm.nil? and !dttm.blank? and !dttm.empty?
+        notification.schedule_dttm = dttm
+      end
+      notification.publisher = @publisher
+      if notification.valid?
+        status 200
+        notification.save
+        ret = {:success => true}
+      else
+        status 400
+        ret = {:success => false, :errors => notification.errors.to_hash}
+      end
+    end
+
+    ret.to_json
 
   end
 
