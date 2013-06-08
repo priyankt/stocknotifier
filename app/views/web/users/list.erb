@@ -37,6 +37,6 @@
                 <% end %>
             </tbody>
         </table>
-        <% will_paginate @users %>
+        <%= will_paginate(@users, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
     </div>
 </div>

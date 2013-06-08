@@ -37,7 +37,9 @@ Padrino.before_load do
   require 'will_paginate'
   require 'will_paginate/data_mapper'
   require 'will_paginate/view_helpers/sinatra'
+  require "bootstrap_pagination/sinatra"
   include WillPaginate::Sinatra::Helpers
+  include BootstrapPagination
 end
 
 ##

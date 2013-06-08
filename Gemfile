@@ -29,6 +29,7 @@ gem 'dm-types'
 gem 'dm-core'
 gem 'dm-serializer'
 gem 'tilt', '1.3.7'
+gem 'will_paginate-bootstrap'
 
 # Test requirements
 gem 'rspec', :group => 'test'

@@ -65,10 +65,10 @@ StockNotifier::App.controllers do
 
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @users = Subscriber.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
+      @users = Subscriber.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page], :per_page => 5)
     else
       #@users = @publisher.subscribers.all(:name.like => "%#{keyword}%", :order => :created_at.desc).paginate(:page => params[:page])
-      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
+      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page], :per_page => 5)
     end
 
     render 'web/users/list'
