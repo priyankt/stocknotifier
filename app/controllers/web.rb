@@ -71,7 +71,9 @@ StockNotifier::App.controllers do
       @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page], :per_page => 5)
     end
 
-    render 'web/users/list'
+    total = @users.total_entries
+
+    render 'web/users/list', :locals => {:total => total}
 
   end
 
@@ -91,9 +93,6 @@ StockNotifier::App.controllers do
     @subscriber.passwd = BCrypt::Engine.hash_secret(SecureRandom.hex(10), salt)
     @subscriber.salt = salt
     
-    # publisher_id = session[:publisher]
-    # p = Publisher.get(publisher_id)
-    # @subscriber.publisher = p
     @subscriber.publisher = @publisher
 
     if @subscriber.valid?
@@ -109,12 +108,14 @@ StockNotifier::App.controllers do
     
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page])
+      @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page], :per_page => 2)
     else
       @notifications = @publisher.notifications.all(:text.like => "%#{keyword}%", :order => :created_at.desc).paginate(:page => params[:page])
     end
 
-    render 'web/notifications/list'
+    total = @notifications.total_entries
+
+    render 'web/notifications/list', :locals => {:total => total}
 
   end
 
@@ -159,7 +160,9 @@ StockNotifier::App.controllers do
       @sponsorers = Sponsorer.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
-    render 'web/sponsorers/list'
+    total = @sponsorers.total_entries
+
+    render 'web/sponsorers/list', :locals => {:total => total}
 
   end
 

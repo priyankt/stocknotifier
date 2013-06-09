@@ -35,6 +35,10 @@
         $(document).ready(function(){
             $('#editor').wysiwyg();
 
+            $('.dropdown-menu input, .dropdown-menu label, .dropdown-menu button').click(function(e) {
+                e.stopPropagation();
+            });
+
             $('#sendMessage').click(function() {
                 var t = $('#editor').html();
                 var htmlText = $.trim(t);
