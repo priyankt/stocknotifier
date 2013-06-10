@@ -65,10 +65,10 @@ StockNotifier::App.controllers do
 
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @users = Subscriber.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page], :per_page => 5)
+      @users = Subscriber.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
     else
       #@users = @publisher.subscribers.all(:name.like => "%#{keyword}%", :order => :created_at.desc).paginate(:page => params[:page])
-      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page], :per_page => 5)
+      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
     total = @users.total_entries
@@ -108,7 +108,7 @@ StockNotifier::App.controllers do
     
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page], :per_page => 2)
+      @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page])
     else
       @notifications = @publisher.notifications.all(:text.like => "%#{keyword}%", :order => :created_at.desc).paginate(:page => params[:page])
     end
@@ -138,16 +138,14 @@ StockNotifier::App.controllers do
       end
       notification.publisher = @publisher
       if notification.valid?
-        status 200
         notification.save
-        ret = {:success => true}
+        flash[:notice] = "Message Sent Successfully"
       else
-        status 400
-        ret = {:success => false, :errors => notification.errors.to_hash}
+        flash[:notice] = "Error while sending message"
       end
     end
 
-    ret.to_json
+    render 'web/notifications/new'
 
   end
 

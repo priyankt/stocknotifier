@@ -40,6 +40,9 @@ Padrino.before_load do
   require "bootstrap_pagination/sinatra"
   include WillPaginate::Sinatra::Helpers
   include BootstrapPagination
+
+  WillPaginate.per_page = 30
+
 end
 
 ##

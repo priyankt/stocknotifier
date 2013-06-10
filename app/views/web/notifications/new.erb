@@ -6,26 +6,32 @@
         <h3>New Message</h3>
         <hr/>
     </div>
+    <% form_tag url(:new_notification), :method => 'POST' do %>
     <div class="span12">
+        <%= flash_tag(:notice, :class => "alert alert-success") %>
         <label><strong>Message Title</strong></label>
-        <input id="title" class="span12" type="text" placeholder="Enter message title here"></input>
+        <%= text_field_tag :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here" %>
     </div>
     <div class="span12">
         <%= partial 'web/wysiwyg' %>
         <div id="editor" contenteditable="true">
             Enter your message here..
         </div>
+        <%= hidden_field_tag :text, :id => 'text' %>
     </div>
     <div class="span12">
         <span class="spacer20"></span>
         <div id="datetimepicker" class="input-append">
-            <input id="dttm" type="text" placeholder="Schedule Time"></input>
+            <%= text_field_tag :dttm, :id => 'dttm', :placeholder => "Schedule Time" %>
             <span class="add-on">
                 <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
             </span>
         </div>
-        <span class="pull-right"><a id="sendMessage" class="btn btn-danger">Send Message</a></span>
+        <span class="pull-right">
+            <%= submit_tag "Send Message", :class => 'btn btn-danger', :id => 'sendMessage' %>
+        </span>
     </div>
+    <% end %>
 </div>
 
 <% content_for :js do %>
@@ -42,8 +48,6 @@
             $('#sendMessage').click(function() {
                 var t = $('#editor').html();
                 var htmlText = $.trim(t);
-                console.log(htmlText);
-                var title = $('#title').val();
                 
                 if(htmlText.length <= 0 || htmlText == '<br>' || title.length <= 0) {
                     alert("Please enter Title and Message.");
@@ -51,26 +55,19 @@
                 }
 
                 if(confirm("Are you sure you want to send this message?")) {
-                    
-                    $.ajax({
-                        type: "POST",
-                        url: "/notifications/new",
-                        dataType: 'json',
-                        data: { text: htmlText, dttm: $('#dttm').val(), title: title }
-                    })
-                    .done(function( msg ) {
-                        alert( "Data Saved: " + msg );
-                    })
-                    .fail(function() { 
-                        alert("Error occured while sending message. Please contact support."); 
-                    });
+                    $('#text').val(htmlText);
+                    return true;
                 }
+
+                return false;
             });
 
             $('#datetimepicker').datetimepicker({
                 language: 'en',
                 pickSeconds: false,
-                format: 'dd/MM/yyyy @ hh:mm',
+                format: 'dd/MM/yyyy @ HH:mm PP',
+                pick12HourFormat: true,
+                startDate: new Date()
                 //startDate:
             });
         });

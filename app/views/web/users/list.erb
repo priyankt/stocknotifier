@@ -40,6 +40,8 @@
                 <% end %>
             </tbody>
         </table>
-        <%= will_paginate(@users, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% if @users.total_entries > 30%>
+            <%= will_paginate(@users, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% end %>
     </div>
 </div>

@@ -14,7 +14,6 @@ source 'https://rubygems.org'
 gem 'rake'
 
 # Component requirements
-gem 'will_paginate', '~>3.0'
 gem 'therubyracer'
 gem 'rack-less'
 gem 'less'
@@ -29,6 +28,7 @@ gem 'dm-types'
 gem 'dm-core'
 gem 'dm-serializer'
 gem 'tilt', '1.3.7'
+gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
 # Test requirements

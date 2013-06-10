@@ -36,6 +36,8 @@
                 <% end %>
             </tbody>
         </table>
-        <%= will_paginate(@sponsorers, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered') %>
+        <% if @sponsorers.total_entries > 30 %>
+            <%= will_paginate(@sponsorers, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered') %>
+        <% end %>
     </div>
 </div>

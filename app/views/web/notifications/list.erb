@@ -36,6 +36,8 @@
                 <% end %>
             </tbody>
         </table>
-        <%= will_paginate(@notifications, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% if @notifications.total_entries > 30 %>
+            <%= will_paginate(@notifications, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% end %>
     </div>
 </div>

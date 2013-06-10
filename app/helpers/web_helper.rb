@@ -8,7 +8,7 @@ StockNotifier::App.helpers do
 
     def format_date(the_date)
         if !the_date.nil? 
-            the_date.strftime("%d %b, %Y @ %H:%M")
+            the_date.strftime("%d %b, %Y @ %I:%M %p")
         end
     end
 
