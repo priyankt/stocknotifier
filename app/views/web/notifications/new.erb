@@ -7,8 +7,9 @@
         <hr/>
     </div>
     <% form_tag url(:new_notification), :method => 'POST' do %>
+    <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
+    <%= flash_tag(:error, :class => "offset2 span6 alert alert-error text-center") %>
     <div class="span12">
-        <%= flash_tag(:notice, :class => "alert alert-success") %>
         <label><strong>Message Title</strong></label>
         <%= text_field_tag :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here" %>
     </div>

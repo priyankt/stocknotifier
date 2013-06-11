@@ -16,7 +16,7 @@ StockNotifier::App.controllers do
       
     if(invalid)
       # if invalis request then send 401 not authorized                                                                                                       
-      flash[:notice] = "Access Denied. Please Login."
+      flash[:error] = "Access Denied. Please Login."
       redirect url(:login)
     end
 
@@ -42,15 +42,15 @@ StockNotifier::App.controllers do
           session[:publisher] = publisher.id
           redirect url(:new_notification)
         else
-          flash[:notice] = "Invalid email or password. Please try again."
+          flash[:error] = "Invalid email or password. Please try again."
           redirect url(:login)
         end
       else
-        flash[:notice] = "Invalid email or password. Please try again."
+        flash[:error] = "Invalid email or password. Please try again."
         redirect url(:login)
       end
     else
-      flash[:notice] = "Please provide both email and password."
+      flash[:error] = "Please provide both email and password."
       redirect url(:login)
     end
 
@@ -58,6 +58,7 @@ StockNotifier::App.controllers do
 
   get :logout, :map => '/logout' do
     session["publisher"] = nil
+    flash[:success] = "You have logged out successfully."
     redirect url(:login)
   end
 
@@ -90,17 +91,38 @@ StockNotifier::App.controllers do
     @subscriber = Subscriber.new(params[:subscriber])
     
     salt = BCrypt::Engine.generate_salt
-    @subscriber.passwd = BCrypt::Engine.hash_secret(SecureRandom.hex(10), salt)
+    user_passwd = SecureRandom.hex(5)
+    @subscriber.passwd = BCrypt::Engine.hash_secret( user_passwd, salt)
     @subscriber.salt = salt
     
     @subscriber.publisher = @publisher
 
     if @subscriber.valid?
       @subscriber.save
-      flash[:notice] = "New user created successfully!"
+      flash[:success] = "User #{@subscriber.name} created successfully."
+      redirect url(:new_user)
+    else
+      flash.now[:error] = "Failed to create user #{@subscriber.name}."
+      render 'web/users/new'
     end
     
-    render 'web/users/new'
+  end
+
+  get :manage_user, :map => '/users/manage/:id' do
+
+    subscriber = Subscriber.get(params[:id])
+    subscriber.active = params[:active]
+
+    if subscriber.valid?
+      subscriber.save
+      # if params[:active]
+      #   flash[:notice] = "#{subscriber.name} activated successfully"
+      # else
+      #   flash[:notice] = "#{subscriber.name} deactivated successfully"
+      # end
+    end
+    
+    redirect(:users)
 
   end
 
@@ -110,7 +132,7 @@ StockNotifier::App.controllers do
     if keyword.nil?
       @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page])
     else
-      @notifications = @publisher.notifications.all(:text.like => "%#{keyword}%", :order => :created_at.desc).paginate(:page => params[:page])
+      @notifications = @publisher.notifications.all(:conditions => ["title like ? OR text like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
     total = @notifications.total_entries
@@ -139,13 +161,13 @@ StockNotifier::App.controllers do
       notification.publisher = @publisher
       if notification.valid?
         notification.save
-        flash[:notice] = "Message Sent Successfully"
+        flash[:success] = "Message sent successfully."
+        redirect url(:new_notification)
       else
-        flash[:notice] = "Error while sending message"
+        flash.now[:error] = "Error while sending message. Try again."
+        render 'web/notifications/new'
       end
     end
-
-    render 'web/notifications/new'
 
   end
 
@@ -179,27 +201,21 @@ StockNotifier::App.controllers do
 
     if @sponsorer.valid?
       @sponsorer.save
-      flash[:notice] = "New sponsorer created successfully!"
+      flash[:success] = "Sponsorer #{@sponsorer.name} created successfully."
+      redirect url(:new_sponsorer)
+    else
+      flash.now[:error] = "Failed to create sponsorer #{@sponsorer.name}."
+      render 'web/sponsorers/new'
     end
     
     render 'web/sponsorers/new'
 
   end
 
-
   # get :sample, :map => '/sample/url', :provides => [:any, :js] do
   #   case content_type
   #     when :js then ...
   #     else ...
   # end
-
-  # get :foo, :with => :id do
-  #   'Maps to url '/foo/#{params[:id]}''
-  # end
-
-  # get '/example' do
-  #   'Hello world!'
-  # end
-  
 
 end

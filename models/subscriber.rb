@@ -11,6 +11,7 @@ class Subscriber
   property :phone, String
   property :occupation, String
   property :city, String
+  property :active, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

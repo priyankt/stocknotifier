@@ -13,7 +13,9 @@
         <% end %>
     </div>
     <div class="span12">
-        <p class="muted"><%= total %> users found</p>
+        <p class="muted">
+            <%= total %> users found
+        </p>
     </div>
     <div class="span12">
         <table class="table table-bordered">
@@ -25,6 +27,7 @@
                     <th>City</th>
                     <th>Profession</th>
                     <th>Active Since</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +39,13 @@
                         <td><%= user.city %></td>
                         <td><%= user.occupation %></td>
                         <td><%= format_date(user.created_at) %></td>
+                        <td>
+                            <% if user.active %>
+                                <a rel="tooltip" title="Currently active. Click to deactivate user." href="<%= url_for(:manage_user, :id => user.id, :active => false) %>" class="btn btn-small btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
+                            <% else %>
+                                <a rel="tooltip" title="Currently inactive. Click to activate user." href="<%= url_for(:manage_user, :id => user.id, :active => true) %>" class="btn btn-small btn-success"><i class="icon-ok-sign"></i> Activate</a>
+                            <% end %>
+                        </td>
                     </tr>
                 <% end %>
             </tbody>

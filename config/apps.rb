@@ -33,3 +33,4 @@ end
 
 # Mounts the core application for this project
 Padrino.mount('StockNotifier::App', :app_file => Padrino.root('app/app.rb')).to('/')
+Padrino.mount('StockNotifier::Api', :app_file => Padrino.root('api/app.rb')).to('/api')

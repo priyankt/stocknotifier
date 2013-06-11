@@ -1,27 +1,11 @@
 module StockNotifier
-  class App < Padrino::Application
-    register WillPaginate::Sinatra
-    register LessInitializer
+  class Api < Padrino::Application
     register Padrino::Rendering
     register Padrino::Mailer
     register Padrino::Helpers
 
-    enable :sessions
-
-    # set :delivery_method, :smtp => {
-    #   :address         => 'smtp.gmail.com',
-    #   :port            => '587',
-    #   :user_name       => 'jaganluthra@gmail.com',
-    #   :password        => 'jaganbangaa',
-    #   :authentication  => :plain, # :plain, :login, :cram_md5, no auth by default 
-    #   :enable_starttls_auto => true 
-    #   #:domain          => "localhost.localdomain" # the HELO domain provided by the client to the server
-    # }
-
-    set :delivery_method, :file => {
-        :location => "#{Padrino.root}/tmp/emails",
-    }
-
+    set :protection, false
+    set :protect_from_csrf, false
 
     ##
     # Caching support
@@ -48,10 +32,10 @@ module StockNotifier
     # set :public_folder, 'foo/bar' # Location for static assets (default root/public)
     # set :reload, false            # Reload application files (default in development)
     # set :default_builder, 'foo'   # Set a custom form builder (default 'StandardFormBuilder')
-    # set :locale_path, 'bar'       # Set path for I18n translations (default your_app/locales)
+    # set :locale_path, 'bar'       # Set path for I18n translations (default your_apps_root_path/locale)
     # disable :sessions             # Disabled sessions by default (enable if needed)
     # disable :flash                # Disables sinatra-flash (enabled by default if Sinatra::Flash is defined)
-    layout  :base            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
+    # layout  :my_layout            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
     #
 
     ##

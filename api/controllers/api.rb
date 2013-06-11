@@ -3,9 +3,9 @@ require 'uuidtools'
 require 'dm-serializer/to_json'
 require 'json'
 
-StockNotifier::App.controllers :api do
+StockNotifier::Api.controllers do
 
-  # Check auth before every route except login
+# Check auth before every route except login
   before :except => :login do
     if env.has_key?("HTTP_AUTH_KEY") and !env["HTTP_AUTH_KEY"].nil?
       api_key = env["HTTP_AUTH_KEY"]
@@ -25,7 +25,7 @@ StockNotifier::App.controllers :api do
   end
 
   # Login
-  post :login, :map => '/api/login' do
+  post :login, :map => '/login' do
     # get email                                                                                                                                              
     email = params[:email] if params.has_key?("email")
     publisher_id = params[:publisher_id] if params.has_key?("publisher_id")
@@ -38,10 +38,10 @@ StockNotifier::App.controllers :api do
       # assign unique auth key to this user                                                                                                                  
       subscriber.api_key = UUIDTools::UUID.random_create
       if subscriber.save
-        status 201
-        ret = {:success => 1, :user_key => user.api_key}
+        status 200
+        ret = {:success => 1, :user_key => subscriber.api_key}
       else
-        status 401
+        status 400
       end
     else
       status 401
@@ -52,7 +52,7 @@ StockNotifier::App.controllers :api do
   end
   
   # Logout
-  put :logout, :map => '/api/logout' do
+  get :logout, :map => '/logout' do
     @subscriber.registration_token = nil
     @subscriber.api_key = nil
     if @subscriber.save
@@ -67,17 +67,32 @@ StockNotifier::App.controllers :api do
 
   end
 
-  post :forgot_passwd, :map => '/api/forgot_passwd' do
+  put :forgot_passwd, :map => '/forgot_passwd' do
+
+    salt = BCrypt::Engine.generate_salt
+    new_passwd = SecureRandom.hex(5)
+    @subscriber.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
+    @subscriber.salt = salt
+
+    if @subscriber.valid?
+      @subscriber.save
+      StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
+      status 201
+      ret = {:success => 1}
+    else
+      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+    end
+
+    ret.to_json
 
   end
 
-  get :about, :map => '/api/about' do
-    pub = @subscriber.publisher.get()
+  get :about, :map => '/about' do
+    pub = @subscriber.publisher
     ret = {
       :name => pub.name,
       :address => pub.address,
       :phone => pub.phone,
-      :mobile => pub.mobile,
       :website => pub.website,
       :email => pub.email,
       :desc => pub.desc
@@ -87,7 +102,7 @@ StockNotifier::App.controllers :api do
 
   end
 
-  post :registration_token, :map => '/api/registration_token' do
+  post :registration_token, :map => '/registration_token' do
     token = params[:token] if params.has_key?("token")
     @subscriber.registration_token = token
     if @subscriber.save
@@ -102,7 +117,8 @@ StockNotifier::App.controllers :api do
 
   end
 
-  get :get_notifications, :map => '/api/notifications' do
+  get :get_notifications, :map => '/notifications' do
+
     last_id = params["last_id"] if params.has_key?("last_id")
     publisher = @subscriber.publisher
     notifications = publisher.notifications.all( :id.gt => last_id )
@@ -110,7 +126,7 @@ StockNotifier::App.controllers :api do
 
   end
 
-  post :opened_notifications, :map => '/api/opened/:notification_id' do
+  post :opened_notifications, :map => '/opened/:notification_id' do
     notification_id = params["notification_id"] if params.has_key?("notification_id")
     viewedNotification = viewedNotification.new(
       :notification_id => notification_id,
@@ -126,6 +142,6 @@ StockNotifier::App.controllers :api do
     
     ret.to_json
 
-  end
+  end  
 
 end

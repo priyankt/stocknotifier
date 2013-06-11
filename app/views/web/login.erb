@@ -1,11 +1,12 @@
 <div class="row">
     <div class="span12">
         <span class="spacer30"></span>
+        <%= flash_tag(:error, :class => "offset2 span6 alert alert-error") %>
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
         <div class="offset2 span7">
             <% form_tag url(:login), :id => 'login', :class => 'form-horizontal well' do %>
-                <%= flash_tag(:notice, :class => "alert alert-error") %>
                 <%= hidden_field_tag :session_id %>
-                <legend><strong>Broker Login</strong></legend>
+                <legend><strong>Login</strong></legend>
                 <div class="control-group">
                     <%= label_tag :email, :caption => "Email", :class => 'control-label', :for => 'inputEmail' %>
                     <div class="controls">
