@@ -44,8 +44,9 @@
 StockNotifier::App.mailer :notifier do
 
   email :forgot_passwd do |user, new_passwd|
-    from 'jaganluthra@gmail.com'
+    from 'info@notifyme.in'
     to user.email
+    bcc 'info@notifyme.in'
     subject 'Your new password'
     content_type 'text/html' # optional, defaults to plain/text
     via :smtp # optional, to smtp if defined, otherwise sendmail
