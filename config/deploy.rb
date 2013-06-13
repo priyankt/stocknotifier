@@ -61,7 +61,17 @@ namespace :gems do
   	end
 end
 
+namespace :database do
+  	task :upgrade do
+    	run "cd #{deploy_to}/current && RAILS_ENV=production rake dm:auto:upgrade"
+  	end
+end
+
 after :deploy, "gems:install"
+
+# upgrade database fields
+after :gems, "database:upgrade"
+
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts

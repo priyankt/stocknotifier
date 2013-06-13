@@ -162,6 +162,7 @@ StockNotifier::App.controllers do
   post :new_notification, :map => '/notifications/new' do
 
     @notification = Notification.new(params[:notification])
+
     if params[:notification][:schedule_dttm].nil? or params[:notification][:schedule_dttm].blank? or params[:notification][:schedule_dttm].empty?
       @notification.schedule_dttm = nil
     end
