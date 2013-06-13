@@ -29,7 +29,7 @@
                 <% for notification in @notifications %>
                     <tr>
                         <td><%= notification.id %></td>
-                        <td><%= notification.title %></td>
+                        <td><a href="<%= url_for(:notification_details, notification.id)%>"><%= notification.title %></a></td>
                         <td><%= format_date(notification.created_at) %></td>
                         <td><span class="badge"><%= notification.viewedNotifications.count %></span></td>
                     </tr>

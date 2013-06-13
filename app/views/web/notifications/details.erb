@@ -1,0 +1,46 @@
+<% content_for :title do %>
+  <title><%= notification.title %></title>
+<% end %>
+
+<div class="row page-notifications-details">
+
+    <%#<div class="span12">
+        <h3>Notification Details</h3>
+        <hr/>
+    </div>%>
+    <div class="span12">
+        
+        <h3 class="text-center"><%= notification.id %> - <%= notification.title %></h3>
+        
+        <hr/>
+
+        <% if notification.image.url %>
+        	<div class="row">
+	    	    <div id="image-carousel" class="carousel slide offset2 span8">
+	    			<ol class="carousel-indicators">
+	    				<li data-target="#image-carousel" data-slide-to="0" class="active"></li>
+	    			</ol>
+	    			<!-- Carousel items -->
+	    			<div class="carousel-inner">
+	    				<div class="active item">
+	    					<img src="<%= notification.image.main.url %>">
+	    				</div>
+	    			</div>
+				    <!-- Carousel nav -->
+				    <a class="carousel-control left" href="#image-carousel" data-slide="prev">&lsaquo;</a>
+				    <a class="carousel-control right" href="#image-carousel" data-slide="next">&rsaquo;</a>
+	    		</div>
+    		</div>
+        <% end %>
+        
+        <div class="row">
+        	<div class="offset2 span8">
+        		<div class="well">
+        			<%= (notification.text).html_safe %>
+        		</div>
+    		</div>
+        </div>
+    	
+    </div>
+    
+</div>

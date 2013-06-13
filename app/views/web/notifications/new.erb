@@ -6,38 +6,56 @@
         <h3>New Message</h3>
         <hr/>
     </div>
-    <% form_tag url(:new_notification), :method => 'POST' do %>
+    <% form_for @notification, :new, :method => 'POST', :multipart => true do |f| %>
     <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
     <%= flash_tag(:error, :class => "offset2 span6 alert alert-error text-center") %>
     <div class="span12">
-        <label><strong>Message Title</strong></label>
-        <%= text_field_tag :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here" %>
+        <label><strong>Title</strong></label>
+        <%= f.text_field :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here" %>
     </div>
     <div class="span12">
-        <%= partial 'web/wysiwyg' %>
+        <%= partial 'web/wysiwyg', :locals => { :f => f } %>
         <div id="editor" contenteditable="true">
             Enter your message here..
         </div>
-        <%= hidden_field_tag :text, :id => 'text' %>
+        <%= f.hidden_field :text, :id => 'text' %>
     </div>
     <div class="span12">
         <span class="spacer20"></span>
-        <div id="datetimepicker" class="input-append">
-            <%= text_field_tag :dttm, :id => 'dttm', :placeholder => "Schedule Time" %>
-            <span class="add-on">
-                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-            </span>
+
+        <div class="row">
+            
+            <div class="span4">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <span class="btn btn-file btn-primary"><span class="fileupload-new">Attach Image</span><span class="fileupload-exists">Change Image</span><%= f.file_field :image %></span>
+                    <span class="fileupload-preview"></span>
+                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div id="datetimepicker" class="input-append">
+                    <%= f.text_field :schedule_dttm, :id => 'dttm', :placeholder => "Schedule Time" %>
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="span4">
+                <%= f.submit "Send Message", :class => 'btn btn-danger btn-block', :id => 'sendMessage', :style => 'font-weight: 900;'%>
+            </div>
+
         </div>
-        <span class="pull-right">
-            <%= submit_tag "Send Message", :class => 'btn btn-danger', :id => 'sendMessage' %>
-        </span>
     </div>
+    
     <% end %>
 </div>
 
 <% content_for :js do %>
     <%= javascript_include_tag 'bootstrap-wysiwyg' %>
     <%= javascript_include_tag 'bootstrap-datetimepicker.min' %>
+    <%= javascript_include_tag 'file-upload' %>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#editor').wysiwyg();
@@ -49,9 +67,10 @@
             $('#sendMessage').click(function() {
                 var t = $('#editor').html();
                 var htmlText = $.trim(t);
-                
+                var title = $('#title').val();
+
                 if(htmlText.length <= 0 || htmlText == '<br>' || title.length <= 0) {
-                    alert("Please enter Title and Message.");
+                    alert("Make sure that title and message body are not empty.");
                     return false;
                 }
 

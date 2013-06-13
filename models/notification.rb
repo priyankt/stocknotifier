@@ -3,8 +3,9 @@ class Notification
 
   property :id, Serial
   property :title, String
-  property :text, Text, :length => 5000000
+  property :text, Text
   property :schedule_dttm, DateTime, :lazy => true
+  mount_uploader :image, Uploader
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

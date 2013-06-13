@@ -1,4 +1,4 @@
---- 
+---
 :mock: none
 :migration_format: number
 :stylesheet: less
@@ -7,3 +7,4 @@
 :test: rspec
 :orm: datamapper
 :namespace: StockNotifier
+:admin_renderer: erb

@@ -1,4 +1,6 @@
 require "securerandom"
+require "resque"
+require "send_notification"
 
 StockNotifier::App.controllers do
   
@@ -141,34 +143,40 @@ StockNotifier::App.controllers do
 
   end
 
+  get :notification_details, :map => '/notifications/details/:id' do
+    
+    notification = @publisher.notifications.get(params[:id])
+    
+    render 'web/notifications/details', :locals => {:notification => notification}
+
+  end
+
   get :new_notification, :map => '/notifications/new' do
+
+    @notification  = Notification.new()
     
     render 'web/notifications/new'
 
   end
 
   post :new_notification, :map => '/notifications/new' do
-    
-    title = params[:title] if params.has_key?("title")
-    text = params[:text] if params.has_key?("text")
-    dttm = params[:dttm] if params.has_key?("dttm")
 
-    if(title and text)
-      notification = Notification.new(:title => title, :text => text)
-      if !dttm.nil? and !dttm.blank? and !dttm.empty?
-        notification.schedule_dttm = dttm
-      end
-      notification.publisher = @publisher
-      if notification.valid?
-        notification.save
-        flash[:success] = "Message sent successfully."
-        redirect url(:new_notification)
-      else
-        flash.now[:error] = "Error while sending message. Try again."
-        render 'web/notifications/new'
-      end
+    @notification = Notification.new(params[:notification])
+    if params[:notification][:schedule_dttm].nil? or params[:notification][:schedule_dttm].blank? or params[:notification][:schedule_dttm].empty?
+      @notification.schedule_dttm = nil
     end
-
+    @notification.publisher = @publisher
+    if @notification.valid?
+      @notification.save
+      Resque.enqueue(SendNotification, @notification.id)
+      flash[:success] = "Message sent successfully."
+      redirect url(:new_notification)
+    else
+      puts @notification.errors.to_hash
+      flash.now[:error] = "Error while sending message. Try again."
+      render 'web/notifications/new'
+    end
+  
   end
 
   get :sponsorers, :map => '/sponsorers' do

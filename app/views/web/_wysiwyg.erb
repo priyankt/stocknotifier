@@ -16,10 +16,11 @@
         <a class="btn  btn-primary" data-edit="justifyright" rel="tooltip" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
         <a class="btn  btn-primary" data-edit="justifyfull" rel="tooltip" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
     </div>
-    <div class="btn-group">
+    <%#-- <div class="btn-group">
         <a class="btn btn-primary dropdown-toggle" id="pictureBtn" rel="tooltip" title="Insert picture (or just drag &amp; drop)"><i class="icon-picture"></i></a>
+        <%= f.file_field :image, :style =>  "opacity: 0; position: absolute; top: 0px; left: 0px; width: 41px; height: 30px;", 'data-role' => 'magic-overlay', 'data-target' => '#pictureBtn', 'data-edit' => 'insertImage'
         <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 41px; height: 30px;">
-    </div>
+    </div> %>
     <div class="btn-group">
         <a class="btn  btn-primary dropdown-toggle" data-toggle="dropdown" rel="tooltip" title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
         <ul class="dropdown-menu">

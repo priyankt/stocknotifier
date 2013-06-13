@@ -18,6 +18,16 @@ module StockNotifier
     #   #:domain          => "localhost.localdomain" # the HELO domain provided by the client to the server
     # }
 
+    # set :delivery_method, :smtp => {
+    #   :address         => 'smtpout.secureserver.net ',
+    #   :port            => '465',
+    #   :user_name       => 'info@notifyme.in',
+    #   :password        => 'w3.notifyme.in',
+    #   :authentication  => :plain, # :plain, :login, :cram_md5, no auth by default 
+    #   :enable_starttls_auto => true 
+    #   #:domain          => "localhost.localdomain" # the HELO domain provided by the client to the server
+    # }
+
     set :delivery_method, :file => {
         :location => "#{Padrino.root}/tmp/emails",
     }
@@ -36,6 +46,7 @@ module StockNotifier
     # set :cache, Padrino::Cache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
     # set :cache, Padrino::Cache::Store::Memory.new(50)
     # set :cache, Padrino::Cache::Store::File.new(Padrino.root('tmp', app_name.to_s, 'cache')) # default choice
+
     #
 
     ##

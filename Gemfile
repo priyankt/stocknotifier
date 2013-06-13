@@ -14,6 +14,11 @@ source 'https://rubygems.org'
 gem 'rake'
 
 # Component requirements
+gem 'bcrypt-ruby', :require => 'bcrypt'
+gem 'carrierwave'
+gem 'carrierwave-datamapper', :require => 'carrierwave/datamapper'
+gem 'mini_magick'
+gem 'resque'
 gem 'therubyracer'
 gem 'rack-less'
 gem 'less'
@@ -31,6 +36,9 @@ gem 'dm-serializer'
 gem 'tilt', '1.3.7'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+
+# Mobile Notification Gems
+gem 'gcm'
 
 # Test requirements
 gem 'rspec', :group => 'test'
