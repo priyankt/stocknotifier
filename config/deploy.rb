@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 set :domain, "notifyme.in"
 set :application, "notifyme"
 set :deploy_to, "/home/web/#{application}"
@@ -17,7 +19,7 @@ role :db,  domain, :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 
 # if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
+after "deploy:restart", "deploy:cleanup"
 
 namespace :deploy do
 	task :start do ; end
@@ -46,32 +48,28 @@ namespace :deploy do
 	end
 end
 
-after 'deploy:update_code', 'deploy:symlink_db'
+# after 'deploy:update_code', 'deploy:symlink_db'
  
-namespace :deploy do
-	desc "Symlinks the database.rb"
-	task :symlink_db, :roles => :app do
-		run "ln -nfs #{deploy_to}/shared/config/database.rb #{release_path}/config/database.rb"
-	end
-end
+# namespace :deploy do
+# 	desc "Symlinks the database.rb"
+# 	task :symlink_db, :roles => :app do
+# 		run "ln -nfs #{deploy_to}/shared/config/database.rb #{release_path}/config/database.rb"
+# 	end
+# end
 
 namespace :gems do
   	task :install do
-    	run "cd #{deploy_to}/current && RAILS_ENV=production rake gems:install"
+    	run "cd #{deploy_to}/current && RAILS_ENV=production bundle install"
   	end
 end
 
 namespace :database do
   	task :upgrade do
-    	run "cd #{deploy_to}/current && RAILS_ENV=production rake dm:auto:upgrade"
+    	run "cd #{deploy_to}/current && rake dm:auto:upgrade -e production"
   	end
 end
 
-after :deploy, "gems:install"
-
-# upgrade database fields
-after :gems, "database:upgrade"
-
+after :deploy, "gems:install", "database:upgrade"
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
