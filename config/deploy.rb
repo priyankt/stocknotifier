@@ -65,7 +65,7 @@ end
 
 namespace :database do
   	task :upgrade do
-    	run "cd #{deploy_to}/current && rake dm:auto:upgrade -e production"
+    	run "cd #{deploy_to}/current && padrino rake dm:auto:upgrade -e production"
   	end
 end
 
