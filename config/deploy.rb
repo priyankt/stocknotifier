@@ -48,14 +48,16 @@ namespace :deploy do
 	end
 end
 
-# after 'deploy:update_code', 'deploy:symlink_db'
+after 'deploy:update_code', 'deploy:symlink_db'
  
-# namespace :deploy do
-# 	desc "Symlinks the database.rb"
-# 	task :symlink_db, :roles => :app do
-# 		run "ln -nfs #{deploy_to}/shared/config/database.rb #{release_path}/config/database.rb"
-# 	end
-# end
+namespace :deploy do
+	desc "Symlinks the database.rb"
+	task :symlink_db, :roles => :app do
+		run "rm -rf #{current_release}/config/database.rb"
+		run "ln -nfs #{deploy_to}/shared/config/database.rb #{current_release}/config/database.rb"
+		run "ln -nfs #{deploy_to}/shared/images/uploads #{current_release}/public/images/uploads"
+	end
+end
 
 namespace :gems do
   	task :install do
