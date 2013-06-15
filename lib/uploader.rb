@@ -1,3 +1,4 @@
+
 class Uploader < CarrierWave::Uploader::Base
 
   ##
@@ -30,7 +31,8 @@ class Uploader < CarrierWave::Uploader::Base
   # Directory where uploaded files will be stored (default is /public/uploads)
   #
   def store_dir
-    'images/uploads'
+    "images/uploads/#{model.class.to_s.underscore}/#{model.id}" 
+    #'images/uploads'
   end
 
   ##
@@ -52,24 +54,22 @@ class Uploader < CarrierWave::Uploader::Base
   #
   # process :resize_to_fit => [640, 400]
 
-  #process :convert => 'png'
-
-  # def filename
-  #   super.chomp(File.extname(super)) + '.png'
-  # end
+  # process :convert => 'png'
 
   ##
   # Create different versions of your uploaded files
   #
   version :main do
     process :resize_and_pad => [640, 400, 'black']
-
-    #process :resize_to_fill => [640, 400]
   end
 
   version :thumb, :from_version => :main do
     process :resize_to_fit => [160, 100]
   end
+
+  # def filename
+  #   super.chomp(File.extname(super)) + '.png'
+  # end
 
   ##
   # White list of extensions which are allowed to be uploaded:

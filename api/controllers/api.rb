@@ -2,13 +2,16 @@ require 'bcrypt'
 require 'uuidtools'
 require 'dm-serializer/to_json'
 require 'json'
+require "resque"
+require "send_email"
 
 StockNotifier::Api.controllers do
 
 # Check auth before every route except login
   before :except => :login do
-    if env.has_key?("HTTP_AUTH_KEY") and !env["HTTP_AUTH_KEY"].nil?
-      api_key = env["HTTP_AUTH_KEY"]
+
+    if env.has_key?("HTTP_X_AUTH_KEY") and !env["HTTP_X_AUTH_KEY"].nil?
+      api_key = env["HTTP_X_AUTH_KEY"]
       @subscriber = Subscriber.first(:api_key => api_key)
       if @subscriber.nil?
         invalid = true
@@ -76,7 +79,8 @@ StockNotifier::Api.controllers do
 
     if @subscriber.valid?
       @subscriber.save
-      StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
+      Resque.enqueue(SendEmail, {:subscriber_id => @subscriber.id, :new_passwd => new_passwd})
+      #StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
       status 201
       ret = {:success => 1}
     else
