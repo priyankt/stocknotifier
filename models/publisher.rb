@@ -16,6 +16,9 @@ class Publisher
   property :android_api_key, String
   property :ios_api_key, String
   mount_uploader :logo, Uploader
+  property :language1, String, :default => 'hindi'
+  property :language2, String
+  property :language3, String
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

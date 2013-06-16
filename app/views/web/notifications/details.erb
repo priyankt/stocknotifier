@@ -10,17 +10,39 @@
         
         <hr/>
 
-        <% if notification.image.url %>
+        <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url %>
         	<div class="row">
 	    	    <div id="image-carousel" class="carousel slide offset2 span8">
-	    			<ol class="carousel-indicators">
-	    				<li data-target="#image-carousel" data-slide-to="0" class="active"></li>
-	    			</ol>
+	    			<%# <ol class="carousel-indicators">
+                        <li data-target="#image-carousel" data-slide-to="0"></li>
+                        <li data-target="#image-carousel" data-slide-to="1"></li>
+                        <li data-target="#image-carousel" data-slide-to="1"></li>
+	    			</ol> %>
 	    			<!-- Carousel items -->
 	    			<div class="carousel-inner">
-	    				<div class="active item">
-	    					<img src="<%= notification.image.main.url %>">
-	    				</div>
+                        <% if notification.image1.main.url %>
+    	    				<div class="item active">
+    	    					<img src="<%= notification.image1.main.url %>">
+    	    				</div>
+                        <% end %>
+                        <% if notification.image2.main.url%>
+                            <% if not notification.image1.main.url %>
+                            <div class="item active">
+                            <% else %>
+                            <div class="item">
+                            <% end %>
+                                <img src="<%= notification.image2.main.url %>">
+                            </div>
+                        <% end %>
+                        <% if notification.image3.main.url%>
+                            <% if not notification.image1.main.url and not notification.image2.main.url %>
+                            <div class="item active">
+                            <% else %>
+                            <div class="item">
+                            <% end %>
+                                <img src="<%= notification.image3.main.url %>">
+                            </div>
+                        <% end %>
 	    			</div>
 				    <!-- Carousel nav -->
 				    <a class="carousel-control left" href="#image-carousel" data-slide="prev">&lsaquo;</a>

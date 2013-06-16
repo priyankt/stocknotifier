@@ -1,6 +1,7 @@
 require "securerandom"
 require "resque"
 require "send_notification"
+#require "youtube_it"
 
 StockNotifier::App.controllers do
   
@@ -116,11 +117,6 @@ StockNotifier::App.controllers do
 
     if subscriber.valid?
       subscriber.save
-      # if params[:active]
-      #   flash[:notice] = "#{subscriber.name} activated successfully"
-      # else
-      #   flash[:notice] = "#{subscriber.name} deactivated successfully"
-      # end
     end
     
     redirect(:users)
@@ -154,6 +150,24 @@ StockNotifier::App.controllers do
 
     @notification  = Notification.new()
     
+    # params = {
+    #   :title => 'Test Video',
+    #   :description => 'Test Description',
+    #   :category => 'People',
+    #   :keywords => ['community']
+    # }
+
+    # videos_url = url(:new_notification)
+
+    # client = YouTubeIt::Client.new(
+    #   :username => "priyankgt",
+    #   :password =>  "b1uebott!e",
+    #   :dev_key => "AI39si6qE58xznZSd7J7IRSQCni3uEP6TuhaQmU89dXiu8DPF8VWQ0YFZGsXXe_rEFSQUZsGLxb9V_cqXoT_PMW9lC4qibb9lQ"
+    # )
+
+    # @upload_info = client.upload_token(params, videos_url)
+    # puts @upload_info
+    
     render 'web/notifications/new'
 
   end
@@ -169,7 +183,12 @@ StockNotifier::App.controllers do
     if @notification.valid?
       @notification.save
       Resque.enqueue(SendNotification, @notification.id)
-      flash[:success] = "Message sent successfully."
+      if @notification.schedule_dttm.nil?
+        flash[:success] = "Message sent successfully."
+      else
+        flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
+      end
+
       redirect url(:new_notification)
     else
       puts @notification.errors.to_hash

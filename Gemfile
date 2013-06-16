@@ -36,6 +36,7 @@ gem 'dm-serializer'
 gem 'tilt', '1.3.7'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+#gem 'youtube_it'
 
 # Mobile Notification Gems
 gem 'gcm'
