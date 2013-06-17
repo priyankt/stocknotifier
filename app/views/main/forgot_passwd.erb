@@ -1,0 +1,32 @@
+<% content_for :title do %>
+  <title>NotifyMe - Forgot Password</title>
+<% end %>
+
+<div class="row">
+    <div class="span12">
+        
+        <span class="spacer30"></span>
+
+        <%= flash_tag(:error, :class => "offset2 span6 alert alert-error") %>
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        
+        <div class="offset2 span7">
+            
+            <% form_tag url(:forgot_passwd), :id => 'forgot_passwd', :class => 'form-horizontal well' do %>
+                <legend><strong>Send New Password</strong></legend>
+                <div class="control-group">
+                    <%= label_tag :email, :caption => "Email", :class => 'control-label', :for => 'inputEmail' %>
+                    <div class="controls">
+                        <%= email_field_tag :email, :id => 'inputEmail', :placeholder => "Registered Email", :autofocus => :true, :required => :true%>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag "Send Password", :class => 'btn btn-primary' %>
+                    </div>
+                </div>
+            <% end %>
+            
+        </div>
+    </div>
+</div>

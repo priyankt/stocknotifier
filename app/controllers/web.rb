@@ -1,12 +1,11 @@
 require "securerandom"
 require "resque"
 require "send_notification"
-#require "youtube_it"
 
 StockNotifier::App.controllers do
   
   # Check auth before every route except login
-  before :except => :login do
+  before do
     if logged_in?
       publisher_id = session[:publisher]
       @publisher = Publisher.get(publisher_id)
@@ -20,40 +19,6 @@ StockNotifier::App.controllers do
     if(invalid)
       # if invalis request then send 401 not authorized                                                                                                       
       flash[:error] = "Access Denied. Please Login."
-      redirect url(:login)
-    end
-
-  end
-
-  get :index, :map => '/' do
-    redirect url(:login)
-  end
-
-  get :login, :map => '/login' do
-    render 'web/login'
-  end
-
-  post :login, :map => '/login' do
-    email = params[:email] if params.has_key?("email")
-    passwd = params[:passwd] if params.has_key?("passwd")
-
-    if email and passwd
-      publisher = Publisher.first(:email => email)
-      if publisher
-        passwd_hash = BCrypt::Engine.hash_secret(passwd, publisher.salt)
-        if publisher.passwd == passwd_hash
-          session[:publisher] = publisher.id
-          redirect url(:new_notification)
-        else
-          flash[:error] = "Invalid email or password. Please try again."
-          redirect url(:login)
-        end
-      else
-        flash[:error] = "Invalid email or password. Please try again."
-        redirect url(:login)
-      end
-    else
-      flash[:error] = "Please provide both email and password."
       redirect url(:login)
     end
 
