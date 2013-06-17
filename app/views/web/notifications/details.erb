@@ -10,55 +10,80 @@
         
         <hr/>
 
-        <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url %>
-        	<div class="row">
-	    	    <div id="image-carousel" class="carousel slide offset2 span8">
-	    			<%# <ol class="carousel-indicators">
-                        <li data-target="#image-carousel" data-slide-to="0"></li>
-                        <li data-target="#image-carousel" data-slide-to="1"></li>
-                        <li data-target="#image-carousel" data-slide-to="1"></li>
-	    			</ol> %>
-	    			<!-- Carousel items -->
-	    			<div class="carousel-inner">
-                        <% if notification.image1.main.url %>
-    	    				<div class="item active">
-    	    					<img src="<%= notification.image1.main.url %>">
-    	    				</div>
+        <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url or notification.video1 %>
+            <div class="row">
+
+                <div class="offset2 span8">
+                    <ul class="nav nav-tabs" id="mediaTab">
+                        <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url %>
+                            <li class="active"><a href="#photos" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
                         <% end %>
-                        <% if notification.image2.main.url%>
-                            <% if not notification.image1.main.url %>
-                            <div class="item active">
-                            <% else %>
-                            <div class="item">
-                            <% end %>
-                                <img src="<%= notification.image2.main.url %>">
+                        <% if notification.video1 %>
+                            <li><a href="#video" data-toggle="tab"><i class="icon-facetime-video"></i> Video</a></li>
+                        <% end %>
+                    </ul>
+                </div>
+         
+                <div class="tab-content offset2 span8">
+
+                    <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url %>
+                        <div class="tab-pane active" id="photos">
+                            <div id="image-carousel" class="carousel slide">
+                            <%# <ol class="carousel-indicators">
+                                <li data-target="#image-carousel" data-slide-to="0"></li>
+                                <li data-target="#image-carousel" data-slide-to="1"></li>
+                                <li data-target="#image-carousel" data-slide-to="1"></li>
+                            </ol> %>
+                            <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <% if notification.image1.main.url %>
+                                        <div class="item active">
+                                            <img src="<%= notification.image1.main.url %>">
+                                        </div>
+                                    <% end %>
+                                    <% if notification.image2.main.url%>
+                                        <% if not notification.image1.main.url %>
+                                        <div class="item active">
+                                        <% else %>
+                                        <div class="item">
+                                        <% end %>
+                                            <img src="<%= notification.image2.main.url %>">
+                                        </div>
+                                    <% end %>
+                                    <% if notification.image3.main.url%>
+                                        <% if not notification.image1.main.url and not notification.image2.main.url %>
+                                        <div class="item active">
+                                        <% else %>
+                                        <div class="item">
+                                        <% end %>
+                                            <img src="<%= notification.image3.main.url %>">
+                                        </div>
+                                    <% end %>
+                                </div>
+                                <!-- Carousel nav -->
+                                <a class="carousel-control left" href="#image-carousel" data-slide="prev">&lsaquo;</a>
+                                <a class="carousel-control right" href="#image-carousel" data-slide="next">&rsaquo;</a>
                             </div>
-                        <% end %>
-                        <% if notification.image3.main.url%>
-                            <% if not notification.image1.main.url and not notification.image2.main.url %>
-                            <div class="item active">
-                            <% else %>
-                            <div class="item">
-                            <% end %>
-                                <img src="<%= notification.image3.main.url %>">
-                            </div>
-                        <% end %>
-	    			</div>
-				    <!-- Carousel nav -->
-				    <a class="carousel-control left" href="#image-carousel" data-slide="prev">&lsaquo;</a>
-				    <a class="carousel-control right" href="#image-carousel" data-slide="next">&rsaquo;</a>
-	    		</div>
-    		</div>
+                        </div>
+                    <% end %>
+
+                    <% if notification.video1 %>
+                        <div class="tab-pane" id="video">
+                            <iframe id="video" class="youtube-player" type="text/html" width="100%" height="385" src="http://www.youtube.com/embed/<%= notification.video1 %>" allowfullscreen frameborder="0" seamless></iframe>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
         <% end %>
         
         <div class="row">
-        	<div class="offset2 span8">
-        		<div class="well">
-        			<%= (notification.text).html_safe %>
+            	<div class="offset2 span8">
+            		<div class="well">
+            			<%= (notification.text).html_safe %>
+            		</div>
         		</div>
-    		</div>
         </div>
-    	
+
     </div>
-    
+
 </div>
