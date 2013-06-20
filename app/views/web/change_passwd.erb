@@ -1,0 +1,45 @@
+<% content_for :title do %>
+  <title>NotifyMe - Change Password</title>
+<% end %>
+
+<div class="row">
+    <div class="span12">
+        
+        <span class="spacer20"></span>
+
+        <%= flash_tag(:error, :class => "offset2 span6 alert alert-error") %>
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        
+        <div class="offset2 span7">
+            
+            <% form_tag url(:change_passwd), :id => 'change_passwd', :class => 'form-horizontal well' do %>
+                <legend><strong>Change Password</strong></legend>
+                <div class="control-group">
+                    <%= label_tag :current_passwd, :caption => "Current Password", :class => 'control-label', :for => 'inputCurrentPassword' %>
+                    <div class="controls">
+                        <%= password_field_tag :current_passwd, :id => 'inputCurrentPassword', :placeholder => "Your current password", :autofocus => :true, :required => :true%>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= label_tag :new_passwd, :caption => "New Password", :class => 'control-label', :for => 'inputNewPassword' %>
+                    <div class="controls">
+                        <%= password_field_tag :new_passwd, :id => 'inputNewPassword', :placeholder => "Your new password", :required => :true %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= label_tag :new_passwd_repeat, :caption => "Repeat New Password", :class => 'control-label', :for => 'inputNewPasswordRepeat' %>
+                    <div class="controls">
+                        <%= password_field_tag :new_passwd_repeat, :id => 'inputNewPasswordRepeat', :placeholder => "Repeat new password", :required => :true %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag "Change Password", :class => 'btn btn-primary' %>
+                    </div>
+                </div>
+                
+            <% end %>
+            
+        </div>
+    </div>
+</div>

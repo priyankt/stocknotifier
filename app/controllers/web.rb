@@ -204,10 +204,35 @@ StockNotifier::App.controllers do
 
   end
 
-  # get :sample, :map => '/sample/url', :provides => [:any, :js] do
-  #   case content_type
-  #     when :js then ...
-  #     else ...
-  # end
+  get :change_passwd, :map => '/change_passwd' do
+    
+    render 'web/change_passwd'
+
+  end
+
+  post :change_passwd, :map => '/change_passwd' do
+
+    current = params[:current_passwd] if params.has_key?("current_passwd")
+    new_passwd = params[:new_passwd] if params.has_key?("new_passwd")
+    new_passwd_repeat = params[:new_passwd_repeat] if params.has_key?("new_passwd_repeat")
+
+    if current and new_passwd and new_passwd_repeat and new_passwd == new_passwd_repeat
+      salt = BCrypt::Engine.generate_salt
+      @publisher.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
+      @publisher.salt = salt
+      if @publisher.valid?
+        @publisher.save
+        flash[:success] = "Password changed successfully."
+        redirect url(:change_passwd)
+      else
+        flash.now[:error] = "Something went wrong. Please try again."
+      end
+    else
+      flash.now[:error] = "Please provide all the values and try again."
+    end
+
+    render 'web/change_passwd'
+
+  end
 
 end
