@@ -71,16 +71,14 @@ namespace :database do
   	end
 end
 
-after :deploy, "gems:install", "database:upgrade"
+desc "Hot-reload God configuration for the Resque worker"
+deploy.task :reload_god_config do
+	run "god stop resque"
+	run "god load #{File.join deploy_to, 'current', 'config', 'resque.god'}"
+	run "god start resque"
+end
 
+after :deploy, "gems:install", "database:upgrade", "deploy:reload_god_config"
+ 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
-
-# If you are using Passenger mod_rails uncomment this:
-# namespace :deploy do
-#   task :start do ; end
-#   task :stop do ; end
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end

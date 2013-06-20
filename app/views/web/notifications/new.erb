@@ -12,7 +12,7 @@
     <%= flash_tag(:later, :class => "offset2 span6 alert alert-info text-center") %>
     <div class="span12">
         <label><strong>Title</strong></label>
-        <%= f.text_field :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here" %>
+        <%= f.text_field :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here", :autofocus => :true %>
     </div>
     <div class="span12">
         <%= partial 'web/wysiwyg', :locals => { :f => f } %>
@@ -27,7 +27,7 @@
         <div class="row">
 
             <div class="offset7 span5">
-                <a href="#schedule-later-modal" class="btn" data-toggle="modal"><i class="icon-time"></i> Schedule For Later</a>
+                <a href="#schedule-later-modal" class="btn btn-info" data-toggle="modal"><i class="icon-time"></i> Send Message Later</a>
             
                 <%= f.submit "Send Message Now", :class => 'btn btn-success pull-right send-message', :style => 'font-weight: 900;'%>
             </div>
@@ -96,7 +96,7 @@
 
         <div class="modal-footer">
             <a class="btn" data-dismiss="modal" aria-hidden="true" href="#">Cancel</a>
-            <button class="btn btn-success send-message">Schedule Message</button>
+            <button class="btn btn-info send-message">Schedule Message</button>
         </div>
     </div>
 
@@ -109,7 +109,7 @@
         </div>
 
         <div class="modal-body">
-            <div id="video-message-box" class="text-info">
+            <div id="video-message-box" class="text-info text-center">
                 <i class="icon-info-sign"></i> This video will be uploaded to your youtube account.
             </div>
             <hr/>
@@ -230,12 +230,12 @@
               width: 300,
                webcamOnly: false,
               events: {
-                'onUploadSuccess': onUploadSuccess
+                'onVideoIdAvailable': onVideoIdAvailable
               }
             });
         }
 
-        function onUploadSuccess(event) {
+        function onVideoIdAvailable(event) {
             // set video id
             $('#video_id').val(event.data.videoId);
             $('#video-message-box').html('<i class="icon-ok-sign"></i> Video Uploaded Successfully. Click "Attach" to continue or "Cancel" to remove video.');

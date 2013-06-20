@@ -8,30 +8,20 @@ module StockNotifier
 
     enable :sessions
 
-    # set :delivery_method, :smtp => {
-    #   :address         => 'smtp.gmail.com',
-    #   :port            => '587',
-    #   :user_name       => 'jaganluthra@gmail.com',
-    #   :password        => 'jaganbangaa',
-    #   :authentication  => :plain, # :plain, :login, :cram_md5, no auth by default 
-    #   :enable_starttls_auto => true 
-    #   #:domain          => "localhost.localdomain" # the HELO domain provided by the client to the server
-    # }
-
-    # set :delivery_method, :smtp => {
-    #   :address         => 'smtpout.secureserver.net ',
-    #   :port            => '465',
-    #   :user_name       => 'info@notifyme.in',
-    #   :password        => 'w3.notifyme.in',
-    #   :authentication  => :plain, # :plain, :login, :cram_md5, no auth by default 
-    #   :enable_starttls_auto => true 
-    #   #:domain          => "localhost.localdomain" # the HELO domain provided by the client to the server
-    # }
-
-    set :delivery_method, :file => {
-        :location => "#{Padrino.root}/tmp/emails",
+    set :delivery_method, :smtp => {
+        :address         => 'smtp.mandrillapp.com',
+        :port            => '587',
+        :user_name       => 'info@notifyme.in',
+        :password        => 'k8vMLtA-FFKbrOESEj7xrA',
+        #:authentication  => :login, # :plain, :login, :cram_md5, no auth by default
+        #:enable_ssl      => true,
+        #:enable_starttls_auto => true
+        #:domain          => "notifyme.in" # the HELO domain provided by the client to the server
     }
 
+    # set :delivery_method, :file => {
+    #     :location => "#{Padrino.root}/tmp/emails",
+    # }
 
     ##
     # Caching support

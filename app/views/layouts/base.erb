@@ -33,6 +33,12 @@
     <% if content_for?(:js) %>  
       <%= yield_content :js %>
     <% end %>
+    
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('[rel=tooltip]').tooltip();
+      });
+    </script>
 
     <% if Padrino.env == :production %>
       <script>
