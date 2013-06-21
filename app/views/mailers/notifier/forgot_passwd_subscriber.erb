@@ -1,0 +1,20 @@
+<p>
+  Hello <%= subscriber.name %>,
+</p>
+
+<p>
+  As per your request, we have generated your new password for "<%= publisher.name %>" app.
+  <br/>
+  You can now login into the "<%= publisher.name %>" app using following details,
+</p>
+
+<p>
+   	<strong>Username:</strong> <i><%= publisher.email %></i><br/>
+   	<strong>Password:</strong> <i><%= new_passwd %></i>
+</p>
+
+<p>
+  Thanks,<br/>
+  Notifyme Team
+  [ On behalf of "<%= publisher.name %>" app ]
+</p>

@@ -28,7 +28,6 @@
     <%# include javascripts from cdn %>
     <%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js" %>
     <%= javascript_include_tag "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" %>
-    <%= javascript_include_tag "application" %>
     
     <% if content_for?(:js) %>  
       <%= yield_content :js %>

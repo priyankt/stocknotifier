@@ -79,7 +79,7 @@ StockNotifier::Api.controllers do
 
     if @subscriber.valid?
       @subscriber.save
-      Resque.enqueue(SendEmail, {:subscriber_id => @subscriber.id, :new_passwd => new_passwd,  :user_type => 'subscriber'})
+      Resque.enqueue(SendEmail, {:subscriber_id => @subscriber.id, :new_passwd => new_passwd})
       #StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
       status 201
       ret = {:success => 1}

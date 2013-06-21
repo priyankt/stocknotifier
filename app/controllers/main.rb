@@ -56,7 +56,7 @@ StockNotifier::App.controllers do
         publisher.salt = salt
         if publisher.valid?
           publisher.save
-          Resque.enqueue(SendEmail, {:mailer_name => 'notifier', :email_type => 'forgot_passwd', :publisher_id => publisher.id, :new_passwd => new_passwd, :user_type => 'publisher'})
+          Resque.enqueue(SendEmail, {:mailer_name => 'notifier', :email_type => 'forgot_passwd_publisher', :publisher_id => publisher.id, :new_passwd => new_passwd})
           flash.now[:success] = "An email has been sent with your new password."
         else
           flash.now[:error] = "An error occured while sending new password. Please try again."

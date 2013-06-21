@@ -76,6 +76,10 @@ deploy.task :reload_god_config do
 	run "god stop resque"
 	run "god load #{File.join deploy_to, 'current', 'config', 'resque.god'}"
 	run "god start resque"
+
+	run "god stop resque-scheduler"
+	run "god load #{File.join deploy_to, 'current', 'config', 'resque_scheduler.god'}"
+	run "god start resque-scheduler"
 end
 
 after :deploy, "gems:install", "database:upgrade", "deploy:reload_god_config"

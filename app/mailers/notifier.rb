@@ -35,14 +35,32 @@
 
 StockNotifier::App.mailer :notifier do
 
-  email :forgot_passwd do |user, new_passwd|
+  email :forgot_passwd_subscriber do |subscriber, new_passwd, publisher|
     from 'info@notifyme.in'
     to user.email
     #bcc 'info@notifyme.in'
-    subject 'Your new password'
+    subject 'Your new password #{publisher.name} app'
     content_type 'text/html' # optional, defaults to plain/text
     via :smtp # optional, to smtp if defined, otherwise sendmail
     render 'notifier/forgot_passwd', :layout => 'email', :locals => {:user => user, :new_passwd => new_passwd}
+  end
+
+  email :forgot_passwd_publisher do |publisher, new_passwd|
+    from 'info@notifyme.in'
+    to publisher.email
+    subject 'Your new password at notifyme.in'
+    content_type 'text/html' # optional, defaults to plain/text
+    via :smtp # optional, to smtp if defined, otherwise sendmail
+    render 'notifier/forgot_passwd_publisher', :layout => 'email', :locals => {:publisher => publisher, :new_passwd => new_passwd}
+  end
+
+  email :new_user do |subscriber, passwd, publisher|
+    from 'info@notifyme.in'
+    to subscriber.email
+    subject "Welcome to #{publisher.name} app"
+    content_type 'text/html' # optional, defaults to plain/text
+    via :smtp # optional, to smtp if defined, otherwise sendmail
+    render 'notifier/new_user', :layout => 'email', :locals => {:subscriber => subscriber, :passwd => passwd, :publisher => publisher}
   end
 
 end

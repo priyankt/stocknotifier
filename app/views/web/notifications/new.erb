@@ -113,8 +113,16 @@
                 <i class="icon-info-sign"></i> This video will be uploaded to your youtube account.
             </div>
             <hr/>
-            <div id="widget" class="offset1">
-                <i class="icon-spinner icon-large icon-spin"></i> Preparing for video upload..
+            <div id="widget" class="span4">
+                <i class="icon-spinner icon-large icon-spin"></i> Loading Youtube widget..
+            </div>
+            <div id="widget" class="span2">
+                <ul class="unstyled" id="video-progress-box">
+                    <li class="muted">
+                        <i class="icon-remove-sign"></i> Uploaded
+                    </li>
+                </ul>
+                <small>After selecting a file, please wait for the upload status to get green</small>
             </div>
             <%= f.hidden_field :video1, :id => 'video_id' %>
         </div>
@@ -122,7 +130,7 @@
         <div class="modal-footer">
             <%#<button class="btn btn-success send-message">Attach Video</button>%>
             <a class="btn" data-dismiss="modal" aria-hidden="true" href="#">Cancel</a>
-            <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Attach</a>
+            <a id="attach-video" href="#" class="btn btn-primary disabled" data-dismiss="modal" aria-hidden="true"><i class="icon-paper-clip"></i> Attach</a>
         </div>
     </div>
     
@@ -230,16 +238,25 @@
               width: 300,
                webcamOnly: false,
               events: {
+                'onUploadSuccess': onUploadSuccess,
                 'onVideoIdAvailable': onVideoIdAvailable
               }
             });
         }
 
+        function onUploadSuccess(event) {
+            $('#video-progress-box').html('<li class="text-success"><i class="icon-ok-sign"></i> Uploaded</li>');
+            $('#attach-video').toggleClass('disabled');
+        }
+
         function onVideoIdAvailable(event) {
             // set video id
             $('#video_id').val(event.data.videoId);
-            $('#video-message-box').html('<i class="icon-ok-sign"></i> Video Uploaded Successfully. Click "Attach" to continue or "Cancel" to remove video.');
         }
+
+        $('#upload-btn').click(function(){
+            $('#video-progress-box').html('<li><i class="icon-spinner icon-spin"></i> Uploading..</li>');
+        });
 
     </script>
 <% end %>

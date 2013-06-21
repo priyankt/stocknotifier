@@ -10,6 +10,7 @@
         
         <hr/>
 
+        <% video_class = '' %>
         <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url or notification.video1 %>
             <div class="row">
 
@@ -17,9 +18,11 @@
                     <ul class="nav nav-tabs" id="mediaTab">
                         <% if notification.image1.main.url or notification.image2.main.url or notification.image3.main.url %>
                             <li class="active"><a href="#photos" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
+                        <% else %>
+                            <% video_class = 'active' %>
                         <% end %>
                         <% if notification.video1 %>
-                            <li><a href="#video" data-toggle="tab"><i class="icon-facetime-video"></i> Video</a></li>
+                            <li class="<%= video_class %>"><a href="#video" data-toggle="tab"><i class="icon-facetime-video"></i> Video</a></li>
                         <% end %>
                     </ul>
                 </div>
@@ -68,7 +71,7 @@
                     <% end %>
 
                     <% if notification.video1 %>
-                        <div class="tab-pane" id="video">
+                        <div class="tab-pane <%= video_class %>" id="video">    
                             <iframe id="video" class="youtube-player" type="text/html" width="100%" height="385" src="http://www.youtube.com/embed/<%= notification.video1 %>" allowfullscreen frameborder="0" seamless></iframe>
                         </div>
                     <% end %>
@@ -77,11 +80,11 @@
         <% end %>
         
         <div class="row">
-            	<div class="offset2 span8">
-            		<div class="well">
-            			<%= (notification.text).html_safe %>
-            		</div>
+        	<div class="offset2 span8">
+        		<div class="well">
+        			<%= (notification.text).html_safe %>
         		</div>
+    		</div>
         </div>
 
     </div>

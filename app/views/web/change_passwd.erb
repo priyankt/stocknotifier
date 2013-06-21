@@ -27,14 +27,14 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <%= label_tag :new_passwd_repeat, :caption => "Repeat New Password", :class => 'control-label', :for => 'inputNewPasswordRepeat' %>
+                    <%= label_tag :new_passwd_repeat, :caption => "Confirm New Password", :class => 'control-label', :for => 'inputNewPasswordRepeat' %>
                     <div class="controls">
                         <%= password_field_tag :new_passwd_repeat, :id => 'inputNewPasswordRepeat', :placeholder => "Repeat new password", :required => :true %>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <%= submit_tag "Change Password", :class => 'btn btn-primary' %>
+                        <%= submit_tag "Change Password", :class => 'btn btn-primary', :id => 'submit-btn' %>
                     </div>
                 </div>
                 
@@ -43,3 +43,18 @@
         </div>
     </div>
 </div>
+
+<% content_for :js do %>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#submit-btn').click(function(){
+                var new_passwd = $('#inputNewPassword').val();
+                var new_passwd_repeat = $('#inputNewPasswordRepeat').val();
+                if(new_passwd != new_passwd_repeat) {
+                    alert('New password and confirm password should match.');
+                    return false;
+                }
+            });
+        });
+    </script>
+<% end %>

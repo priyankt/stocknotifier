@@ -66,6 +66,7 @@ StockNotifier::App.controllers do
 
     if @subscriber.valid?
       @subscriber.save
+      Resque.enqueue(SendEmail, {:mailer_name => 'notifier', :email_type => 'new_user', :subscriber_id => @subscriber.id, :new_passwd => user_passwd})
       flash[:success] = "User #{@subscriber.name} created successfully."
       redirect url(:new_user)
     else
@@ -147,10 +148,11 @@ StockNotifier::App.controllers do
     @notification.publisher = @publisher
     if @notification.valid?
       @notification.save
-      Resque.enqueue(SendNotification, @notification.id)
       if @notification.schedule_dttm.nil?
+        Resque.enqueue(SendNotification, @notification.id)
         flash[:success] = "Message sent successfully."
       else
+        Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
         flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
       end
 
@@ -216,16 +218,25 @@ StockNotifier::App.controllers do
     new_passwd = params[:new_passwd] if params.has_key?("new_passwd")
     new_passwd_repeat = params[:new_passwd_repeat] if params.has_key?("new_passwd_repeat")
 
-    if current and new_passwd and new_passwd_repeat and new_passwd == new_passwd_repeat
-      salt = BCrypt::Engine.generate_salt
-      @publisher.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
-      @publisher.salt = salt
-      if @publisher.valid?
-        @publisher.save
-        flash[:success] = "Password changed successfully."
-        redirect url(:change_passwd)
+    if current and new_passwd and new_passwd_repeat
+      if new_passwd != new_passwd_repeat
+        flash.now[:error] = "New password and repeat password should match."
       else
-        flash.now[:error] = "Something went wrong. Please try again."
+        passwd_hash = BCrypt::Engine.hash_secret(current, @publisher.salt)
+        if passwd_hash == @publisher.passwd
+          salt = BCrypt::Engine.generate_salt
+          @publisher.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
+          @publisher.salt = salt
+          if @publisher.valid?
+            @publisher.save
+            flash[:success] = "Password changed successfully."
+            redirect url(:change_passwd)
+          else
+            flash.now[:error] = "Something went wrong. Please try again."
+          end
+        else
+          flash.now[:error] = "Invalid current password."
+        end
       end
     else
       flash.now[:error] = "Please provide all the values and try again."

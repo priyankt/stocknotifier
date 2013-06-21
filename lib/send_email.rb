@@ -5,18 +5,25 @@ class SendEmail
 	def self.perform(params)
 
 		case params['mailer_name']
-		when 'notifier'
-		case params['email_type']
-			when 'forgot_passwd'
-				if params['user_type'] == 'publisher'
-					user = Publisher.get(params['publisher_id'])
-				else
-					user = Subscriber.get(params['subscriber_id'])
+			when 'notifier'
+				case params['email_type']
+					when 'forgot_passwd_publisher'
+						publisher = Publisher.get(params['publisher_id'])
+						new_passwd = params['new_passwd']
+						StockNotifier::App.deliver(:notifier, :forgot_passwd_publisher, publisher, new_passwd)
+					when 'forgot_passwd_subscriber'
+						subscriber = Subscriber.get(params['subscriber_id'])
+						new_passwd = params['new_passwd']
+						StockNotifier::App.deliver(:notifier, :forgot_passwd_subscriber, subscriber, new_passwd, subscriber.publisher)
+					when 'new_user'
+						subscriber = Subscriber.get(params['subscriber_id'])
+						passwd = params['new_passwd']
+						StockNotifier::App.deliver(:notifier, :new_user, subscriber, passwd, subscriber.publisher)
+					else
+						puts 'Invalid email type'
 				end
-				new_passwd = params['new_passwd']
-				StockNotifier::App.deliver(:notifier, :forgot_passwd, user, new_passwd)
-			end
 		end
-  	end
+		
+	end
 
 end
