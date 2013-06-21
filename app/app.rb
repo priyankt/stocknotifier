@@ -1,5 +1,8 @@
 module StockNotifier
   class App < Padrino::Application
+
+    require 'notifyme_constants'
+
     register WillPaginate::Sinatra
     register LessInitializer
     register Padrino::Rendering
@@ -7,21 +10,6 @@ module StockNotifier
     register Padrino::Helpers
 
     enable :sessions
-
-    set :delivery_method, :smtp => {
-        :address         => 'smtp.mandrillapp.com',
-        :port            => '587',
-        :user_name       => 'info@notifyme.in',
-        :password        => 'k8vMLtA-FFKbrOESEj7xrA',
-        #:authentication  => :login, # :plain, :login, :cram_md5, no auth by default
-        #:enable_ssl      => true,
-        #:enable_starttls_auto => true
-        #:domain          => "notifyme.in" # the HELO domain provided by the client to the server
-    }
-
-    # set :delivery_method, :file => {
-    #     :location => "#{Padrino.root}/tmp/emails",
-    # }
 
     ##
     # Caching support
@@ -55,13 +43,24 @@ module StockNotifier
     layout  :base            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
     #
 
-    ##
-    # You can configure for a specified environment like:
-    #
-    #   configure :development do
-    #     set :foo, :bar
-    #     disable :asset_stamp # no asset timestamping for dev
-    #   end
+    configure :development do
+
+        set :delivery_method, :file => {
+            :location => "#{Padrino.root}/tmp/emails",
+        }
+        
+    end
+
+    configure :production do
+
+        set :delivery_method, :smtp => {
+            :address         => NotifyMeConstants::EMAIL_HOST,
+            :port            => NotifyMeConstants::EMAIL_PORT,
+            :user_name       => NotifyMeConstants::EMAIL_FROM,
+            :password        => NotifyMeConstants::EMAIL_KEY,
+        }
+        
+    end
     #
 
     ##

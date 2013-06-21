@@ -46,18 +46,26 @@ namespace :deploy do
 		# 	run "find #{asset_paths} -exec touch -t #{stamp} {} ';'; true", :env => { "TZ" => "UTC" }
 		# end
 	end
-end
 
-after 'deploy:update_code', 'deploy:symlink_db'
- 
-namespace :deploy do
 	desc "Symlinks the database.rb"
 	task :symlink_db, :roles => :app do
 		run "rm -rf #{current_release}/config/database.rb"
 		run "ln -nfs #{deploy_to}/shared/config/database.rb #{current_release}/config/database.rb"
+	end
+
+	desc "Symlinks the upload directory"
+	task :symlink_upload, :roles => :app do
 		run "ln -nfs #{deploy_to}/shared/images/uploads #{current_release}/public/images/uploads"
 	end
+
+	desc "Symlinks the lib/notifyme_constants.rb"
+	task :symlink_constants, :roles => :app do
+		run "rm -rf #{current_release}/lib/notifyme_constants.rb"
+		run "ln -nfs #{deploy_to}/shared/config/notifyme_constants.rb #{current_release}/lib/notifyme_constants.rb"
+	end
 end
+
+after 'deploy:update_code', 'deploy:symlink_db', 'deploy:symlink_upload', 'deploy:symlink_constants'
 
 namespace :gems do
   	task :install do
