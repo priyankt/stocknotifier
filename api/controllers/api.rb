@@ -1,5 +1,3 @@
-require 'bcrypt'
-require 'uuidtools'
 require 'dm-serializer/to_json'
 require 'json'
 require "resque"
@@ -8,7 +6,7 @@ require "send_email"
 StockNotifier::Api.controllers do
 
 # Check auth before every route except login
-  before :except => :login do
+  before do
 
     if env.has_key?("HTTP_X_AUTH_KEY") and !env["HTTP_X_AUTH_KEY"].nil?
       api_key = env["HTTP_X_AUTH_KEY"]

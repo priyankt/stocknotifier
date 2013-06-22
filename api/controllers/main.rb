@@ -1,3 +1,6 @@
+require "securerandom"
+require "bcrypt"
+
 StockNotifier::Api.controllers do
   
   # Login
@@ -12,8 +15,8 @@ StockNotifier::Api.controllers do
       passwd_hash = BCrypt::Engine.hash_secret(params[:passwd], subscriber.salt)
       ret = {:success => 0}
       if subscriber.passwd == passwd_hash
-        # assign unique auth key to this user                                                                                                                  
-        subscriber.api_key = UUIDTools::UUID.random_create
+        # assign unique auth key to this user                                                                                                               
+        subscriber.api_key = generate_api_key()
         if subscriber.save
           status 200
           ret = {:success => 1, :user_key => subscriber.api_key}
@@ -55,6 +58,7 @@ StockNotifier::Api.controllers do
   post :register, :map => '/register' do
 
     salt = BCrypt::Engine.generate_salt
+    api_key = generate_api_key()
     @subscriber = Subscriber.new(
       :name => params[:name],
       :email => params[:email],
@@ -62,14 +66,15 @@ StockNotifier::Api.controllers do
       :salt => salt,
       :city => params[:city],
       :occupation => params[:occupation],
-      :phone => params[:phone]
+      :phone => params[:phone],
+      :api_key => api_key
     )
 
     @subscriber.publisher = Publisher.get(params[:publisher_id])
 
     if @subscriber.valid?
       @subscriber.save
-      ret = {:success => 1, :id => @subscriber.id}
+      ret = {:success => 1, :id => @subscriber.id, :api_key => api_key}
       status 201
     else
       ret = {:success => 0, :errors => @subscriber.errors.to_hash}
