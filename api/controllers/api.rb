@@ -75,7 +75,12 @@ StockNotifier::Api.controllers do
 
     last_id = params["last_id"] if params.has_key?("last_id")
     publisher = @subscriber.publisher
-    notifications = publisher.notifications.all( :id.gt => last_id )
+    if last_id
+      notifications = publisher.notifications.all( :id.gt => last_id, :order => :created_at.desc )
+    else
+      notifications = publisher.notifications.all(:order => :created_at.desc)
+    end
+    
     notifications.to_json
 
   end

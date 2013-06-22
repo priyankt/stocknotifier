@@ -244,25 +244,16 @@
               width: 300,
                webcamOnly: false,
               events: {
-                'onUploadSuccess': onUploadSuccess,
                 'onVideoIdAvailable': onVideoIdAvailable
               }
             });
         }
 
-        function onUploadSuccess(event) {
+        function onVideoIdAvailable(event) {
             $('#video-progress-box').html('<li class="text-success"><i class="icon-ok-sign"></i> Uploaded</li>');
             $('#attach-video').toggleClass('disabled');
-        }
-
-        function onVideoIdAvailable(event) {
-            // set video id
             $('#video_id').val(event.data.videoId);
         }
-
-        $('#upload-btn').click(function(){
-            $('#video-progress-box').html('<li><i class="icon-spinner icon-spin"></i> Uploading..</li>');
-        });
 
     </script>
 <% end %>
