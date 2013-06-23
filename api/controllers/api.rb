@@ -78,7 +78,7 @@ StockNotifier::Api.controllers do
 
     last_id = params["last_id"] if params.has_key?("last_id")
     publisher = @subscriber.publisher
-    fields = [:id, :title, :text, :video1, :image1, :image2, :image3]
+    fields = [:id, :title, :text, :video1, :image1, :image2, :image3, :updated_at]
     if last_id
       notifications = publisher.notifications.all( :fields => fields, :id.gt => last_id, :order => :created_at.desc )
     else
@@ -95,6 +95,7 @@ StockNotifier::Api.controllers do
         :image1 => {:url => n.image1.url, :main => n.image1.main.url, :thumb => n.image1.thumb.url},
         :image2 => {:url => n.image2.url, :main => n.image2.main.url, :thumb => n.image2.thumb.url},
         :image3 => {:url => n.image3.url, :main => n.image3.main.url, :thumb => n.image3.thumb.url},
+        :updated_at => n.updated_at
       })
     end
     
