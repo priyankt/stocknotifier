@@ -11,22 +11,25 @@ StockNotifier::Api.controllers do
 
     # get subscriber for this email & publisher
     subscriber = Subscriber.first(:email => email, :publisher_id => publisher_id)
+    ret = {:success => 0}
     if subscriber
       passwd_hash = BCrypt::Engine.hash_secret(params[:passwd], subscriber.salt)
-      ret = {:success => 0}
       if subscriber.passwd == passwd_hash
         # assign unique auth key to this user                                                                                                               
         subscriber.api_key = generate_api_key()
         if subscriber.save
-          status 200
           ret = {:success => 1, :user_key => subscriber.api_key}
+          status 200
         else
+          ret = {:success => 0, :errors => subscriber.errors.to_hash}
           status 400
         end
       else
+        ret = {:success => 0, :errors => ['Invalid password']}
         status 401
       end
     else
+      ret = {:success => 0, :errors => ['Invalid subscriber']}
       status 400
     end
     
@@ -36,19 +39,26 @@ StockNotifier::Api.controllers do
 
   put :forgot_passwd, :map => '/forgot_passwd' do
 
-    salt = BCrypt::Engine.generate_salt
-    new_passwd = SecureRandom.hex(5)
-    @subscriber.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
-    @subscriber.salt = salt
+    subscriber = Subscriber.first(:email => params[:email], :publisher_id => params[:publisher_id])
+    if subscriber
+      salt = BCrypt::Engine.generate_salt
+      new_passwd = SecureRandom.hex(5)
+      subscriber.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
+      subscriber.salt = salt
 
-    if @subscriber.valid?
-      @subscriber.save
-      Resque.enqueue(SendEmail, {:subscriber_id => @subscriber.id, :new_passwd => new_passwd})
-      #StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
-      status 201
-      ret = {:success => 1}
+      if subscriber.valid?
+        subscriber.save
+        Resque.enqueue(SendEmail, {:subscriber_id => subscriber.id, :new_passwd => new_passwd})
+        #StockNotifier::App.deliver(:notifier, :forgot_passwd, @subscriber, new_passwd)
+        status 200
+        ret = {:success => 1}
+      else
+        status 400
+        ret = {:success => 0, :errors => subscriber.errors.to_hash}
+      end
     else
-      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+      status 400
+      ret = {:success => 0, :errors => ["Invalid email: #{params[:email]}"]}
     end
 
     ret.to_json
@@ -59,7 +69,7 @@ StockNotifier::Api.controllers do
 
     salt = BCrypt::Engine.generate_salt
     api_key = generate_api_key()
-    @subscriber = Subscriber.new(
+    subscriber = Subscriber.new(
       :name => params[:name],
       :email => params[:email],
       :passwd => BCrypt::Engine.hash_secret( params[:passwd], salt),
@@ -70,14 +80,14 @@ StockNotifier::Api.controllers do
       :api_key => api_key
     )
 
-    @subscriber.publisher = Publisher.get(params[:publisher_id])
+    subscriber.publisher = Publisher.get(params[:publisher_id])
 
-    if @subscriber.valid?
-      @subscriber.save
-      ret = {:success => 1, :id => @subscriber.id, :api_key => api_key}
+    if subscriber.valid?
+      subscriber.save
+      ret = {:success => 1, :id => subscriber.id, :api_key => api_key}
       status 201
     else
-      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+      ret = {:success => 0, :errors => subscriber.errors.to_hash}
       status 400
     end
 
