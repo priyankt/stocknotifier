@@ -144,7 +144,11 @@ StockNotifier::App.controllers do
 
     if params[:notification][:schedule_dttm].nil? or params[:notification][:schedule_dttm].blank? or params[:notification][:schedule_dttm].empty?
       @notification.schedule_dttm = nil
+    else
+      # change timezone to IST
+      @notification.schedule_dttm = @notification.schedule_dttm.change(:offset => "+0530")
     end
+
     @notification.publisher = @publisher
     if @notification.valid?
       @notification.save
