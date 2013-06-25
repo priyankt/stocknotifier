@@ -21,6 +21,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Title</th>
+                    <th>Scheduled</th>
                     <th>Sent On</th>
                     <th>Views <i class="icon-info-sign" data-toggle="tooltip" rel="tooltip" title="Number of users who viewed the details of the message"></i></th>
                 </tr>
@@ -29,8 +30,22 @@
                 <% for notification in @notifications %>
                     <tr>
                         <td><%= notification.id %></td>
-                        <td><a href="<%= url_for(:notification_details, notification.id)%>"><%= notification.title %></a></td>
-                        <td><%= format_date(notification.created_at) %></td>
+                        <td class="span5"><a href="<%= url_for(:notification_details, notification.id)%>"><%= notification.title %></a></td>
+                        <% if notification.schedule_dttm %>
+                            <td><%= format_date(notification.schedule_dttm) %></td>
+                        <% else %>
+                            <td>No</td>
+                        <% end %>
+                        <% if notification.schedule_dttm %>
+                            <% if notification.sent %>
+                                <td><%= format_date(notification.updated_at) %></td>
+                            <% else %>
+                                <td>Not Yet</td>
+                            <% end %>
+                        <% else %>
+                            <td><%= format_date(notification.updated_at) %></td>
+                        <% end %>
+                        
                         <td><span class="badge"><%= notification.viewedNotifications.count %></span></td>
                     </tr>
                 <% end %>

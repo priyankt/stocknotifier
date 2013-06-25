@@ -147,6 +147,7 @@ StockNotifier::App.controllers do
     else
       # change timezone to IST
       @notification.schedule_dttm = @notification.schedule_dttm.change(:offset => "+0530")
+      @notification.sent = false
     end
 
     @notification.publisher = @publisher

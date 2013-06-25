@@ -13,6 +13,7 @@ class Notification
   mount_uploader :image3, Uploader
   mount_uploader :image4, Uploader
   mount_uploader :image5, Uploader
+  property :sent, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

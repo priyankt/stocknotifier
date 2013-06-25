@@ -1,0 +1,30 @@
+<span class="spacer30"></span>
+
+<%= flash_tag(:error, :class => "offset2 span6 alert alert-error") %>
+<%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+
+<div class="offset2 span7">
+    
+    <% form_tag url(:login), :id => 'login', :class => 'form-horizontal well' do %>
+        <%= hidden_field_tag :session_id %>
+        <legend><strong>Login</strong></legend>
+        <div class="control-group">
+            <%= label_tag :email, :caption => "Email", :class => 'control-label', :for => 'inputEmail' %>
+            <div class="controls">
+                <%= email_field_tag :email, :id => 'inputEmail', :placeholder => "Email", :autofocus => :true, :required => :true%>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :passwd, :caption => "Password", :class => 'control-label', :for => 'inputPassword' %>
+            <div class="controls">
+                <%= password_field_tag :passwd, :id => 'inputPassword', :placeholder => "Password", :required => :true %>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <%= submit_tag "Login", :class => 'btn btn-primary' %>
+            </div>
+        </div>
+        <p class="text-center"><a href="<%= url_for(:forgot_passwd) %>">Forgot Password?</a></p>
+    <% end %>
+</div>

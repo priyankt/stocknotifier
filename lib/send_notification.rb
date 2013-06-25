@@ -10,9 +10,14 @@ class SendNotification
     	publisher = notification.publisher
 
     	# send android notifications
-    	registration_ids = Subscriber.all(:fields => [:registration_token], :publisher_id => publisher.id, :active => true)
+    	registration_ids = Subscriber.all(
+    		:fields => [:registration_token],
+    		:publisher_id => publisher.id,
+    		:active => true,
+    		:registration_token.not => nil
+    		)
 
-    	if not publisher.android_api_key == nil
+    	unless publisher.android_api_key.nil?
 	    	
 	    	gcm = GCM.new(publisher.android_api_key)
 			options = {data: {message: notification.title} }
@@ -30,8 +35,15 @@ class SendNotification
 			
 		end
 
-		if not publisher.ios_api_key == nil
+		unless publisher.ios_api_key.nil?
 			# code to send notification to ios
+		end
+
+		notification.sent = true
+		if notification.valid?
+			notification.save
+		else
+			# print some error here
 		end
 
   	end

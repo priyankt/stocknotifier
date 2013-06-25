@@ -7,6 +7,14 @@ StockNotifier::App.controllers do
   end
 
   get :login, :map => '/login' do
+    
+    if logged_in?
+      @publisher = Publisher.get(session[:publisher])
+      @active_users = Subscriber.count(:publisher_id => session[:publisher], :active => true)
+      @messages_sent = Notification.count(:publisher_id => session[:publisher], :sent => true)
+      @messages_scheduled = Notification.count(:publisher_id => session[:publisher], :sent => false)
+    end
+
     render 'main/login'
   end
 

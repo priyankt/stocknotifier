@@ -230,6 +230,10 @@
                 startDate: new Date()
                 //startDate:
             });
+
+            $('.disabled').click(function(){
+                return false;
+            });
         });
 
         var tag = document.createElement('script');
@@ -244,9 +248,25 @@
               width: 300,
                webcamOnly: false,
               events: {
-                'onVideoIdAvailable': onVideoIdAvailable
+                'onVideoIdAvailable': onVideoIdAvailable,
+                'onApiReady': onApiReady
               }
             });
+        }
+
+        function onApiReady(){
+            title = $('#title').val();
+            desc = $('#editor').html();
+
+            if(title.length > 0) {
+                widget.setVideoTitle(title);
+            }
+            
+            if(desc.length > 0) {
+                widget.setVideoDescription(desc);
+            }
+            
+            widget.setVideoPrivacy('public');
         }
 
         function onVideoIdAvailable(event) {

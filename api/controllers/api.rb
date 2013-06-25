@@ -76,25 +76,45 @@ StockNotifier::Api.controllers do
 
   get :get_notifications, :map => '/notifications' do
 
-    last_id = params["last_id"] if params.has_key?("last_id")
+    last_updated_at = DateTime.parse(params["last_updated_at"]) if params.has_key?("last_updated_at")
+    
     publisher = @subscriber.publisher
     fields = [:id, :title, :text, :video1, :image1, :image2, :image3, :updated_at]
-    if last_id
-      notifications = publisher.notifications.all( :fields => fields, :id.gt => last_id, :order => :created_at.desc )
+    if last_updated_at
+      # TODO: Find a better way to specify timezone
+      last_updated_at = last_updated_at.change(:offset => "+0530")
+      notifications = publisher.notifications.all( :fields => fields, :updated_at.gt => last_updated_at, :order => :updated_at.desc, :sent => true, :limit => 50 )
     else
-      notifications = publisher.notifications.all( :fields => fields, :order => :created_at.desc)
+      notifications = publisher.notifications.all( :fields => fields, :order => :updated_at.desc, :sent => true, :limit => 50)
     end
 
     data = Array.new()
     notifications.each do |n|
+      display_image = n.image1.thumb.url || n.image2.thumb.url || n.image3.thumb.url || get_display_image()
+      
+      images = Array.new()
+      if n.image1.url
+        images.push({:url => n.image1.url, :main => n.image1.main.url, :thumb => n.image1.thumb.url})
+      end
+      if n.image2.url
+        images.push({:url => n.image2.url, :main => n.image2.main.url, :thumb => n.image2.thumb.url})
+      end
+      if n.image3.url
+        images.push({:url => n.image3.url, :main => n.image3.main.url, :thumb => n.image3.thumb.url})
+      end
+
+      videos = Array.new()
+      if n.video1 == nil
+        videos.push({:id => n.video1, :thumb => get_video_thumb(n.video1)})
+      end
+
       data.push({
         :id => n.id,
         :title => n.title,
         :text => n.text,
-        :video1 => n.video1,
-        :image1 => {:url => n.image1.url, :main => n.image1.main.url, :thumb => n.image1.thumb.url},
-        :image2 => {:url => n.image2.url, :main => n.image2.main.url, :thumb => n.image2.thumb.url},
-        :image3 => {:url => n.image3.url, :main => n.image3.main.url, :thumb => n.image3.thumb.url},
+        :videos => videos,
+        :images => images,
+        :display_image => display_image, # stub image when no image is uploaded with message
         :updated_at => n.updated_at
       })
     end

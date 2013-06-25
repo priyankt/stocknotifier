@@ -1,7 +1,16 @@
 # Helper methods defined here can be accessed in any controller or view in the application
 
 StockNotifier::Api.helpers do
-  # def simple_helper_method
-  #  ...
-  # end
+
+	def get_display_image
+
+		'/images/display_image.png'
+		
+	end
+
+	def get_video_thumb(video_id)
+
+		"img.youtube.com/vi/#{video_id}/default.jpg"
+
+	end
 end
