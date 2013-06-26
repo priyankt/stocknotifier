@@ -9,13 +9,7 @@ class SendNotification
     	notification = Notification.get(notification_id)
     	publisher = notification.publisher
 
-    	# send android notifications
-    	registration_ids = Subscriber.all(
-    		:fields => [:registration_token],
-    		:publisher_id => publisher.id,
-    		:active => true,
-    		:registration_token.not => nil
-    		)
+    	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = 1 and active = 't' and registration_token is not null")
 
     	unless publisher.android_api_key.nil?
 	    	
