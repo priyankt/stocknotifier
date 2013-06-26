@@ -39,7 +39,7 @@ StockNotifier::App.mailer :notifier do
     from 'info@notifyme.in'
     to subscriber.email
     #bcc 'info@notifyme.in'
-    subject 'Your new password for #{publisher.name} app'
+    subject "Your new password for #{publisher.name} app"
     content_type 'text/html' # optional, defaults to plain/text
     via :smtp # optional, to smtp if defined, otherwise sendmail
     render 'notifier/forgot_passwd_subscriber', :layout => 'email', :locals => {:subscriber => subscriber, :new_passwd => new_passwd, :publisher => publisher}
