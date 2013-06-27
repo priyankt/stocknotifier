@@ -86,6 +86,14 @@
     <span class='help-inline'><%= error ? f.error_message_on(:ios_api_key) : "Ex: a simple text" %></span>
   </div>
 </fieldset>
+<% error = @publisher.errors.key?(:language1) && @publisher.errors[:language1].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :language1, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :language1, :class => 'input-mini input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:language1) : "2 character language code liki 'hi', 'mr'" %> <a href="https://developers.google.com/transliterate/v1/getting_started#LanguageCode" target="_blank">Click here</a> for language codes</span>
+  </div>
+</fieldset>
 <% error = @publisher.errors.key?(:logo) && @publisher.errors[:logo].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :logo, :class => 'control-label' %>

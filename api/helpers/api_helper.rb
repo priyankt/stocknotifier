@@ -10,7 +10,7 @@ StockNotifier::Api.helpers do
 
 	def get_video_thumb(video_id)
 
-		"img.youtube.com/vi/#{video_id}/default.jpg"
+		"img.youtube.com/vi/#{video_id}/0.jpg"
 
 	end
 end

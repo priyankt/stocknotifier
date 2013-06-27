@@ -10,42 +10,61 @@
         <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
         <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
         <% form_for @subscriber, :new, :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
-            <%= f.error_messages %>
 
             <legend>Create New User</legend>
-
+            
+            <% error = @subscriber.errors.key?(:name) && @subscriber.errors[:name].count > 0 %>
             <div class="control-group">
                 <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Full Name" %>
                 <div class="controls">
                     <%= f.text_field :name, :id => "inputName", :placeholder => "Your Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @subscriber.errors.key?(:email) && @subscriber.errors[:email].count > 0 %>
             <div class="control-group">
                 <%= f.label :email, :class => "control-label", :for => "inputEmail", :caption => "Email" %>
                 <div class="controls">
                     <%= f.email_field :email, :id => "inputEmail", :placeholder => "Your Email", :required => true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:email, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @subscriber.errors.key?(:phone) && @subscriber.errors[:phone].count > 0 %>
             <div class="control-group">
                 <%= f.label :phone, :class => "control-label", :for => "inputPhone", :caption => "Phone" %>
                 <div class="controls">
                     <%= f.text_field :phone, :id => "inputPhone", :placeholder => "Your phone number" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:phone, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @subscriber.errors.key?(:occupation) && @subscriber.errors[:occupation].count > 0 %>
             <div class="control-group">
                 <%= f.label :occupation, :class => "control-label", :for => "inputOccupation", :caption => "Occupation" %>
                 <div class="controls">
                     <%= f.text_field :occupation, :id => "inputOccupation", :placeholder => "Your occupation" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:occupation, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @subscriber.errors.key?(:city) && @subscriber.errors[:city].count > 0 %>
             <div class="control-group">
                 <%= f.label :city, :class => "control-label", :for => "inputCity", :caption => "City" %>
                 <div class="controls">
                     <%= f.text_field :city, :id => "inputCity", :placeholder => "Your City" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:city, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 

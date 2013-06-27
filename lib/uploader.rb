@@ -60,11 +60,11 @@ class Uploader < CarrierWave::Uploader::Base
   # Create different versions of your uploaded files
   #
   version :main do
-    process :resize_and_pad => [640, 400, 'black']
+    process :resize_to_fit => [640, 400]
   end
 
-  version :thumb, :from_version => :main do
-    process :resize_to_fit => [160, 100]
+  version :thumb do
+    process :resize_to_fill => [160, 100]
   end
 
   # def filename

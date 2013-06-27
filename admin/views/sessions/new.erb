@@ -14,9 +14,9 @@
   <body>
     <% form_tag url(:sessions, :create), :class=>"login form-horizontal" do %>
       <div class="login-header modal-header">
-        <div class="login-logo"> <%= image_tag("logo.png", :alt => "Padrino's logo", :height => 250, :width => 193) %> </div>
+        <h2>NotifyMe Admin Login</h2>
       </div>
-      <div class="login-body modal-body">
+      <div class="login-body modal-body well">
 
         <%= [:error, :warning, :success, :notice].map { |type| flash_tag(type, :class => "alert alert-#{type} fade in", :bootstrap => true) }.join.html_safe %>
 
@@ -30,14 +30,11 @@
           <div class="login-controls controls"><%= password_field_tag :password, :value => params[:password] %></div>
         </fieldset>
 
-        <fieldset class="login-control-group-last control-group">
-          <div class="login-controls controls">
-            <label class="login-bypass-label checkbox"><%= check_box_tag :bypass %>  <%= pat('login.bypass') %></label>
-          </div>
+        <fieldset class="control-group">
+          <div class="login-controls controls"><%= submit_tag(pat('login.sign_in'), :class => "btn btn-primary pull-right") %></div>
         </fieldset>
-
+       
       </div>
-      <div class="login-footer modal-footer"><%= submit_tag(pat('login.sign_in'), :class => "btn btn-primary pull-right") %></div>
     <% end %>
     <%= javascript_include_tag 'jquery-1.9.0.min', (Padrino.env == :production ? 'bootstrap/bootstrap.min' : %w[bootstrap/bootstrap-affix bootstrap/bootstrap-alert bootstrap/bootstrap-button bootstrap/bootstrap-carousel bootstrap/bootstrap-collapse bootstrap/bootstrap-dropdown bootstrap/bootstrap-tooltip bootstrap/bootstrap-transition bootstrap/bootstrap-typeahead bootstrap/bootstrap-modal bootstrap/bootstrap-popover bootstrap/bootstrap-scrollspy bootstrap/bootstrap-tab]), :application %>
   </body>

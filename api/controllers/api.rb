@@ -104,7 +104,7 @@ StockNotifier::Api.controllers do
       end
 
       videos = Array.new()
-      if n.video1 == nil
+      if n.video1.present?
         videos.push({:id => n.video1, :thumb => get_video_thumb(n.video1)})
       end
 

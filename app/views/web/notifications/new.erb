@@ -110,7 +110,7 @@
 
         <div class="modal-body">
             <div id="video-message-box" class="text-info text-center">
-                <i class="icon-info-sign"></i> This video will be uploaded to your youtube account.
+                <i class="icon-youtube icon-large"></i> This video will be uploaded to your youtube account.
             </div>
             <hr/>
             <div id="widget" class="span4">
@@ -136,7 +136,7 @@
         <div class="modal-footer">
             <%#<button class="btn btn-success send-message">Attach Video</button>%>
             <a class="btn" data-dismiss="modal" aria-hidden="true" href="#">Cancel</a>
-            <a id="attach-video" href="#" class="btn btn-primary disabled" data-dismiss="modal" aria-hidden="true"><i class="icon-paper-clip"></i> Attach</a>
+            <a href="#" id="attach-video" class="btn btn-primary disabled"><i class="icon-paper-clip"></i> Attach</a>
         </div>
     </div>
     
@@ -162,10 +162,9 @@
         function onLoad() {
 
             var options = {
-                sourceLanguage:
-                    google.elements.transliteration.LanguageCode.ENGLISH,
+                sourceLanguage: 'en',
                 destinationLanguage:
-                    [google.elements.transliteration.LanguageCode.HINDI],
+                    ['<%= @publisher.language1 %>'],
                 shortcutKey: 'ctrl+g',
                 transliterationEnabled: true
             };
@@ -245,18 +244,17 @@
 
         function onYouTubeIframeAPIReady() {
             widget = new YT.UploadWidget('widget', {
-              width: 300,
-               webcamOnly: false,
-              events: {
-                'onVideoIdAvailable': onVideoIdAvailable,
-                'onApiReady': onApiReady
-              }
+                width: 300,
+                webcamOnly: false,
+                events: {
+                    'onVideoIdAvailable': onVideoIdAvailable
+                }
             });
         }
 
-        function onApiReady(){
+        $('#videoBtn').click(function(){
             title = $('#title').val();
-            desc = $('#editor').html();
+            desc = $('#editor').text();
 
             if(title.length > 0) {
                 widget.setVideoTitle(title);
@@ -267,12 +265,15 @@
             }
             
             widget.setVideoPrivacy('public');
-        }
+        });
 
         function onVideoIdAvailable(event) {
+            $('#video_id').val(event.data.videoId);
             $('#video-progress-box').html('<li class="text-success"><i class="icon-ok-sign"></i> Uploaded</li>');
             $('#attach-video').toggleClass('disabled');
-            $('#video_id').val(event.data.videoId);
+            $('#attach-video').click(function(){
+                $('#attach-video-modal').modal('hide')
+            });
         }
 
     </script>

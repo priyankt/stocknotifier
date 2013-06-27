@@ -10,43 +10,62 @@
         <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
         <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
         <% form_for @sponsorer, :new, :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
-            <%= f.error_messages %>
             <%= flash_tag(:notice, :class => "alert alert-success") %>
             
             <legend>Create New Sponsorer</legend>
 
+            <% error = @sponsorer.errors.key?(:name) && @sponsorer.errors[:name].count > 0 %>
             <div class="control-group">
                 <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
                 <div class="controls">
                     <%= f.text_field :name, :id => "inputName", :placeholder => "Sponsorer Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @sponsorer.errors.key?(:email) && @sponsorer.errors[:email].count > 0 %>
             <div class="control-group">
                 <%= f.label :email, :class => "control-label", :for => "inputEmail", :caption => "Email" %>
                 <div class="controls">
                     <%= f.email_field :email, :id => "inputEmail", :placeholder => "Sponsorer Email", :required => true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:email, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @sponsorer.errors.key?(:phone) && @sponsorer.errors[:phone].count > 0 %>
             <div class="control-group">
                 <%= f.label :phone, :class => "control-label", :for => "inputPhone", :caption => "Phone" %>
                 <div class="controls">
                     <%= f.text_field :phone, :id => "inputPhone", :placeholder => "Sponsorer phone number" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:phone, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @sponsorer.errors.key?(:website) && @sponsorer.errors[:website].count > 0 %>
             <div class="control-group">
                 <%= f.label :website, :class => "control-label", :for => "inputWebsite", :caption => "Website" %>
                 <div class="controls">
                     <%= f.text_field :website, :id => "inputwebsite", :placeholder => "Sponsorer Website" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:website, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
+            <% error = @sponsorer.errors.key?(:address) && @sponsorer.errors[:address].count > 0 %>
             <div class="control-group">
                 <%= f.label :address, :class => "control-label", :for => "inputAddress", :caption => "Address" %>
                 <div class="controls">
                     <%= f.text_area :address, :id => "inputAddress", :placeholder => "Sponsorer Address" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:address, :class => 'text-error') %></span>
+                    <% end %>
                 </div>
             </div>
 
