@@ -2,7 +2,7 @@ class Subscriber
   include DataMapper::Resource
 
   property :id, Serial
-  property :email, String, :format => :email_address, :required => true, :unique => true
+  property :email, String, :format => :email_address, :required => true #, :unique => true
   property :passwd, String, :required => true
   property :salt, String
   property :api_key, String
@@ -18,7 +18,7 @@ class Subscriber
   property :updated_at, DateTime, :lazy => true
 
   belongs_to :publisher
-  validates_uniqueness_of :email, :scope => :publisher,
-    :message => "Current email address is already registered"
+  # validates_uniqueness_of :email, :scope => :publisher,
+  #   :message => "Current email address is already registered"
 
 end

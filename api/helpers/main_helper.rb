@@ -6,4 +6,14 @@ StockNotifier::Api.helpers do
 		SecureRandom.hex(15)
 	end
   
+  	def get_formatted_errors(errors)
+
+  		err_list = Array.new()
+      	errors.each do |e|
+      		err_list.push(e.pop)
+      	end
+
+      	return err_list
+
+  	end
 end

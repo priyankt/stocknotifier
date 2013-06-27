@@ -35,7 +35,7 @@ StockNotifier::Api.controllers do
       ret = {:success => 1}
     else
       status 401
-      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
     end
 
     ret.to_json
@@ -66,7 +66,7 @@ StockNotifier::Api.controllers do
       status 200
       ret = {:success => 1}
     else
-      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
       status 401
     end
 
@@ -149,7 +149,7 @@ StockNotifier::Api.controllers do
             ret = {:success => 1}
           else
             status 400
-            ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+            ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
           end
         else
           status 400
@@ -192,7 +192,7 @@ StockNotifier::Api.controllers do
       status 200
       ret = {:success => 1, :subscriber_id => @subscriber.id}
     else
-      ret = {:success => 0, :errors => @subscriber.errors.to_hash}
+      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
     end
 
     ret.to_json
