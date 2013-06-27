@@ -90,33 +90,19 @@ StockNotifier::Api.controllers do
 
     data = Array.new()
     notifications.each do |n|
-      display_image = n.image1.thumb.url || n.image2.thumb.url || n.image3.thumb.url || get_display_image()
+
+      display_image = get_display_image(n)
       
-      images = Array.new()
-      if n.image1.url
-        images.push({:url => n.image1.url, :main => n.image1.main.url, :thumb => n.image1.thumb.url})
-      end
-      if n.image2.url
-        images.push({:url => n.image2.url, :main => n.image2.main.url, :thumb => n.image2.thumb.url})
-      end
-      if n.image3.url
-        images.push({:url => n.image3.url, :main => n.image3.main.url, :thumb => n.image3.thumb.url})
-      end
-
-      videos = Array.new()
-      if n.video1.present?
-        videos.push({:id => n.video1, :thumb => get_video_thumb(n.video1)})
-      end
-
       data.push({
         :id => n.id,
         :title => n.title,
         :text => n.text,
-        :videos => videos,
-        :images => images,
+        :videos => get_videos(n),
+        :images => get_images(n),
         :display_image => display_image, # stub image when no image is uploaded with message
         :updated_at => n.updated_at
       })
+
     end
     
     data.to_json

@@ -3,7 +3,7 @@
   <%= f.label :email, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :email, :class => 'input-xlarge input-with-feedback', :autofocus => true %>
-    <span class='help-inline'><%= error ? f.error_message_on(:email) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:email) : "Ex: info@jainsena.com" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:passwd) && @publisher.errors[:passwd].count > 0 %>
@@ -27,7 +27,7 @@
   <%= f.label :address, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_area :address, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:address) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:address) : "Ex: a simple multiline text" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:phone) && @publisher.errors[:phone].count > 0 %>
@@ -35,7 +35,7 @@
   <%= f.label :phone, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :phone, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:phone) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:phone) : "Ex: +919881060938" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:website) && @publisher.errors[:website].count > 0 %>
@@ -43,7 +43,7 @@
   <%= f.label :website, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :website, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:website) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:website) : "Ex: http://www.jainsena.com" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:desc) && @publisher.errors[:desc].count > 0 %>
@@ -59,7 +59,7 @@
   <%= f.label :occupation, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :occupation, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:occupation) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:occupation) : "Ex: Business, Lawyer" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:city) && @publisher.errors[:city].count > 0 %>
@@ -67,7 +67,15 @@
   <%= f.label :city, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :city, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:city) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:city) : "Ex: Pune, Nasik" %></span>
+  </div>
+</fieldset>
+<% error = @publisher.errors.key?(:mailing_list) && @publisher.errors[:mailing_list].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :mailing_list, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :mailing_list, :class => 'input-xlarge input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:mailing_list) : "Ex: jainsena@googlegroups.com" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:android_api_key) && @publisher.errors[:android_api_key].count > 0 %>
@@ -75,7 +83,7 @@
   <%= f.label :android_api_key, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :android_api_key, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:android_api_key) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:android_api_key) : "Ex: alphanumeric android server key obtained from google developer console" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:ios_api_key) && @publisher.errors[:ios_api_key].count > 0 %>
@@ -83,7 +91,7 @@
   <%= f.label :ios_api_key, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :ios_api_key, :class => 'input-xlarge input-with-feedback' %>
-    <span class='help-inline'><%= error ? f.error_message_on(:ios_api_key) : "Ex: a simple text" %></span>
+    <span class='help-inline'><%= error ? f.error_message_on(:ios_api_key) : "alphanumeric ios key provided by apple" %></span>
   </div>
 </fieldset>
 <% error = @publisher.errors.key?(:language1) && @publisher.errors[:language1].count > 0 %>

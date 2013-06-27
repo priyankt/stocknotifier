@@ -13,6 +13,7 @@ class Publisher
   property :desc, Text
   property :occupation, String
   property :city, String
+  property :mailing_list, String, :format => :email_address
   property :android_api_key, String
   property :ios_api_key, String
   mount_uploader :logo, Uploader

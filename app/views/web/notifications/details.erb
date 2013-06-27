@@ -11,17 +11,17 @@
         <hr/>
 
         <% video_class = '' %>
-        <% if notification.image1.main.url.present? or notification.image2.main.url.present? or notification.image3.main.url.present? or notification.video1.present? %>
+        <% if media_available(notification) %>
             <div class="row">
 
                 <div class="offset2 span8">
                     <ul class="nav nav-tabs" id="mediaTab">
-                        <% if notification.image1.main.url.present? or notification.image2.main.url.present? or notification.image3.main.url.present? %>
+                        <% if images_available(notification) %>
                             <li class="active"><a href="#photos" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
-                        <% elsif notification.video1.present? %>
+                        <% elsif videos_available(notification) %>
                             <% video_class = 'active' %>
                         <% end %>
-                        <% if notification.video1.present? %>
+                        <% if videos_available(notification) %>
                             <li class="<%= video_class %>"><a href="#video" data-toggle="tab"><i class="icon-facetime-video"></i> Video</a></li>
                         <% end %>
                     </ul>
@@ -29,7 +29,7 @@
          
                 <div class="tab-content offset2 span8">
 
-                    <% if notification.image1.main.url.present? or notification.image2.main.url.present? or notification.image3.main.url.present? %>
+                    <% if images_available(notification) %>
                         <div class="tab-pane active" id="photos">
                             <div id="image-carousel" class="carousel slide">
                             <%# <ol class="carousel-indicators">
@@ -38,7 +38,7 @@
                                 <li data-target="#image-carousel" data-slide-to="1"></li>
                             </ol> %>
                             <!-- Carousel items -->
-                                <div class="carousel-inner text-center">
+                                <div class="carousel-inner">
                                     <% if notification.image1.main.url %>
                                         <div class="item active">
                                             <img src="<%= notification.image1.main.url %>">
@@ -60,6 +60,24 @@
                                         <div class="item">
                                         <% end %>
                                             <img src="<%= notification.image3.main.url %>">
+                                        </div>
+                                    <% end %>
+                                    <% if notification.image4.main.url%>
+                                        <% if not notification.image1.main.url and not notification.image2.main.url and not notification.image3.main.url %>
+                                        <div class="item active">
+                                        <% else %>
+                                        <div class="item">
+                                        <% end %>
+                                            <img src="<%= notification.image4.main.url %>">
+                                        </div>
+                                    <% end %>
+                                    <% if notification.image5.main.url %>
+                                        <% if not notification.image1.main.url and not notification.image2.main.url and not notification.image3.main.url and not notification.image4.main.url %>
+                                        <div class="item active">
+                                        <% else %>
+                                        <div class="item">
+                                        <% end %>
+                                            <img src="<%= notification.image5.main.url %>">
                                         </div>
                                     <% end %>
                                 </div>
