@@ -9,4 +9,3 @@ vendor/gems/*
 .sass-cache/*
 db/*.db
 public/images/upload/*
-Gemfile.lock
