@@ -41,7 +41,7 @@ gem 'will_paginate-bootstrap'
 #gem 'youtube_it'
 
 # Mobile Notification Gems
-gem 'gcm'
+gem 'pushmeup'
 
 # Test requirements
 gem 'rspec', :group => 'test'

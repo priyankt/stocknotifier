@@ -11,25 +11,15 @@ class SendNotification
 
     	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = #{publisher.id} and active = 1 and registration_token is not null")
 
-    	android_response = ''
     	unless publisher.android_api_key.nil?
 	    	
-			gcm = GCM.new(publisher.android_api_key)
+	    	GCM.key = publisher.android_api_key
+			#gcm = GCM.new()
 
-			options = {data: {message: notification.title} }
+			data = {message: notification.title}
+			response = GCM.send_notification( registration_ids, data )
+			android_response = response.to_json
 
-			total = registration_ids.length
-			start = 0
-			
-			while start < total
-				# minus 1 since starting from 0
-				last = [start + (ANDROID_BATCH_LIMIT - 1), total - 1].min
-				chunk = registration_ids[start..last]
-				response = gcm.send_notification(chunk, options)
-				android_response += response[:body]
-				start = last + 1
-			end
-			
 		end
 
 		unless publisher.ios_api_key.nil?
