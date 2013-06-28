@@ -83,9 +83,9 @@ StockNotifier::Api.controllers do
     if last_updated_at
       # TODO: Find a better way to specify timezone
       last_updated_at = last_updated_at.change(:offset => "+0530")
-      notifications = publisher.notifications.all( :fields => fields, :updated_at.gt => last_updated_at, :order => :updated_at.desc, :sent => true, :limit => 50 )
+      notifications = publisher.notifications.all( :fields => fields, :updated_at.gt => last_updated_at, :order => :updated_at.desc, :sent => true, :limit => 20 )
     else
-      notifications = publisher.notifications.all( :fields => fields, :order => :updated_at.desc, :sent => true, :limit => 50)
+      notifications = publisher.notifications.all( :fields => fields, :order => :updated_at.desc, :sent => true, :limit => 20 )
     end
 
     data = Array.new()
