@@ -11,6 +11,7 @@ class SendNotification
 
     	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = 1 and active = 't' and registration_token is not null")
 
+    	android_response = ''
     	unless publisher.android_api_key.nil?
 	    	
 	    	gcm = GCM.new(publisher.android_api_key)
@@ -24,6 +25,7 @@ class SendNotification
 				last = [start + (ANDROID_BATCH_LIMIT - 1), total - 1].min
 				chunk = registration_ids[start..last]
 				response = gcm.send_notification(chunk, options)
+				android_response += response[:body]
 				start = last + 1
 			end
 			
@@ -34,10 +36,12 @@ class SendNotification
 		end
 
 		notification.sent = true
+		notification.android_response = android_response
+		
 		if notification.valid?
 			notification.save
 		else
-			# print some error here
+			puts notification.errors.to_hash
 		end
 
   	end

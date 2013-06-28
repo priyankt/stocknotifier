@@ -15,6 +15,7 @@ class Notification
   mount_uploader :image5, Uploader
   property :sent, Boolean, :default => true
   property :location, String
+  property :android_response, Text
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 
