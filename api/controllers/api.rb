@@ -110,17 +110,18 @@ StockNotifier::Api.controllers do
   end
 
   post :opened_notifications, :map => '/opened/:notification_id' do
-    notification_id = params["notification_id"] if params.has_key?("notification_id")
-    viewedNotification = viewedNotification.new(
+    notification_id = params[:notification_id] if params.has_key?(:notification_id)
+    viewedNotification = ViewedNotification.new(
       :notification_id => notification_id,
       :subscriber_id => @subscriber.id
       )
-    if viewedNotification.save
+    if viewedNotification.valid?
+      viewedNotification.save
       status 201
       ret = {:success => 1}
     else
-      status 401
-      ret = {:success => 0}
+      status 400
+      ret = {:success => 0, :errors => get_formatted_errors(viewedNotification.errors)}
     end
     
     ret.to_json

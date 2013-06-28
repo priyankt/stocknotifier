@@ -151,6 +151,7 @@ StockNotifier::App.controllers do
     end
 
     @notification.publisher = @publisher
+    
     if @notification.valid?
       @notification.save
       if @notification.schedule_dttm.nil?
@@ -163,7 +164,6 @@ StockNotifier::App.controllers do
 
       redirect url(:new_notification)
     else
-      puts @notification.errors.to_hash
       flash.now[:error] = "Error while sending message. Try again."
       render 'web/notifications/new'
     end
