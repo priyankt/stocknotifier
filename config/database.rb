@@ -13,6 +13,6 @@ DataMapper.logger = logger
 DataMapper::Property::String.length(255)
 
 case Padrino.env
-  when :development then DataMapper.setup(:default, "sqlite3://" + Padrino.root('db', "stock_notifier_development.db"))
+  when :development then DataMapper.setup(:default, "mysql://notifyme:notifyme@localhost/notifyme")
   when :test        then DataMapper.setup(:default, "sqlite3://" + Padrino.root('db', "stock_notifier_test.db"))
 end

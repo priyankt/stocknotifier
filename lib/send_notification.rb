@@ -9,12 +9,13 @@ class SendNotification
     	notification = Notification.get(notification_id)
     	publisher = notification.publisher
 
-    	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = 1 and active = 't' and registration_token is not null")
+    	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = #{publisher.id} and active = 1 and registration_token is not null")
 
     	android_response = ''
     	unless publisher.android_api_key.nil?
 	    	
-	    	gcm = GCM.new(publisher.android_api_key)
+			gcm = GCM.new(publisher.android_api_key)
+
 			options = {data: {message: notification.title} }
 
 			total = registration_ids.length
