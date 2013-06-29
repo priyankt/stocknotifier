@@ -7,6 +7,8 @@
         <hr/>
     </div>
     <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
+        <%= flash_tag(:later, :class => "offset2 span6 alert alert-info text-center") %>
         <% form_tag url(:notifications), :class => 'form-search', :method => 'GET' do %>
             <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search across messages.." %>
             <%= submit_tag "Search", :class => 'btn btn-primary' %>

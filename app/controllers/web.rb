@@ -162,7 +162,7 @@ StockNotifier::App.controllers do
         flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
       end
 
-      redirect url(:new_notification)
+      redirect url(:notifications)
     else
       flash.now[:error] = "Error while sending message. Try again."
       render 'web/notifications/new'

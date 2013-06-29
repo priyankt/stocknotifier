@@ -7,9 +7,7 @@
         <hr/>
     </div>
     <% form_for @notification, :new, :method => 'POST', :multipart => true do |f| %>
-    <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
     <%= flash_tag(:error, :class => "offset2 span6 alert alert-error text-center") %>
-    <%= flash_tag(:later, :class => "offset2 span6 alert alert-info text-center") %>
     <div class="span12">
         <label><strong>Title</strong></label>
         <%= f.text_field :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here", :autofocus => :true %>
@@ -160,6 +158,12 @@
     <% end %>
 
 </div>
+<%# Block screen when user clicks send %>
+<div id="blockMessage" class="overlay">
+    <p style="position: fixed; top: 40%;left: 40%; font-size: 2em;">
+        <i class="icon-spinner icon-spin icon-2x"></i> Sending..
+    </p>
+</div>
 
 <% content_for :js do %>
 
@@ -232,6 +236,7 @@
 
                 if(confirm("Are you sure you want to send this message?")) {
                     $('#text').val(htmlText);
+                    $('#blockMessage').css('display', 'block');
                     return true;
                 }
 
