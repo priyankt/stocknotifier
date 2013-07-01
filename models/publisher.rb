@@ -20,6 +20,7 @@ class Publisher
   property :language1, String, :default => 'hi', :length => 2
   property :language2, String, :length => 2
   property :language3, String, :length => 2
+  property :active, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

@@ -16,6 +16,7 @@ class Notification
   property :sent, Boolean, :default => true
   property :location, String
   property :android_response, Text
+  property :active, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

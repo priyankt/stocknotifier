@@ -1,8 +1,15 @@
+require 'resque-retry'
+
 class SendNotification
+	extend Resque::Plugins::ExponentialBackoff
 
 	ANDROID_BATCH_LIMIT = 1000
 
 	@queue = :send_notification
+
+	# using exponential backoff as required by google gcm
+	# it might blacklist of exponential backoff is not used
+	@backoff_strategy = [5, 50, 500, 5000]
 
 	def self.perform(notification_id)
 
@@ -14,8 +21,7 @@ class SendNotification
     	unless publisher.android_api_key.nil?
 	    	
 	    	GCM.key = publisher.android_api_key
-			#gcm = GCM.new()
-
+			
 			data = {message: notification.title}
 			response = GCM.send_notification( registration_ids, data )
 			android_response = response.to_json
@@ -27,7 +33,7 @@ class SendNotification
 		end
 
 		notification.sent = true
-		notification.android_response = android_response
+		logger.info android_response
 		
 		if notification.valid?
 			notification.save

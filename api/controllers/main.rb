@@ -13,8 +13,7 @@ StockNotifier::Api.controllers do
     subscriber = Subscriber.first(:email => email, :publisher_id => publisher_id)
     ret = {:success => 0}
     if subscriber
-      passwd_hash = BCrypt::Engine.hash_secret(params[:passwd], subscriber.salt)
-      if subscriber.passwd == passwd_hash
+      if valid_user(subscriber, params[:passwd])
         # assign unique auth key to this user                                                                                                               
         subscriber.api_key = generate_api_key()
         if subscriber.save

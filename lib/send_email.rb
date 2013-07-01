@@ -1,6 +1,12 @@
+require 'resque-retry'
+
 class SendEmail
+	extend Resque::Plugins::Retry
 
 	@queue = :send_email
+
+	@retry_limit = 3
+  	@retry_delay = 120
 
 	def self.perform(params)
 

@@ -1,28 +1,25 @@
-# Seed add you the ability to populate your db.
-# We provide you a basic shell for interaction with the end user.
-# So try some code like below:
-#
-#   name = shell.ask("What's your name?")
-#   shell.say name
-#
-email     = shell.ask "Which email do you want use for logging into admin?"
-password  = shell.ask "Tell me the password to use:"
+require 'csv'    
 
-shell.say ""
+csv_text = File.read('/home/priyank/web/StockNotifier/config/jainsite_user.csv')
+csv = CSV.parse(csv_text, :headers => false)
+publisher = Publisher.first(:email => 'info@jainsite.com')
+csv.each do |u|
+  	subscriber = Subscriber.new(
+		:email => u[1],
+		:passwd => u[2],
+		:name => u[3],
+		:phone => u[4],
+		:occupation => u[5],
+		:city => u[7],
+		:publisher => publisher
+	)
 
-account = Account.create(:email => email, :name => "Foo", :surname => "Bar", :password => password, :password_confirmation => password, :role => "admin")
+	if subscriber.valid?
+		subscriber.save
+		puts "user #{subscriber.name} saved successfully."
+	else
+		puts "Invalid user #{subscriber.name}."
+		puts subscriber.errors.to_hash
+	end
 
-if account.valid?
-  shell.say "================================================================="
-  shell.say "Account has been successfully created, now you can login with:"
-  shell.say "================================================================="
-  shell.say "   email: #{email}"
-  shell.say "   password: #{password}"
-  shell.say "================================================================="
-else
-  shell.say "Sorry but some thing went wrong!"
-  shell.say ""
-  account.errors.full_messages.each { |m| shell.say "   - #{m}" }
 end
-
-shell.say ""
