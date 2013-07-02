@@ -200,4 +200,26 @@ StockNotifier::Api.controllers do
     
   end
 
+  get :sponsorer, :map => '/sponsorer' do
+
+    data = {}
+    puts @subscriber
+    sponsorer = Sponsorer.first(:publisher_id => @subscriber.publisher_id, :order => :updated_at.desc)
+    if sponsorer.present?
+      data = {
+        :id => sponsorer.id,
+        :email => sponsorer.email,
+        :name => sponsorer.name,
+        :phone => sponsorer.phone,
+        :address => sponsorer.address,
+        :website => sponsorer.website,
+        :desc => sponsorer.about,
+        :logo_url => sponsorer.logo.main.url
+      }
+    end
+    
+    data.to_json
+
+  end
+
 end

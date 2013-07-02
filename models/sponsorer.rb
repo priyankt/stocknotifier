@@ -8,6 +8,7 @@ class Sponsorer
   property :address, String
   property :website, String, :format => :url
   property :about, Text
+  mount_uploader :logo, Uploader
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 
