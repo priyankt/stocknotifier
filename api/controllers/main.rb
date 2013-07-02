@@ -86,9 +86,15 @@ StockNotifier::Api.controllers do
     subscriber.publisher = Publisher.get(params[:publisher_id])
 
     if subscriber.valid?
-      subscriber.save
-      ret = {:success => 1, :id => subscriber.id, :api_key => api_key}
-      status 201
+      begin
+        subscriber.save
+        ret = {:success => 1, :id => subscriber.id, :api_key => api_key}
+        status 201
+      rescue DataObjects::IntegrityError => e
+        ret = {:success => 0, :errors => ["Email #{subscriber.email} is already registered."]}
+        status 400
+      end
+      
     else
       
       ret = {:success => 0, :errors => get_formatted_errors(subscriber.errors)}
