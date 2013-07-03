@@ -23,8 +23,18 @@ class SendNotification
 	    	GCM.key = publisher.android_api_key
 			
 			data = {message: notification.title}
-			response = GCM.send_notification( registration_ids, data )
-			android_response = response.to_json
+			total = registration_ids.length
+			start = 0
+
+			while start < total
+				# minus 1 since starting from 0
+				last = [start + (ANDROID_BATCH_LIMIT - 1), total - 1].min
+				chunk = registration_ids[start..last]
+				response = GCM.send_notification( chunk, data )
+				android_response = android_response + response.to_json
+				start = last + 1
+			end
+			
 
 		end
 
