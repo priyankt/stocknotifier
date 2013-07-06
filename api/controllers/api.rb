@@ -222,4 +222,13 @@ StockNotifier::Api.controllers do
 
   end
 
+  get :user_count, :map => '/subscribers/count' do
+
+    count = Subscriber.count(:publisher_id => @subscriber.publisher.id)
+    ret = {:count => count}
+    
+    ret.to_json
+
+  end
+
 end
