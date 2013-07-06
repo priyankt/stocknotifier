@@ -15,7 +15,6 @@
     <div class="span12">
         <%= partial 'web/wysiwyg', :locals => { :f => f } %>
         <div id="editor" contenteditable="true">
-            Enter your message here..
         </div>
         <%= f.hidden_field :text, :id => 'text' %>
     </div>
@@ -187,7 +186,7 @@
                 destinationLanguage:
                     ['<%= @publisher.language1 %>'],
                 shortcutKey: 'ctrl+g',
-                transliterationEnabled: true
+                transliterationEnabled: false
             };
 
             control =
