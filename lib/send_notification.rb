@@ -1,7 +1,7 @@
-require 'resque-retry'
+#require 'resque-retry'
 
 class SendNotification
-	extend Resque::Plugins::ExponentialBackoff
+	#extend Resque::Plugins::ExponentialBackoff
 
 	ANDROID_BATCH_LIMIT = 1000
 
@@ -9,7 +9,7 @@ class SendNotification
 
 	# using exponential backoff as required by google gcm
 	# it might blacklist of exponential backoff is not used
-	@backoff_strategy = [5, 50, 500, 5000]
+	#@backoff_strategy = [5, 50, 500, 5000]
 
 	def self.perform(notification_id)
 
