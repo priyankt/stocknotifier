@@ -18,6 +18,7 @@ class SendNotification
 
     	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = #{publisher.id} and active = 1 and registration_token is not null")
 
+    	android_response = ""
     	unless publisher.android_api_key.nil?
 	    	
 	    	GCM.key = publisher.android_api_key
