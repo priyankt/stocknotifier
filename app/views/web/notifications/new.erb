@@ -15,6 +15,9 @@
     <div class="span12">
         <%= partial 'web/wysiwyg', :locals => { :f => f } %>
         <div id="editor" contenteditable="true">
+            <% if @publisher.footer_msg %>
+                <%= @publisher.footer_msg.html_safe %>
+            <% end %>
         </div>
         <%= f.hidden_field :text, :id => 'text' %>
     </div>

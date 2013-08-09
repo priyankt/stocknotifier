@@ -110,6 +110,14 @@
     <span class='help-block'><%= error ? f.error_message_on(:logo) : "Ex: Publisher's Logo" %></span>
   </div>
 </fieldset>
+<% error = @publisher.errors.key?(:footer_msg) && @publisher.errors[:footer_msg].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :footer_msg, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :footer_msg, :class => 'input-xlarge input-with-feedback'%>
+    <span class='help-block'><%= error ? f.error_message_on(:footer_msg) : "Ex: Add any footer message you want that will be appended to every message" %></
+  </div>
+</fieldset>
 
 
 <div class="form-actions">
