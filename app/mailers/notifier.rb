@@ -63,4 +63,13 @@ StockNotifier::App.mailer :notifier do
     render 'notifier/new_user', :layout => 'email', :locals => {:subscriber => subscriber, :passwd => passwd, :publisher => publisher}
   end
 
+  email :feedback do |subscriber, msg|
+    from 'info@notifyme.in'
+    to subscriber.publisher.email
+    subject "New feedback from #{subscriber.name}"
+    content_type 'text/html' # optional, defaults to plain/text
+    via :smtp # optional, to smtp if defined, otherwise sendmail
+    render 'notifier/feedback', :layout => 'email', :locals => {:subscriber => subscriber, :msg => msg}
+  end
+
 end

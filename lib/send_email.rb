@@ -25,6 +25,10 @@ class SendEmail
 						subscriber = Subscriber.get(params['subscriber_id'])
 						passwd = params['new_passwd']
 						StockNotifier::App.deliver(:notifier, :new_user, subscriber, passwd, subscriber.publisher)
+					when 'feedback'
+						subscriber = Subscriber.get(params['subscriber_id'])
+						msg = params['msg']
+						StockNotifier::App.deliver(:notifier, :feedback, subscriber, msg)
 					else
 						puts 'Invalid email type'
 				end

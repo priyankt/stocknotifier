@@ -243,6 +243,12 @@ StockNotifier::Api.controllers do
 
     if feedback.valid?
       feedback.save
+      Resque.enqueue(SendEmail, {
+          :mailer_name => 'notifier',
+          :email_type => 'feedback',
+          :subscriber_id => @subscriber.id,
+          :msg => feedback.text
+      })
       status 200
       ret = {:success => 1, :feedback_id => feedback.id}
     else
