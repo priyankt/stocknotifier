@@ -193,6 +193,7 @@ StockNotifier::Api.controllers do
       status 200
       ret = {:success => 1, :subscriber_id => @subscriber.id}
     else
+      status 400
       ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
     end
 
@@ -226,7 +227,29 @@ StockNotifier::Api.controllers do
 
     count = Subscriber.count(:publisher_id => @subscriber.publisher.id)
     ret = {:count => count}
+
+    status 200
     
+    ret.to_json
+
+  end
+
+  post :feedback, :map => '/feedback' do
+
+    feedback = Feedback.new
+    feedback.text = params[:text] if params.has_key?('text')
+
+    feedback.subscriber = @subscriber
+
+    if feedback.valid?
+      feedback.save
+      status 200
+      ret = {:success => 1, :feedback_id => feedback.id}
+    else
+      status 400
+      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
+    end
+
     ret.to_json
 
   end
