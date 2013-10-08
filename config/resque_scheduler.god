@@ -4,7 +4,7 @@ God.watch do |w|
 	w.env = { 'RAILS_ENV' => 'production',
 	'QUEUE' => '*' }
 	w.dir = File.expand_path(File.join(File.dirname(__FILE__),'..'))
-	w.start = "padrino rake resque:scheduler -e production"
+	w.start = "bundle exec padrino rake resque:scheduler -e production"
 	w.start_grace = 10.seconds
 	w.log = File.expand_path(File.join(File.dirname(__FILE__), '..','log','resque-scheduler-worker.log'))
 	# restart if memory gets too high
