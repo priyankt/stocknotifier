@@ -19,27 +19,9 @@ StockNotifier::Api.helpers do
 
   def valid_user(subscriber, passwd)
 
-    # if not jain site user then follow normal process
-    if subscriber.passwd.length > 32
-      passwd_from_user = BCrypt::Engine.hash_secret(passwd, subscriber.salt)
-      stored_passwd = subscriber.passwd
-    else
-      # if jain site user then get md5 hash of passwd
-      passwd_from_user = Digest::MD5.hexdigest(passwd)
-      # stored passwd is in subscriber password
-      stored_passwd = subscriber.passwd
-    end
-
-    valid = (passwd_from_user == stored_passwd)
-    # if passwd is valid & subscriber is for jain site, then update his passwd
-    if valid and subscriber.passwd.length <= 32
-      subscriber.salt = BCrypt::Engine.generate_salt
-      new_passwd = BCrypt::Engine.hash_secret(passwd, subscriber.salt)
-      # update passwd for this jain site user
-      subscriber.passwd = new_passwd
-    end
-
-    return valid
+    passwd_from_user = BCrypt::Engine.hash_secret(passwd, subscriber.salt)
+    
+    return passwd_from_user == subscriber.passwd
 
   end
 

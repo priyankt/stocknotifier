@@ -25,7 +25,7 @@
                     <th>Title</th>
                     <th>Scheduled</th>
                     <th>Sent On</th>
-                    <th>Views <i class="icon-info-sign" data-toggle="tooltip" rel="tooltip" title="Number of users who viewed the details of the message"></i></th>
+                    <th>Sponsor</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,8 +47,14 @@
                         <% else %>
                             <td><%= format_date(notification.updated_at) %></td>
                         <% end %>
-                        
-                        <td><span class="badge"><%= notification.viewedNotifications.count %></span></td>
+                        <td>
+                            <% if notification.sponsor.nil? %>
+                            none
+                            <% else %>
+                            <%= notification.sponsor.name %>
+                            <% end %>
+                            
+                        </td>
                     </tr>
                 <% end %>
             </tbody>

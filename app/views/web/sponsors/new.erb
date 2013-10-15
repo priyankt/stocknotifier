@@ -1,0 +1,81 @@
+<% content_for :title do %>
+  <title>New Sponsor</title>
+<% end %>
+<div class="row page-sponsors-new">
+    <div class="span12">
+        <h3>New Sponsor</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
+        <% form_for @sponsor, :new, :class => 'offset2 span6 form-horizontal well', :method => 'POST', :multipart => true do |f| %>
+            <%= flash_tag(:notice, :class => "alert alert-success") %>
+            
+            <legend>Create New Sponsor</legend>
+
+            <% error = @sponsor.errors.key?(:name) && @sponsor.errors[:name].count > 0 %>
+            <div class="control-group">
+                <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
+                <div class="controls">
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "sponsor Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @sponsor.errors.key?(:banner) && @sponsor.errors[:banner].count > 0 %>
+            <div class="control-group">
+                <%= f.label :banner, :class => "control-label", :for => "inputBanner", :caption => "Small Image" %>
+                <div class="controls">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <span class="btn btn-file btn-success"><span class="fileupload-new">Attach Small Image</span><span class="fileupload-exists">Change Image</span><%= f.file_field :banner, :required => true %></span>
+                        <span class="fileupload-preview"></span>
+                        <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                    </div>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:banner, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @sponsor.errors.key?(:large) && @sponsor.errors[:large].count > 0 %>
+            <div class="control-group">
+                <%= f.label :large, :class => "control-label", :for => "inputLarge", :caption => "Full Size Image" %>
+                <div class="controls">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <span class="btn btn-file btn-success"><span class="fileupload-new">Attach Full Image</span><span class="fileupload-exists">Change Image</span><%= f.file_field :large %></span>
+                        <span class="fileupload-preview"></span>
+                        <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                    </div>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:large, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @sponsor.errors.key?(:website) && @sponsor.errors[:website].count > 0 %>
+            <div class="control-group">
+                <%= f.label :website, :class => "control-label", :for => "inputWebsite", :caption => "Website" %>
+                <div class="controls">
+                    <%= f.text_field :website, :id => "inputwebsite", :placeholder => "sponsor Website" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:website, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <%= f.submit "Create", :class => 'btn btn-primary' %>
+                </div>
+            </div>
+
+        <% end %>
+    </div>
+</div>
+
+<% content_for :js do %>
+    <%= javascript_include_tag 'file-upload' %>
+<% end %>

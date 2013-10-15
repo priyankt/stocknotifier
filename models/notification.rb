@@ -17,10 +17,13 @@ class Notification
   property :location, String
   property :android_response, Text
   property :active, Boolean, :default => true
+  property :comment_count, Integer, :default => 0
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 
   belongs_to :publisher
+  belongs_to :sponsor, :required => false
   has n, :viewedNotifications
+  has n, :comments
 
 end

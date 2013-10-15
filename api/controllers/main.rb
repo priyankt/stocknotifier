@@ -12,7 +12,7 @@ StockNotifier::Api.controllers do
     # get subscriber for this email & publisher
     subscriber = Subscriber.first(:email => email, :publisher_id => publisher_id)
     ret = {:success => 0}
-    if subscriber
+    if subscriber.present?
       if valid_user(subscriber, params[:passwd])
         # assign unique auth key to this user                                                                                                               
         subscriber.api_key = generate_api_key()
@@ -20,15 +20,15 @@ StockNotifier::Api.controllers do
           ret = {:success => 1, :api_key => subscriber.api_key}
           status 200
         else
-          ret = {:success => 0, :errors => get_formatted_errors(subscriber.errors)}
+          ret = {:success => 0, :registered_user => 1, :errors => get_formatted_errors(subscriber.errors)}
           status 400
         end
       else
-        ret = {:success => 0, :errors => ['Invalid password']}
+        ret = {:success => 0, :registered_user => 1, :errors => ['Invalid password']}
         status 401
       end
     else
-      ret = {:success => 0, :errors => ['Invalid subscriber']}
+      ret = {:success => 0, :registered_user => 0, :errors => ['Invalid subscriber']}
       status 400
     end
     

@@ -26,5 +26,6 @@ class Publisher
   property :updated_at, DateTime, :lazy => true
 
   has n, :notifications
+  has n, :sponsors
   
 end

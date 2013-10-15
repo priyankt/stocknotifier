@@ -1,0 +1,69 @@
+<% content_for :title do %>
+  <title>Sponsors List</title>
+<% end %>
+<div class="row page-sponsors-list">
+    <div class="span12">
+        <h3>Sponsors</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <% form_tag url(:sponsors), :class => 'form-search', :method => 'GET' do %>
+            <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search sponsors.." %>
+            <%= submit_tag "Search", :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+    <div class="span12">
+        <p class="muted"><%= total %> sponsors found</p>
+    </div>
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Small Image</th>
+                    <th>Large Image</th>
+                    <th>Website</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for sponsor in @sponsors %>
+                    <tr>
+                        <td><%= sponsor.name %></td>
+                        <td>
+                            <% if sponsor.banner.thumb.present? %>
+                            <img src="<%= sponsor.banner.thumb.url %>" height="50" width="50">
+                            <% else %>
+                            None
+                            <% end %>
+                        </td>
+                        <td>
+                            <% if sponsor.large.thumb.present? %>
+                            <img src="<%= sponsor.large.thumb.url %>" height="50" width="50">
+                            <% else %>
+                            None
+                            <% end %>
+                        </td>
+                        <td>
+                            <% if sponsor.website.present? %>
+                            <a href="<%= sponsor.website %>" target="_blank"><%= sponsor.website %></a>
+                            <% else %>
+                            None
+                            <% end %>
+                        </td>
+                        <td>
+                            <% if sponsor.active %>
+                                <a rel="tooltip" title="Currently active. Click to deactivate sponsor." href="<%= url_for(:manage_sponsor, :id => sponsor.id, :active => false) %>" class="btn btn-small btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
+                            <% else %>
+                                <a rel="tooltip" title="Currently inactive. Click to activate sponsor." href="<%= url_for(:manage_sponsor, :id => sponsor.id, :active => true) %>" class="btn btn-small btn-success"><i class="icon-ok-sign"></i> Activate</a>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% if @sponsors.total_entries > 30 %>
+            <%= will_paginate(@sponsors, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered') %>
+        <% end %>
+    </div>
+</div>

@@ -79,11 +79,11 @@ StockNotifier::Api.controllers do
     last_updated_at = DateTime.parse(params["last_updated_at"]) if params.has_key?("last_updated_at")
     
     publisher = @subscriber.publisher
-    fields = [:id, :title, :text, :video1, :image1, :image2, :image3, :updated_at]
+    fields = [:id, :title, :text, :video1, :image1, :image2, :image3, :created_at]
     if last_updated_at
       # TODO: Find a better way to specify timezone
       last_updated_at = last_updated_at.change(:offset => "+0530")
-      notifications = publisher.notifications.all( :fields => fields, :updated_at.gt => last_updated_at, :order => :updated_at.desc, :sent => true, :limit => 20, :active => true )
+      notifications = publisher.notifications.all( :fields => fields, :created_at.gt => last_updated_at, :order => :updated_at.desc, :sent => true, :limit => 20, :active => true )
     else
       notifications = publisher.notifications.all( :fields => fields, :order => :updated_at.desc, :sent => true, :limit => 20, :active => true )
     end
@@ -100,7 +100,9 @@ StockNotifier::Api.controllers do
         :videos => get_videos(n),
         :images => get_images(n),
         :display_image => display_image, # stub image when no image is uploaded with message
-        :updated_at => n.updated_at
+        :updated_at => n.updated_at,
+        :comment_count => n.comment_count,
+        :sponsor => (n.sponsor.blank? ? nil : n.sponsor.format_for_app)
       })
 
     end
@@ -201,28 +203,6 @@ StockNotifier::Api.controllers do
     
   end
 
-  get :sponsorer, :map => '/sponsorer' do
-
-    data = {}
-    puts @subscriber
-    sponsorer = Sponsorer.first(:publisher_id => @subscriber.publisher_id, :order => :updated_at.desc)
-    if sponsorer.present?
-      data = {
-        :id => sponsorer.id,
-        :email => sponsorer.email,
-        :name => sponsorer.name,
-        :phone => sponsorer.phone,
-        :address => sponsorer.address,
-        :website => sponsorer.website,
-        :desc => sponsorer.about,
-        :logo_url => sponsorer.logo.main.url
-      }
-    end
-    
-    data.to_json
-
-  end
-
   get :user_count, :map => '/subscribers/count' do
 
     count = Subscriber.count(:publisher_id => @subscriber.publisher.id)
@@ -254,6 +234,59 @@ StockNotifier::Api.controllers do
     else
       status 400
       ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
+    end
+
+    ret.to_json
+
+  end
+
+  # Get comments for notification
+  get :comments, :map => '/notification/:id/comments' do
+
+    comments = Comment.all(:notification_id => params[:id], :active => true, :order => [:created_at.desc])
+    status 200
+
+    ret = []
+    comments.each do |c|
+
+      ret.push({
+        :text => c.text,
+        :name => c.subscriber.name,
+        :dttm => c.created_at
+      })
+
+    end
+
+    ret.to_json
+
+  end
+
+  # Get comments for notification
+  get :comment_count, :map => '/notification/:id/comment/count' do
+
+    n = Notification.get(params[:id])
+    
+    if n.present?
+      ret = {:success => 1, :count => n.comment_count}
+    else
+      ret = {:success => 0, :errors => ['Invalid message. Please try again.']}
+    end
+
+    return ret.to_json
+
+  end
+
+  # Add comment for particluar notification
+  post :comment, :map => '/notification/:id/comment' do
+
+    comment = Comment.new(:text => params[:text], :notification_id => params[:id], :subscriber_id => @subscriber.id)
+    if comment.valid?
+      comment.save
+      status 200
+      ret = {:success => 1, :comment_id => comment.id}
+    else
+      status 400
+      ret = {:success => 0, :errors => get_formatted_errors(comment.errors)}
     end
 
     ret.to_json

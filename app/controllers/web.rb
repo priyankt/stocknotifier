@@ -140,6 +140,10 @@ StockNotifier::App.controllers do
 
   post :new_notification, :map => '/notifications/new' do
 
+    if params[:notification][:sponsor_id].empty?
+      params[:notification].delete('sponsor_id')
+    end
+
     @notification = Notification.new(params[:notification])
 
     if params[:notification][:schedule_dttm].nil? or params[:notification][:schedule_dttm].blank? or params[:notification][:schedule_dttm].empty?
@@ -151,7 +155,7 @@ StockNotifier::App.controllers do
     end
 
     @notification.publisher = @publisher
-    
+
     if @notification.valid?
       @notification.save
       if @notification.schedule_dttm.nil?
@@ -164,50 +168,64 @@ StockNotifier::App.controllers do
 
       redirect url(:notifications)
     else
+      puts @notification.errors.inspect
       flash.now[:error] = "Error while sending message. Try again."
       render 'web/notifications/new'
     end
   
   end
 
-  get :sponsorers, :map => '/sponsorers' do
+  get :sponsors, :map => '/sponsors' do
 
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @sponsorers = Sponsorer.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
+      @sponsors = Sponsor.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
     else
-      @sponsorers = Sponsorer.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
+      @sponsors = Sponsor.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
-    total = @sponsorers.total_entries
+    total = @sponsors.total_entries
 
-    render 'web/sponsorers/list', :locals => {:total => total}
+    render 'web/sponsors/list', :locals => {:total => total}
 
   end
 
-  get :new_sponsorer, :map => '/sponsorers/new' do
+  get :new_sponsor, :map => '/sponsors/new' do
     
-    @sponsorer = Sponsorer.new()
+    @sponsor = Sponsor.new()
 
-    render 'web/sponsorers/new'
+    render 'web/sponsors/new'
 
   end
 
-  post :new_sponsorer, :map => '/sponsorers/new' do
+  post :new_sponsor, :map => '/sponsors/new' do
 
-    @sponsorer = Sponsorer.new(params[:sponsorer])
-    @sponsorer.publisher = @publisher
+    @sponsor = Sponsor.new(params[:sponsor])
+    @sponsor.publisher = @publisher
 
-    if @sponsorer.valid?
-      @sponsorer.save
-      flash[:success] = "Sponsorer #{@sponsorer.name} created successfully."
-      redirect url(:new_sponsorer)
+    if @sponsor.valid?
+      @sponsor.save
+      flash[:success] = "Sponsor #{@sponsor.name} created successfully."
+      redirect url(:new_sponsor)
     else
-      flash.now[:error] = "Failed to create sponsorer #{@sponsorer.name}."
-      render 'web/sponsorers/new'
+      flash.now[:error] = "Failed to create sponsor #{@sponsor.name}."
+      render 'web/sponsors/new'
     end
     
-    render 'web/sponsorers/new'
+    render 'web/sponsors/new'
+
+  end
+
+  get :manage_sponsor, :map => '/sponsor/manage/:id/' do
+
+    sponsor = Sponsor.get(params[:id])
+    sponsor.active = params[:active]
+
+    if sponsor.valid?
+      sponsor.save
+    end
+    
+    redirect(:sponsors)
 
   end
 
