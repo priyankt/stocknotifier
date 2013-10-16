@@ -100,7 +100,7 @@ StockNotifier::Api.controllers do
         :videos => get_videos(n),
         :images => get_images(n),
         :display_image => display_image, # stub image when no image is uploaded with message
-        :updated_at => n.updated_at,
+        :updated_at => n.created_at,
         :comment_count => n.comment_count,
         :sponsor => (n.sponsor.blank? ? nil : n.sponsor.format_for_app)
       })

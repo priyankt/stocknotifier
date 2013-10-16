@@ -3,7 +3,13 @@
 </p>
 
 <p>
-  New feedback/suggestion has been received from user "<%= subscriber.name %>"
+  New feedback/suggestion has been received.
+</p>
+
+<p>
+  <strong>Name:</strong> <%= (subscriber.name.present? ? subscriber.name : 'NA') %> <br/>
+  <strong>Phone:</strong> <%= (subscriber.phone.present? ? subscriber.phone : 'NA') %> <br/>
+  <strong>Email:</strong> <%= (subscriber.email.present? ? subscriber.email : 'NA') %> <br/>
 </p>
 
 <p>
