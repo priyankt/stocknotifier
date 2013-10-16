@@ -269,4 +269,18 @@ StockNotifier::App.controllers do
 
   end
 
+  get :delete_comment, :map => '/comment/:id' do
+
+    comment = Comment.get(params[:id])
+    if comment.present?
+      comment.active = false
+      if comment.valid?
+        comment.save
+      end
+    end
+
+    redirect(url(:notification_details, :id => comment.notification_id))
+
+  end
+
 end

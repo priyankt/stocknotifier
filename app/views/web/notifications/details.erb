@@ -108,9 +108,12 @@
         <div class="row">
             <div class="offset2 span8">
                 <h4>Comments</h4>
-                <% notification.comments.each do |comment| %>
+                <% notification.comments.all(:active => true, :order => [:created_at.desc]).each do |comment| %>
                 <div class="well well-small">
+                    <p>
                     <strong><%= comment.subscriber.name %>: </strong> <%= comment.text %>
+                    </p>
+                    <p><a class="btn btn-small btn-danger" href="<%= url_for(:delete_comment, :id => comment.id) %>">delete</a></p>
                 </div>
                 <% end %>
             </div>

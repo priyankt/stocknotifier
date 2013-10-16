@@ -267,7 +267,7 @@ StockNotifier::Api.controllers do
     n = Notification.get(params[:id])
     
     if n.present?
-      ret = {:success => 1, :count => n.comment_count}
+      ret = {:success => 1, :count => n.comments.all(:active => true).count}
     else
       ret = {:success => 0, :errors => ['Invalid message. Please try again.']}
     end
