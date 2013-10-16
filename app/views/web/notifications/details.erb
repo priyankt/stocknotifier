@@ -105,6 +105,17 @@
     		</div>
         </div>
 
+        <div class="row">
+            <div class="offset2 span8">
+                <h4>Comments</h4>
+                <% notification.comments.each do |comment| %>
+                <div class="well well-small">
+                    <strong><%= comment.subscriber.name %>: </strong> <%= comment.text %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+
     </div>
 
 </div>
