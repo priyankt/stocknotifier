@@ -8,8 +8,8 @@ StockNotifier::App.controllers do
   before do
     if logged_in?
       publisher_id = session[:publisher]
-      @publisher = Publisher.get(publisher_id)
-      if @publisher.nil?
+      @publisher = Publisher.first(:id => publisher_id, :active => true)
+      if @publisher.nil? or @publisher.active == false
         invalid = true
       end     
     else    

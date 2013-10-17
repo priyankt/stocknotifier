@@ -4,7 +4,7 @@ StockNotifier::App.helpers do
   
     def logged_in?
 
-        !session[:publisher].nil? and !Publisher.get(session[:publisher]).nil?
+        !session[:publisher].nil? and !Publisher.first( :id => session[:publisher], :active => true).nil?
 
     end
 
