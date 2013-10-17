@@ -18,7 +18,7 @@
             <div class="control-group">
                 <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
                 <div class="controls">
-                    <%= f.text_field :name, :id => "inputName", :placeholder => "sponsor Name", :required => true, :autofocus => :true %>
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "Sponsor Name", :required => true, :autofocus => :true %>
                     <% if error %>
                         <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
                     <% end %>
@@ -34,9 +34,8 @@
                         <span class="fileupload-preview"></span>
                         <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
                     </div>
-                    <% if error %>
-                        <span class="help-block"><%= f.error_message_on(:banner, :class => 'text-error') %></span>
-                    <% end %>
+                    <span class="help-block"><%= ( error ? f.error_message_on(:banner, :class => 'text-error') : '<small>Recommended size 480 X 80</small>'.html_safe) %></span>
+                    
                 </div>
             </div>
 
@@ -49,9 +48,7 @@
                         <span class="fileupload-preview"></span>
                         <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
                     </div>
-                    <% if error %>
-                        <span class="help-block"><%= f.error_message_on(:large, :class => 'text-error') %></span>
-                    <% end %>
+                    <span class="help-block"><%= ( error ? f.error_message_on(:large, :class => 'text-error') : '<small>Recommended size 480 X 800</small>'.html_safe) %></span>
                 </div>
             </div>
 
@@ -59,7 +56,7 @@
             <div class="control-group">
                 <%= f.label :website, :class => "control-label", :for => "inputWebsite", :caption => "Website" %>
                 <div class="controls">
-                    <%= f.text_field :website, :id => "inputwebsite", :placeholder => "sponsor Website" %>
+                    <%= f.text_field :website, :id => "inputwebsite", :placeholder => "Sponsor Website" %>
                     <% if error %>
                         <span class="help-block"><%= f.error_message_on(:website, :class => 'text-error') %></span>
                     <% end %>

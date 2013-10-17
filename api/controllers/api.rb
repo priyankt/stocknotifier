@@ -279,14 +279,23 @@ StockNotifier::Api.controllers do
   # Add comment for particluar notification
   post :comment, :map => '/notification/:id/comment' do
 
-    comment = Comment.new(:text => params[:text], :notification_id => params[:id], :subscriber_id => @subscriber.id)
-    if comment.valid?
-      comment.save
-      status 200
-      ret = {:success => 1, :comment_id => comment.id}
+    if @subscriber.can_comment
+    
+      comment = Comment.new(:text => params[:text], :notification_id => params[:id], :subscriber_id => @subscriber.id)
+      if comment.valid?
+        comment.save
+        status 200
+        ret = {:success => 1, :comment_id => comment.id}
+      else
+        status 400
+        ret = {:success => 0, :errors => get_formatted_errors(comment.errors)}
+      end
+
     else
+
       status 400
-      ret = {:success => 0, :errors => get_formatted_errors(comment.errors)}
+      ret = {:success => 0, :errors => ['You are not allowed to comment. Please contact admin.']}
+
     end
 
     ret.to_json

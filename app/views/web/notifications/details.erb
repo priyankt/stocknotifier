@@ -113,7 +113,9 @@
                     <p>
                     <strong><%= comment.subscriber.name %>: </strong> <%= comment.text %>
                     </p>
-                    <p><a class="btn btn-small btn-danger" href="<%= url_for(:delete_comment, :id => comment.id) %>">delete</a></p>
+                    <p>
+                        <a class="btn btn-small btn-danger" href="<%= url_for(:delete_comment, :id => comment.id) %>">delete</a>
+                    </p>
                 </div>
                 <% end %>
             </div>

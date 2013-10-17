@@ -181,7 +181,7 @@ StockNotifier::App.controllers do
     if keyword.nil?
       @sponsors = Sponsor.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
     else
-      @sponsors = Sponsor.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
+      @sponsors = Sponsor.all(:publisher_id => @publisher.id, :conditions => ["name like ?", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
     total = @sponsors.total_entries
