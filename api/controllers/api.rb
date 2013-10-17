@@ -219,28 +219,25 @@ StockNotifier::Api.controllers do
     feedback = Feedback.new
     feedback.text = params[:text] if params.has_key?('text')
 
-    if feedback.text.length > 25
-      feedback.subscriber = @subscriber
+    feedback.subscriber = @subscriber
 
-      if feedback.valid?
-        feedback.save
+    if feedback.valid?
+      feedback.save
+      if feedback.text.length > 20
         Resque.enqueue(SendEmail, {
             :mailer_name => 'notifier',
             :email_type => 'feedback',
             :subscriber_id => @subscriber.id,
             :msg => feedback.text
         })
-        status 200
-        ret = {:success => 1, :feedback_id => feedback.id}
-      else
-        status 400
-        ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
       end
+      status 200
+      ret = {:success => 1, :feedback_id => feedback.id}
     else
       status 400
-      ret = {:success => 0, :errors => ['Suggestion needs to be atleast 25 characters long.']}
+      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
     end
-
+    
     ret.to_json
 
   end
