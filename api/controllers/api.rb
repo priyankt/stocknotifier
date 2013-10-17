@@ -219,21 +219,26 @@ StockNotifier::Api.controllers do
     feedback = Feedback.new
     feedback.text = params[:text] if params.has_key?('text')
 
-    feedback.subscriber = @subscriber
+    if feedback.text.length > 25
+      feedback.subscriber = @subscriber
 
-    if feedback.valid?
-      feedback.save
-      Resque.enqueue(SendEmail, {
-          :mailer_name => 'notifier',
-          :email_type => 'feedback',
-          :subscriber_id => @subscriber.id,
-          :msg => feedback.text
-      })
-      status 200
-      ret = {:success => 1, :feedback_id => feedback.id}
+      if feedback.valid?
+        feedback.save
+        Resque.enqueue(SendEmail, {
+            :mailer_name => 'notifier',
+            :email_type => 'feedback',
+            :subscriber_id => @subscriber.id,
+            :msg => feedback.text
+        })
+        status 200
+        ret = {:success => 1, :feedback_id => feedback.id}
+      else
+        status 400
+        ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
+      end
     else
       status 400
-      ret = {:success => 0, :errors => get_formatted_errors(@subscriber.errors)}
+      ret = {:success => 0, :errors => ['Suggestion needs to be atleast 25 characters long.']}
     end
 
     ret.to_json
@@ -279,7 +284,7 @@ StockNotifier::Api.controllers do
   # Add comment for particluar notification
   post :comment, :map => '/notification/:id/comment' do
 
-    if @subscriber.can_comment
+    #if @subscriber.can_comment
     
       comment = Comment.new(:text => params[:text], :notification_id => params[:id], :subscriber_id => @subscriber.id)
       if comment.valid?
@@ -291,12 +296,12 @@ StockNotifier::Api.controllers do
         ret = {:success => 0, :errors => get_formatted_errors(comment.errors)}
       end
 
-    else
+    #else
 
-      status 400
-      ret = {:success => 0, :errors => ['You are not allowed to comment. Please contact admin.']}
+      #status 400
+      #ret = {:success => 0, :errors => ['You are not allowed to comment. Please contact admin.']}
 
-    end
+    #end
 
     ret.to_json
 
