@@ -19,8 +19,8 @@ StockNotifier::Api.controllers do
     end     
       
     if(invalid)
-      # if invalis request then send 401 not authorized                                                                                                       
-      throw(:halt, [401, "Not Authorized"])
+      # if invalis request then send 401 not authorized
+      halt 401, {:success => 0, :errors => ['Authentication failed. Please logout and login again.']}.to_json
     end     
 
   end
