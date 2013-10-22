@@ -33,27 +33,22 @@
                     <tr>
                         <td><%= notification.id %></td>
                         <td class="span5"><a href="<%= url_for(:notification_details, notification.id)%>"><%= notification.title %></a></td>
-                        <% if notification.schedule_dttm %>
+                        <% if notification.schedule_dttm.present? %>
                             <td><%= format_date(notification.schedule_dttm) %></td>
                         <% else %>
                             <td>No</td>
                         <% end %>
-                        <% if notification.schedule_dttm %>
-                            <% if notification.sent %>
-                                <td><%= format_date(notification.updated_at) %></td>
-                            <% else %>
-                                <td>Not Yet</td>
-                            <% end %>
+                        <% if notification.sent_dttm.present? %>
+                            <td><%= format_date(notification.sent_dttm) %></td>
                         <% else %>
-                            <td><%= format_date(notification.updated_at) %></td>
+                            <td>Not Yet</td>
                         <% end %>
                         <td>
-                            <% if notification.sponsor.nil? %>
+                            <% if notification.sponsor.blank? %>
                             none
                             <% else %>
                             <%= notification.sponsor.name %>
                             <% end %>
-                            
                         </td>
                     </tr>
                 <% end %>

@@ -18,6 +18,8 @@ class Notification
   property :android_response, Text
   property :active, Boolean, :default => true
   property :comment_count, Integer, :default => 0
+
+  property :sent_dttm, DateTime
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 

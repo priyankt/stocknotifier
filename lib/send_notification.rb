@@ -16,10 +16,19 @@ class SendNotification
     	notification = Notification.get(notification_id)
     	publisher = notification.publisher
 
+    	# set sent_dttm
+    	notification.sent_dttm = DateTime.now
+		notification.sent = true
+		if notification.valid?
+			notification.save
+		else
+			puts notification.errors.to_hash
+		end
+
     	registration_ids = repository(:default).adapter.select("SELECT registration_token FROM subscribers WHERE publisher_id = #{publisher.id} and active = 1 and registration_token is not null")
 
     	android_response = ""
-    	unless publisher.android_api_key.nil?
+    	if publisher.android_api_key.present?
 	    	
 	    	GCM.key = publisher.android_api_key
 			
@@ -36,21 +45,13 @@ class SendNotification
 				start = last + 1
 			end
 			
-
 		end
 
-		unless publisher.ios_api_key.nil?
+		if publisher.ios_api_key.present?
 			# code to send notification to ios
 		end
 
-		notification.sent = true
 		logger.info android_response
-		
-		if notification.valid?
-			notification.save
-		else
-			puts notification.errors.to_hash
-		end
 
   	end
 
