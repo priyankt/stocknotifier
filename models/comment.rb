@@ -11,13 +11,4 @@ class Comment
   belongs_to :subscriber
   belongs_to :notification
 
-  after :save, :update_comment_count
-
-  def update_comment_count
-
-  	self.notification.comment_count += 1
-  	self.notification.save
-
-  end
-  
 end
