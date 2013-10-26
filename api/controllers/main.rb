@@ -41,7 +41,7 @@ StockNotifier::Api.controllers do
     subscriber = Subscriber.first(:email => params[:email], :publisher_id => params[:publisher_id])
     if subscriber
       salt = BCrypt::Engine.generate_salt
-      new_passwd = SecureRandom.hex(2)
+      new_passwd = SecureRandom.hex(3)
       subscriber.passwd = BCrypt::Engine.hash_secret( new_passwd, salt)
       subscriber.salt = salt
 

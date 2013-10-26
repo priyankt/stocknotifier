@@ -3,19 +3,21 @@ require "send_notification"
 StockNotifier::App.controllers do
 
   get :index, :map => '/' do
-    redirect url(:login)
+
+    publisher = get_publisher_from_session()
+
+    if publisher.present?
+      redirect url(:dashboard)
+    else
+      redirect url(:login)
+    end
+    
   end
 
   get :login, :map => '/login' do
     
-    @publisher = get_publisher_from_session()
-    if @publisher.present?
-      @active_users = Subscriber.count(:publisher_id => session[:publisher], :active => true)
-      @messages_sent = Notification.count(:publisher_id => session[:publisher], :sent => true)
-      @messages_scheduled = Notification.count(:publisher_id => session[:publisher], :sent => false)
-    end
-
     render 'main/login'
+
   end
 
   post :login, :map => '/login' do

@@ -1,0 +1,69 @@
+<% content_for :title do %>
+  <title>Edit Place</title>
+<% end %>
+<div class="row page-place-edit">
+    <div class="span12">
+        <h3>Edit Place</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
+        <% place_id = @place.id %>
+        <% form_for @place, url_for(:place, :edit_place, :id => place_id), :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
+
+            <legend>Edit Place</legend>
+            
+            <% error = @place.errors.key?(:name) && @place.errors[:name].count > 0 %>
+            <div class="control-group">
+                <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
+                <div class="controls">
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "Place Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @place.errors.key?(:description) && @place.errors[:description].count > 0 %>
+            <div class="control-group">
+                <%= f.label :description, :class => "control-label", :for => "inputDescription", :caption => "Extra Info" %>
+                <div class="controls">
+                    <%= f.text_area :description, :id => "inputDescription", :rows => 6, :class => "span4" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:description, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @place.errors.key?(:phone) && @place.errors[:phone].count > 0 %>
+            <div class="control-group">
+                <%= f.label :phone, :class => "control-label", :for => "inputDescription", :caption => "Contact" %>
+                <div class="controls">
+                    <%= f.text_field :phone, :id => "inputDescription", :placeholder => "Phone or email" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:phone, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @place.errors.key?(:address) && @place.errors[:address].count > 0 %>
+            <div class="control-group">
+                <%= f.label :address, :class => "control-label", :for => "inputDescription", :caption => "Address" %>
+                <div class="controls">
+                    <%= f.text_field :address, :id => "inputDescription", :placeholder => "Address of this place", :class => "span4" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:address, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <%= f.submit "Update", :class => 'btn btn-primary' %>
+                </div>
+            </div>
+
+        <% end %>
+    </div>
+</div>

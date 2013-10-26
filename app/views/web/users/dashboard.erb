@@ -1,0 +1,29 @@
+<% content_for :title do %>
+  <title>NotifyMe - Dashboard</title>
+<% end %>
+
+<div class="row">
+    <div class="span12">
+
+        <h2><%= @publisher.name %></h2>
+		<hr/>
+
+		<div class="span5 well text-center">
+		    <h4>Active Users</h4>
+		    <p class="text-error" style="font-size: 2em;"><%= @publisher.subscribers.count(:active => true) %></p>
+		</div>
+		<div class="span5 well text-center">
+		    <h4>Messages Sent</h4>
+		    <p class="text-error" style="font-size: 2em;"><%= @publisher.notifications.count(:sent => true) %></p>
+		</div>
+		<div class="span5 well text-center">
+		    <h4>Messages Scheduled</h4>
+		    <p class="text-error" style="font-size: 2em;"><%= @publisher.notifications.count(:sent => false) %></p>
+		</div>
+		<div class="span5 well text-center">
+		    <h4>Active Places</h4>
+		    <p class="text-error" style="font-size: 2em;"><%= @publisher.places.count(:verified => true) %></p>
+		</div>
+
+    </div>
+</div>

@@ -27,6 +27,7 @@ class Publisher
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 
+  has n, :subscribers
   has n, :notifications
   has n, :sponsors
   has n, :places

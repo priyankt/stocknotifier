@@ -16,6 +16,12 @@ StockNotifier::App.controllers do
 
   end
 
+  get :dashboard, :map => '/dashboard' do
+
+    render 'web/users/dashboard'
+
+  end
+
   get :logout, :map => '/logout' do
     session["publisher"] = nil
     flash[:success] = "You have logged out successfully."

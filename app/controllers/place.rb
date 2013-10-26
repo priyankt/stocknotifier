@@ -39,4 +39,30 @@ StockNotifier::App.controllers :place do
 
     end
 
+    get :edit_place, :map => '/place/:id/edit' do
+
+        @place = Place.get(params[:id])
+        
+        render 'place/edit'
+
+    end
+
+    post :edit_place, :map => '/place/:id/edit' do
+
+        @place = Place.get(params[:id].to_i)
+        if @place.present?
+            if @place.update(params[:place])
+                flash[:success] = "Place #{@place.name} updated successfully."
+                redirect(:places)
+            else
+                flash.now[:error] = "Failed to update place #{@place.name}."
+            end
+        else
+            flash.now[:error] = "Invalid place #{@place.name}. Please try again."
+        end
+
+        render 'place/edit'
+
+    end
+
 end

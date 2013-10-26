@@ -24,7 +24,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Address</th>
-                    <th>Phone</th>
+                    <th>Contact</th>
                     <th>Image 1</th>
                     <th>Image 2</th>
                     <th>Image 3</th>
@@ -67,7 +67,7 @@
                             <% else %>
                                 <a href="<%= url_for(:place, :manage_place, :id => place.id, :active => true) %>">activate</a>
                             <% end %>
-                            <br/><a href="#">edit</a>
+                            <br/><a href="<%= url_for(:place, :edit_place, :id => place.id) %>">edit</a>
                         </td>
                     </tr>
                 <% end %>
