@@ -1,0 +1,49 @@
+<% content_for :title do %>
+  <title>Category List</title>
+<% end %>
+<div class="row page-category-list">
+    <div class="span12">
+        <h3>Categories</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
+        <%= flash_tag(:later, :class => "offset2 span6 alert alert-info text-center") %>
+        <% form_tag url(:category, :categories), :class => 'form-search', :method => 'GET' do %>
+            <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search across categories.." %>
+            <%= submit_tag "Search", :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+    <div class="span12">
+        <p class="muted"><%= total %> categories found</p>
+    </div>
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subtitle</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for category in categories %>
+                    <tr>
+                        <td><%= category.name %></td>
+                        <td><%= category.subtitle %></td>
+                        <td>
+                            <% if category.active %>
+                                <a href="<%= url_for(:category, :manage_category, :id => category.id, :active => false) %>" class="btn btn-small btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
+                            <% else %>
+                                <a href="<%= url_for(:category, :manage_category, :id => category.id, :active => true) %>" class="btn btn-small btn-success"><i class="icon-ok-sign"></i> Activate</a>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% if categories.total_entries > 30 %>
+            <%= will_paginate(categories, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% end %>
+    </div>
+</div>

@@ -8,20 +8,11 @@ StockNotifier::Api.controllers do
 # Check auth before every route except login
   before do
 
-    if env.has_key?("HTTP_X_AUTH_KEY") and !env["HTTP_X_AUTH_KEY"].nil?
-      api_key = env["HTTP_X_AUTH_KEY"]
-      @subscriber = Subscriber.first(:api_key => api_key)
-      if @subscriber.nil?
-        invalid = true
-      end     
-    else    
-      invalid = true
-    end     
-      
-    if(invalid)
+    @subscriber = get_subscriber_from_key()
+    if @subscriber.blank?
       # if invalis request then send 401 not authorized
       halt 401, {:success => 0, :errors => ['Authentication failed. Please logout and login again.']}.to_json
-    end     
+    end
 
   end
 

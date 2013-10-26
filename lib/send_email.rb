@@ -3,7 +3,7 @@
 class SendEmail
 	extend Resque::Plugins::Retry
 
-	@queue = :send_email
+	@queue = :notifyme_send_email
 
 	#@retry_limit = 3
   	#@retry_delay = 120

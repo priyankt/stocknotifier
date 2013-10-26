@@ -2,9 +2,14 @@
 
 StockNotifier::App.helpers do
   
-    def logged_in?
+    def get_publisher_from_session()
 
-        !session[:publisher].nil? and !Publisher.first( :id => session[:publisher], :active => true).nil?
+        publisher = nil
+        if session[:publisher].present?
+            publisher = Publisher.first(:api_key => session[:publisher], :active => true)
+        end
+
+        return publisher
 
     end
 

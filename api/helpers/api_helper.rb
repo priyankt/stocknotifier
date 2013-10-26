@@ -2,6 +2,18 @@
 
 StockNotifier::Api.helpers do
 
+	def get_subscriber_from_key()
+
+		subscriber = nil
+		if env.has_key?("HTTP_X_AUTH_KEY") and env["HTTP_X_AUTH_KEY"].present?
+      		api_key = env["HTTP_X_AUTH_KEY"]
+      		subscriber = Subscriber.first(:api_key => api_key, :active => true)
+      	end
+
+      	return subscriber
+      
+	end
+
 	def get_display_image(n)
 
 		no_image = '/images/display_image.png'

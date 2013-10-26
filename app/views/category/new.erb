@@ -1,0 +1,47 @@
+<% content_for :title do %>
+  <title>New Category</title>
+<% end %>
+<div class="row page-category-new">
+    <div class="span12">
+        <h3>New Category</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
+        <% form_for @category, :new, :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
+            <%= flash_tag(:notice, :class => "alert alert-success") %>
+            
+            <legend>Create New Category</legend>
+
+            <% error = @category.errors.key?(:name) && @category.errors[:name].count > 0 %>
+            <div class="control-group">
+                <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
+                <div class="controls">
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "Category Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @category.errors.key?(:subtitle) && @category.errors[:subtitle].count > 0 %>
+            <div class="control-group">
+                <%= f.label :subtitle, :class => "control-label", :for => "inputSubtitle", :caption => "Info" %>
+                <div class="controls">
+                    <%= f.text_field :subtitle, :id => "inputSubtitle", :placeholder => "short info" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:subtitle, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <%= f.submit "Create", :class => 'btn btn-primary' %>
+                </div>
+            </div>
+
+        <% end %>
+    </div>
+</div>

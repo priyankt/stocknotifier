@@ -1,0 +1,80 @@
+<% content_for :title do %>
+  <title>Places List</title>
+<% end %>
+<div class="row page-places-list">
+    <div class="span12">
+        <h3>Places</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success text-center") %>
+        <%= flash_tag(:later, :class => "offset2 span6 alert alert-info text-center") %>
+        <% form_tag url(:place, :places), :class => 'form-search', :method => 'GET' do %>
+            <%= text_field_tag :keyword, :class => "span5", :placeholder => "Search across places.." %>
+            <%= submit_tag "Search", :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+    <div class="span12">
+        <p class="muted"><%= total %> places found</p>
+    </div>
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Image 1</th>
+                    <th>Image 2</th>
+                    <th>Image 3</th>
+                    <th>By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for place in places %>
+                    <tr>
+                        <td><%= place.name %></td>
+                        <td><%= place.description %></td>
+                        <td><a href="http://maps.google.com/maps?q=<%= place.lat %>,<%= place.lng %>" target="_blank"><%= place.address %></a></td>
+                        <td><%= place.phone %></td>
+                        <td>
+                        <% if place.image1.present? %>
+                            <a href="<%= place.image1.url%>"><img src="<%= place.image1.thumb.url %>"></img></a></td>
+                        <% else %>
+                            -
+                        <% end %>
+                        </td>
+                        <td>
+                        <% if place.image2.present? %>
+                            <a href="<%= place.image2.url%>"><img src="<%= place.image2.thumb.url %>"></img></a></td>
+                        <% else %>
+                            -
+                        <% end %>
+                        </td>
+                        <td>
+                        <% if place.image3.present? %>
+                            <a href="<%= place.image3.url%>"><img src="<%= place.image3.thumb.url %>"></img></a></td>
+                        <% else %>
+                            -
+                        <% end %>
+                        </td>
+                        <td><%= place.subscriber.name %></td>
+                        <td>
+                            <% if place.verified %>
+                                <a href="<%= url_for(:place, :manage_place, :id => place.id, :active => false) %>">inactivate</a>
+                            <% else %>
+                                <a href="<%= url_for(:place, :manage_place, :id => place.id, :active => true) %>">activate</a>
+                            <% end %>
+                            <br/><a href="#">edit</a>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% if places.total_entries > 30 %>
+            <%= will_paginate(places, :renderer => BootstrapPagination::Sinatra, :class => 'pagination pagination-centered').html_safe %>
+        <% end %>
+    </div>
+</div>

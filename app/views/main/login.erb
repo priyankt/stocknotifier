@@ -5,7 +5,8 @@
 <div class="row">
     <div class="span12">
 
-        <% if logged_in? %>
+    	<% publisher = get_publisher_from_session() %>
+        <% if publisher.present? %>
             <%= partial 'main/dashboard' %>
         <% else %>
             <%= partial 'main/login' %>

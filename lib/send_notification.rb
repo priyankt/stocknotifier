@@ -5,7 +5,7 @@ class SendNotification
 
 	ANDROID_BATCH_LIMIT = 1000
 
-	@queue = :send_notification
+	@queue = :notifyme_send_notification
 
 	# using exponential backoff as required by google gcm
 	# it might blacklist of exponential backoff is not used

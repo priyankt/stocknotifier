@@ -6,17 +6,9 @@ StockNotifier::App.controllers do
   
   # Check auth before every route except login
   before do
-    if logged_in?
-      publisher_id = session[:publisher]
-      @publisher = Publisher.first(:id => publisher_id, :active => true)
-      if @publisher.nil? or @publisher.active == false
-        invalid = true
-      end     
-    else    
-      invalid = true
-    end     
-      
-    if(invalid)
+    
+    @publisher = get_publisher_from_session()
+    if @publisher.blank?
       # if invalis request then send 401 not authorized                                                                                                       
       flash[:error] = "Access Denied. Please Login."
       redirect url(:login)
@@ -140,13 +132,13 @@ StockNotifier::App.controllers do
 
   post :new_notification, :map => '/notifications/new' do
 
-    if params[:notification][:sponsor_id].empty?
+    if params[:notification][:sponsor_id].blank?
       params[:notification].delete('sponsor_id')
     end
 
     @notification = Notification.new(params[:notification])
 
-    if params[:notification][:schedule_dttm].nil? or params[:notification][:schedule_dttm].blank? or params[:notification][:schedule_dttm].empty?
+    if params[:notification][:schedule_dttm].blank?
       @notification.schedule_dttm = nil
     else
       # change timezone to IST
@@ -156,20 +148,24 @@ StockNotifier::App.controllers do
 
     @notification.publisher = @publisher
 
-    if @notification.valid?
-      @notification.save
-      if @notification.schedule_dttm.nil?
-        Resque.enqueue(SendNotification, @notification.id)
-        flash[:success] = "Message sent successfully."
-      else
-        Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
-        flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
-      end
+    if @publisher.notifications.count <= @publisher.msg_limit
+      if @notification.valid?
+        @notification.save
+        if @notification.schedule_dttm.nil?
+          Resque.enqueue(SendNotification, @notification.id)
+          flash[:success] = "Message sent successfully."
+        else
+          Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
+          flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
+        end
 
-      redirect url(:notifications)
+        redirect url(:notifications)
+      else
+        flash.now[:error] = "Error while sending message. Try again."
+        render 'web/notifications/new'
+      end
     else
-      puts @notification.errors.inspect
-      flash.now[:error] = "Error while sending message. Try again."
+      flash.now[:error] = "Limit exceeded. Please contact notifyme team."
       render 'web/notifications/new'
     end
   

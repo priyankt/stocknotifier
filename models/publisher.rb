@@ -5,7 +5,7 @@ class Publisher
   property :email, String, :format => :email_address, :required => true, :unique => true
   property :passwd, String, :required => true
   property :salt, String
-  property :api_key, String
+  property :api_key, String, :unique => true
   property :name, String
   property :address, Text
   property :phone, String
@@ -21,11 +21,15 @@ class Publisher
   property :language2, String, :length => 2
   property :language3, String, :length => 2
   property :footer_msg, String
+  property :msg_limit, Integer, :default => 1200
+  property :users_limit, Integer, :default => 5000
   property :active, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true
 
   has n, :notifications
   has n, :sponsors
+  has n, :places
+  has n, :categories
   
 end

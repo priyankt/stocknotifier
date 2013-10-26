@@ -78,6 +78,16 @@
     <span class='help-inline'><%= error ? f.error_message_on(:mailing_list) : "Ex: jainsena@googlegroups.com" %></span>
   </div>
 </fieldset>
+
+<% error = @publisher.errors.key?(:api_key) && @publisher.errors[:api_key].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :api_key, :class => 'control-label', :caption => 'Auth Key' %>
+  <div class='controls'>
+    <%= f.text_field :api_key, :class => 'input-xlarge input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:api_key) : "Ex: Some large api key unique to publisher. Used for web login." %></span>
+  </div>
+</fieldset>
+
 <% error = @publisher.errors.key?(:android_api_key) && @publisher.errors[:android_api_key].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :android_api_key, :class => 'control-label' %>

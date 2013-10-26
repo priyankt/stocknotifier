@@ -8,8 +8,8 @@ StockNotifier::App.controllers do
 
   get :login, :map => '/login' do
     
-    if logged_in?
-      @publisher = Publisher.get(session[:publisher])
+    @publisher = get_publisher_from_session()
+    if @publisher.present?
       @active_users = Subscriber.count(:publisher_id => session[:publisher], :active => true)
       @messages_sent = Notification.count(:publisher_id => session[:publisher], :sent => true)
       @messages_scheduled = Notification.count(:publisher_id => session[:publisher], :sent => false)
@@ -27,7 +27,8 @@ StockNotifier::App.controllers do
       if publisher
         passwd_hash = BCrypt::Engine.hash_secret(passwd, publisher.salt)
         if publisher.passwd == passwd_hash
-          session[:publisher] = publisher.id
+          #session[:publisher] = publisher.id
+          session[:publisher] = publisher.api_key
           redirect url(:new_notification)
         else
           flash[:error] = "Invalid email or password. Please try again."
@@ -75,6 +76,12 @@ StockNotifier::App.controllers do
     end
 
     render 'main/forgot_passwd'
+
+  end
+
+  get :contact, :map => '/contact' do
+
+    render 'main/contact'
 
   end
 
