@@ -5,6 +5,8 @@ StockNotifier::Api.helpers do
 	def get_place_images(place)
 
 		p = Place.new
+
+		p.id = place[:id]
 		p.image1 = place[:image1]
 		p.image2 = place[:image2]
 		p.image3 = place[:image3]
