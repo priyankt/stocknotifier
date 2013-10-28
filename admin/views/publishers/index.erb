@@ -40,9 +40,9 @@
                 <th class=header> <%= mat(:publisher, :email) %></th>
                 <th class=header> <%= mat(:publisher, :name) %></th>
                 <th class=header> <%= mat(:publisher, :phone) %></th>
-                <th class=header> <%= mat(:publisher, :msg_limit) %></th>
-                <th class=header> <%= mat(:publisher, :users_limit) %></th>
-                <th class=header> <%= mat(:publisher, :places_limit) %></th>
+                <th class=header> Messages </th>
+                <th class=header> Users </th>
+                <th class=header> Places</th>
                 <th class=header> <%= mat(:publisher, :active) %></th>
                 <th class=header> <%= mat(:publisher, :created_at) %></th>
                 <th class="header list-row-action-header"></th>
@@ -58,9 +58,9 @@
           <td class=list-column> <%= publisher.email %> </td>
           <td class=list-column> <%= publisher.name %> </td>
           <td class=list-column> <%= publisher.phone %> </td>
-          <td class=list-column> <%= publisher.msg_limit %> </td>
-          <td class=list-column> <%= publisher.users_limit %> </td>
-          <td class=list-column> <%= publisher.places_limit %> </td>
+          <td class=list-column> <%= publisher.notifications.count(:active => true)%> / <%= publisher.msg_limit %> </td>
+          <td class=list-column> <%= publisher.subscribers.count(:active => true)%> / <%= publisher.users_limit %> </td>
+          <td class=list-column> <%= publisher.places.count(:verified => true)%> / <%= publisher.places_limit %> </td>
           <td class=list-column> <%= publisher.active %> </td>
           <td class=list-column> <%= time_ago_in_words(publisher.created_at) %> ago </td>
           <td class="list-column list-row-action">
