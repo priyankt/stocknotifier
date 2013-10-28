@@ -23,6 +23,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Categories</th>
                     <th>Address</th>
                     <th>Contact</th>
                     <th>Image 1</th>
@@ -37,6 +38,7 @@
                     <tr>
                         <td><%= place.name %></td>
                         <td><%= place.description %></td>
+                        <td><%= (place.categories.map { |c| c.name }).join(', ') %></td>
                         <td><a href="http://maps.google.com/maps?q=<%= place.lat %>,<%= place.lng %>" target="_blank"><%= place.address %></a></td>
                         <td><%= place.phone %></td>
                         <td>

@@ -91,7 +91,8 @@ StockNotifier::Api.controllers :place do
         "
 
         if category_ids.present? and category_ids.length > 0
-            query += ' AND category_id in (' + category_ids.join(',') + ')'
+            categories = JSON.parse category_ids
+            query += ' AND category_id in (' + categories.join(',') + ')'
         end
 
         if exclude_ids.present? and exclude_ids.length > 0
@@ -128,7 +129,7 @@ StockNotifier::Api.controllers :place do
         begin
 
             review = Review.new()
-            review.text = params[:text] if has_key?('text')
+            review.text = params[:text] if params.has_key?('text')
             review.place_id = params[:id]
             review.subscriber = @subscriber
 
@@ -147,21 +148,31 @@ StockNotifier::Api.controllers :place do
 
         end
 
+        return ret.to_json
+
     end
 
     get :reviews, :map => '/place/:id/reviews' do
 
-        reviews = Review.all(place_id => params[:id], :active => true)
+        reviews = Review.all(:place_id => params[:id], :active => true, :order => [:created_at.desc])
+        ret = []
+        reviews.each do |r|
+            ret.push({
+                :text => r.text,
+                :name => r.subscriber.name,
+                :dttm => r.created_at
+            })
+        end
 
-        return reviews.to_json
+        return ret.to_json
 
     end
 
-    get :review_count, :map => '/place/:id/review_count' do
+    get :review_count, :map => '/place/:id/review/count' do
 
-        count = Review.count(place_id => params[:id], :active => true)
+        count = Review.count(:place_id => params[:id], :active => true)
         
-        return count
+        return {:count => count}.to_json
 
     end
 

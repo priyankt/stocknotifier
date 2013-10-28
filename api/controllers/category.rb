@@ -12,7 +12,7 @@ StockNotifier::Api.controllers :category do
 
     get :categories, :map => '/categories' do
 
-        categories = @subscriber.publisher.categories.all(:active => true)
+        categories = @subscriber.publisher.categories.all(:active => true, :order => [:name])
 
         return categories.to_json(:exclude => [:updated_at, :created_at, :active, :publisher_id])
 
