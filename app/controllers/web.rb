@@ -91,9 +91,9 @@ StockNotifier::App.controllers do
     
     keyword = params[:keyword] if params.has_key?("keyword")
     if keyword.nil?
-      @notifications = @publisher.notifications.all(:order => :created_at.desc).paginate(:page => params[:page])
+      @notifications = @publisher.notifications.all(:order => :sent_dttm.desc).paginate(:page => params[:page])
     else
-      @notifications = @publisher.notifications.all(:conditions => ["title like ? OR text like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
+      @notifications = @publisher.notifications.all(:conditions => ["title like ? OR text like ?", "%#{keyword}%", "%#{keyword}%"], :order => :sent_dttm.desc).paginate(:page => params[:page])
     end
 
     total = @notifications.total_entries
