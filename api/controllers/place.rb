@@ -44,6 +44,11 @@ StockNotifier::Api.controllers :place do
                 place.save
                 status 200
                 ret = {:success => 1, :id => place.id}
+                Resque.enqueue(SendEmail, {
+                    :mailer_name => 'notifier',
+                    :email_type => 'new_place',
+                    :place_id => place.id
+                })
             else
                 raise CustomError.new(get_formatted_errors(place.errors))
             end

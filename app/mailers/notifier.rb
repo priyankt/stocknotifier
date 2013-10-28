@@ -72,4 +72,13 @@ StockNotifier::App.mailer :notifier do
     render 'notifier/feedback', :layout => 'email', :locals => {:subscriber => subscriber, :msg => msg}
   end
 
+  email :new_place do |place|
+    from 'info@notifyme.in'
+    to place.publisher.email
+    subject "New place added - #{place.name}"
+    content_type 'text/html' # optional, defaults to plain/text
+    via :smtp # optional, to smtp if defined, otherwise sendmail
+    render 'notifier/new_place', :layout => 'email', :locals => {:place => place}
+  end
+
 end

@@ -29,6 +29,9 @@ class SendEmail
 						subscriber = Subscriber.get(params['subscriber_id'])
 						msg = params['msg']
 						StockNotifier::App.deliver(:notifier, :feedback, subscriber, msg)
+					when 'new_place'
+						place = Place.get(params['place_id'])
+						StockNotifier::App.deliver(:notifier, :new_place, place)
 					else
 						puts 'Invalid email type'
 				end
