@@ -21,9 +21,9 @@ class Publisher
   property :language2, String, :length => 2
   property :language3, String, :length => 2
   property :footer_msg, String
-  property :msg_limit, Integer, :default => 1200
-  property :users_limit, Integer, :default => 5000
-  property :places_limit, Integer, :default => 100
+  property :msg_limit, Integer, :default => 1500
+  property :users_limit, Integer, :default => 10000
+  property :places_limit, Integer, :default => 500
   property :active, Boolean, :default => true
   property :created_at, DateTime, :lazy => true
   property :updated_at, DateTime, :lazy => true

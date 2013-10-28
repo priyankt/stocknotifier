@@ -85,7 +85,7 @@ StockNotifier::Api.controllers do
 
     subscriber.publisher = Publisher.get(params[:publisher_id])
     users_count = Subscriber.count(:publisher_id => subscriber.publisher_id)
-    if users_count <= subscriber.publisher.users_count
+    if users_count.blank? or users_count <= subscriber.publisher.users_limit
 
       if subscriber.valid?
         begin
