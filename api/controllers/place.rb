@@ -12,37 +12,49 @@ StockNotifier::Api.controllers :place do
 
     post :place, :map => '/place' do
 
-        puts params.inspect
-        place = Place.new
-        place.name = params[:name] if params.has_key?('name')
-        place.description = params[:description] if params.has_key?('description')
-        place.phone = params[:contact] if params.has_key?('contact')
-        place.address = params[:address] if params.has_key?('address')
-        place.lat = params[:lat].to_f if params.has_key?('lat')
-        place.lng = params[:lng].to_f if params.has_key?('lng')
-        place.image1 = params[:image1] if params.has_key?('image1')
-        place.image2 = params[:image2] if params.has_key?('image2')
-        place.image3 = params[:image3] if params.has_key?('image3')
+        begin
 
-        if params.has_key?('categories')
-            categories = JSON.parse params[:categories]
-            categories.each do |c|
-                place.categories << Category.get(c)
+            # Check places limit
+            if @subscriber.publisher.places.count >= @subscriber.publisher.places_limit
+                raise CustomError.new(['Places maximum limit reached. Contact admin.'])
             end
-        end
 
-        place.subscriber = @subscriber
-        place.publisher = @subscriber.publisher
+            place = Place.new
+            place.name = params[:name] if params.has_key?('name')
+            place.description = params[:description] if params.has_key?('description')
+            place.phone = params[:contact] if params.has_key?('contact')
+            place.address = params[:address] if params.has_key?('address')
+            place.lat = params[:lat].to_f if params.has_key?('lat')
+            place.lng = params[:lng].to_f if params.has_key?('lng')
+            place.image1 = params[:image1] if params.has_key?('image1')
+            place.image2 = params[:image2] if params.has_key?('image2')
+            place.image3 = params[:image3] if params.has_key?('image3')
 
-        if place.valid?
-            place.save
-            status 200
-            ret = {:success => 1, :id => place.id}
-        else
+            if params.has_key?('categories')
+                categories = JSON.parse params[:categories]
+                categories.each do |c|
+                    place.categories << Category.get(c)
+                end
+            end
+
+            place.subscriber = @subscriber
+            place.publisher = @subscriber.publisher
+
+            if place.valid?
+                place.save
+                status 200
+                ret = {:success => 1, :id => place.id}
+            else
+                raise CustomError.new(get_formatted_errors(place.errors))
+            end
+            
+        rescue CustomError => ce
+
             status 400
-            ret = {:success => 0, :errors => get_formatted_errors(place.errors)}
+            ret = {:success => 0, :errors => ce.errors}
+            
         end
-        
+
         ret.to_json
 
     end
@@ -142,6 +154,14 @@ StockNotifier::Api.controllers :place do
         reviews = Review.all(place_id => params[:id], :active => true)
 
         return reviews.to_json
+
+    end
+
+    get :review_count, :map => '/place/:id/review_count' do
+
+        count = Review.count(place_id => params[:id], :active => true)
+        
+        return count
 
     end
 

@@ -70,12 +70,40 @@
     <span class='help-inline'><%= error ? f.error_message_on(:city) : "Ex: Pune, Nasik" %></span>
   </div>
 </fieldset>
+
 <% error = @publisher.errors.key?(:mailing_list) && @publisher.errors[:mailing_list].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :mailing_list, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :mailing_list, :class => 'input-xlarge input-with-feedback' %>
     <span class='help-inline'><%= error ? f.error_message_on(:mailing_list) : "Ex: jainsena@googlegroups.com" %></span>
+  </div>
+</fieldset>
+
+<% error = @publisher.errors.key?(:msg_limit) && @publisher.errors[:msg_limit].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :msg_limit, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :msg_limit, :class => 'input-xlarge input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:msg_limit) : "Number of messages allowed per year" %></span>
+  </div>
+</fieldset>
+
+<% error = @publisher.errors.key?(:users_limit) && @publisher.errors[:users_limit].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :users_limit, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :users_limit, :class => 'input-xlarge input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:users_limit) : "Total users allowed" %></span>
+  </div>
+</fieldset>
+
+<% error = @publisher.errors.key?(:places_limit) && @publisher.errors[:places_limit].count > 0 %>
+<fieldset class='control-group <%= error ? 'has-error' : ''%>'>
+  <%= f.label :places_limit, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.text_field :places_limit, :class => 'input-xlarge input-with-feedback' %>
+    <span class='help-inline'><%= error ? f.error_message_on(:places_limit) : "Total places allowed" %></span>
   </div>
 </fieldset>
 
@@ -96,6 +124,7 @@
     <span class='help-inline'><%= error ? f.error_message_on(:android_api_key) : "Ex: alphanumeric android server key obtained from google developer console" %></span>
   </div>
 </fieldset>
+
 <% error = @publisher.errors.key?(:ios_api_key) && @publisher.errors[:ios_api_key].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :ios_api_key, :class => 'control-label' %>
@@ -104,6 +133,7 @@
     <span class='help-inline'><%= error ? f.error_message_on(:ios_api_key) : "alphanumeric ios key provided by apple" %></span>
   </div>
 </fieldset>
+
 <% error = @publisher.errors.key?(:language1) && @publisher.errors[:language1].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :language1, :class => 'control-label' %>
@@ -112,6 +142,7 @@
     <span class='help-inline'><%= error ? f.error_message_on(:language1) : "2 character language code liki 'hi', 'mr'" %> <a href="https://developers.google.com/transliterate/v1/getting_started#LanguageCode" target="_blank">Click here</a> for language codes</span>
   </div>
 </fieldset>
+
 <% error = @publisher.errors.key?(:logo) && @publisher.errors[:logo].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :logo, :class => 'control-label' %>
@@ -120,15 +151,15 @@
     <span class='help-block'><%= error ? f.error_message_on(:logo) : "Ex: Publisher's Logo" %></span>
   </div>
 </fieldset>
+
 <% error = @publisher.errors.key?(:footer_msg) && @publisher.errors[:footer_msg].count > 0 %>
 <fieldset class='control-group <%= error ? 'has-error' : ''%>'>
   <%= f.label :footer_msg, :class => 'control-label' %>
   <div class='controls'>
     <%= f.text_field :footer_msg, :class => 'input-xlarge input-with-feedback'%>
-    <span class='help-block'><%= error ? f.error_message_on(:footer_msg) : "Ex: Add any footer message you want that will be appended to every message" %></
+    <span class='help-block'><%= error ? f.error_message_on(:footer_msg) : "Ex: Add any footer message you want that will be appended to every message" %></span>
   </div>
 </fieldset>
-
 
 <div class="form-actions">
   <%= f.submit pat(:save), :class => 'btn btn-primary' %>

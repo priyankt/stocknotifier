@@ -39,16 +39,12 @@
                 <th class=header> <%= mat(:publisher, :id) %></th>
                 <th class=header> <%= mat(:publisher, :email) %></th>
                 <th class=header> <%= mat(:publisher, :name) %></th>
-                <th class=header> <%= mat(:publisher, :address) %></th>
                 <th class=header> <%= mat(:publisher, :phone) %></th>
-                <th class=header> <%= mat(:publisher, :website) %></th>
-                <th class=header> <%= mat(:publisher, :desc) %></th>
-                <th class=header> <%= mat(:publisher, :occupation) %></th>
-                <th class=header> <%= mat(:publisher, :city) %></th>
-                <th class=header> <%= mat(:publisher, :android_api_key) %></th>
-                <th class=header> <%= mat(:publisher, :ios_api_key) %></th>
+                <th class=header> <%= mat(:publisher, :msg_limit) %></th>
+                <th class=header> <%= mat(:publisher, :users_limit) %></th>
+                <th class=header> <%= mat(:publisher, :places_limit) %></th>
+                <th class=header> <%= mat(:publisher, :active) %></th>
                 <th class=header> <%= mat(:publisher, :created_at) %></th>
-                <th class=header> <%= mat(:publisher, :updated_at) %></th>
                 <th class="header list-row-action-header"></th>
     </thead>
 
@@ -60,20 +56,13 @@
            </td>
           <td class=list-column> <%= publisher.id %> </td>
           <td class=list-column> <%= publisher.email %> </td>
-          <td class=list-column> <%= publisher.passwd %> </td>
-          <td class=list-column> <%= publisher.salt %> </td>
-          <td class=list-column> <%= publisher.api_key %> </td>
           <td class=list-column> <%= publisher.name %> </td>
-          <td class=list-column> <%= publisher.address %> </td>
           <td class=list-column> <%= publisher.phone %> </td>
-          <td class=list-column> <%= publisher.website %> </td>
-          <td class=list-column> <%= publisher.desc %> </td>
-          <td class=list-column> <%= publisher.occupation %> </td>
-          <td class=list-column> <%= publisher.city %> </td>
-          <td class=list-column> <%= publisher.android_api_key %> </td>
-          <td class=list-column> <%= publisher.ios_api_key %> </td>
-          <td class=list-column> <%= publisher.created_at %> </td>
-          <td class=list-column> <%= publisher.updated_at %> </td>
+          <td class=list-column> <%= publisher.msg_limit %> </td>
+          <td class=list-column> <%= publisher.users_limit %> </td>
+          <td class=list-column> <%= publisher.places_limit %> </td>
+          <td class=list-column> <%= publisher.active %> </td>
+          <td class=list-column> <%= time_ago_in_words(publisher.created_at) %> ago </td>
           <td class="list-column list-row-action">
             <div class='list-row-action-wrapper'>
                <%= link_to tag_icon(:edit), :href => url(:publishers, :edit, :id => publisher.id), :rel => :tooltip, :title => "#{pat(:edit)} publisher", :class => 'list-row-action-wrapper-link' %>
