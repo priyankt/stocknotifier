@@ -1,0 +1,19 @@
+<p>
+  Hello <%= place.publisher.name %>,
+</p>
+
+<p>
+  A new place has been submitted for review.
+</p>
+
+<p>
+  <strong>Place Name:</strong> <%= (place.name.present? ? place.name : 'NA') %> <br/>
+  <strong>User Name:</strong> <%= (place.subscriber.name.present? ? place.subscriber.name : 'NA') %> <br/>
+  <strong>User Email:</strong> <%= (place.subscriber.email.present? ? place.subscriber.email : 'NA') %> <br/>
+  <strong>User Phone:</strong> <%= (place.subscriber.phone.present? ? place.subscriber.phone : 'NA') %> <br/>
+</p>
+
+<p>
+  Thanks,<br/>
+  Notifyme Team
+</p>
