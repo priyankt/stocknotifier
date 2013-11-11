@@ -181,4 +181,32 @@ StockNotifier::Api.controllers :place do
 
     end
 
+    post :viewed_place, :map => '/place/:id/viewed' do
+
+        puts params.inspect
+
+        place_id = params[:id] if params.has_key?(:id)
+        lat = params[:lat].to_f if params.has_key?("lat")
+        lng = params[:lng].to_f if params.has_key?("lng")
+
+        viewedPlace = ViewedPlace.new(
+            :place_id => place_id,
+            :subscriber_id => @subscriber.id,
+            :lat => lat,
+            :lng => lng
+        )
+        
+        if viewedPlace.valid?
+            viewedPlace.save
+            status 201
+            ret = {:success => 1}
+        else
+            status 400
+            ret = {:success => 0, :errors => get_formatted_errors(viewedPlace.errors)}
+        end
+    
+        ret.to_json
+
+    end
+
 end
