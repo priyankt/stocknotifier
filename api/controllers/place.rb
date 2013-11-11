@@ -92,7 +92,7 @@ StockNotifier::Api.controllers :place do
             AND
                 lng < #{ne_lng}
             AND
-                verified = 't'
+                verified = 1
         "
 
         if category_ids.present? and category_ids.length > 0
