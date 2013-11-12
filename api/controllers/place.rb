@@ -73,6 +73,7 @@ StockNotifier::Api.controllers :place do
         sw_lat = params[:sw_lat].to_f if params.has_key?('sw_lat')
         sw_lng = params[:sw_lng].to_f if params.has_key?('sw_lng')
         category_ids = params[:categories] if params.has_key?('categories')
+        publisher_id = @subscriber.publisher_id
 
         query = "
             SELECT
@@ -93,6 +94,8 @@ StockNotifier::Api.controllers :place do
                 lng < #{ne_lng}
             AND
                 verified = 1
+            AND
+                publisher_id = #{publisher_id}
         "
 
         if category_ids.present? and category_ids.length > 0
