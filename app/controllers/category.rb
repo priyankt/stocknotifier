@@ -37,6 +37,23 @@ StockNotifier::App.controllers :category do
 
     end
 
+    get :edit_category, :map => '/category/edit/:id' do
+
+        category = @publisher.categories.get(params[:id])
+
+        render 'category/edit', :locals => {:category => category}
+
+    end
+
+    post :edit_category, :map => '/category/edit/:id' do
+
+        category = @publisher.categories.get(params[:id])
+        category.update(params[:category])
+
+        redirect url(:category, :categories)
+
+    end
+
     get :categories, :map => '/categories' do
     
         keyword = params[:keyword] if params.has_key?("keyword")

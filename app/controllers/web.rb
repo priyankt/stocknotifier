@@ -34,7 +34,7 @@ StockNotifier::App.controllers do
     if keyword.nil?
       @users = Subscriber.all(:publisher_id => @publisher.id, :order => :created_at.desc).paginate(:page => params[:page])
     else
-      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ?", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
+      @users = Subscriber.all(:publisher_id => @publisher.id, :conditions => ["name like ? OR email like ? OR city like ?", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"], :order => :created_at.desc).paginate(:page => params[:page])
     end
 
     total = @users.total_entries

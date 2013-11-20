@@ -37,7 +37,7 @@
                 <% for place in places %>
                     <tr>
                         <td><%= place.name %></td>
-                        <td><%= place.description %></td>
+                        <td><%= truncate(place.description, :length => 50) %></td>
                         <td><%= (place.categories.map { |c| c.name }).join(', ') %></td>
                         <td><a href="http://maps.google.com/maps?q=<%= place.lat %>,<%= place.lng %>" target="_blank"><%= place.address %></a></td>
                         <td><%= place.phone %></td>

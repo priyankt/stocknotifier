@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Subtitle</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,13 +30,15 @@
                 <% for category in categories %>
                     <tr>
                         <td><%= category.name %></td>
-                        <td><%= category.subtitle %></td>
                         <td>
-                            <% if category.active %>
-                                <a href="<%= url_for(:category, :manage_category, :id => category.id, :active => false) %>" class="btn btn-small btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
-                            <% else %>
-                                <a href="<%= url_for(:category, :manage_category, :id => category.id, :active => true) %>" class="btn btn-small btn-success"><i class="icon-ok-sign"></i> Activate</a>
-                            <% end %>
+                        <% if category.active %>
+                            <span class="label label-success">active</span>
+                        <% else %>
+                            <span class="label">inactive</span>
+                        <% end %>
+                        </td>
+                        <td>
+                            <a href="<%= url_for(:category, :edit_category, :id => category.id) %>" class="btn btn-small btn-info"><i class="icon-edit"></i> Edit</a>
                         </td>
                     </tr>
                 <% end %>

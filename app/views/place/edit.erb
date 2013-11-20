@@ -58,6 +58,28 @@
                 </div>
             </div>
 
+            <% error = @place.errors.key?(:lat) && @place.errors[:lat].count > 0 %>
+            <div class="control-group">
+                <%= f.label :lat, :class => "control-label", :for => "inputLat", :caption => "Latitude" %>
+                <div class="controls">
+                    <%= f.text_field :lat, :id => "inputLat", :placeholder => "Latitude of this place", :class => "span4" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:lat, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = @place.errors.key?(:lng) && @place.errors[:lng].count > 0 %>
+            <div class="control-group">
+                <%= f.label :lng, :class => "control-label", :for => "inputLng", :caption => "Longitude" %>
+                <div class="controls">
+                    <%= f.text_field :lng, :id => "inputLat", :placeholder => "Longitude of this place", :class => "span4" %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:lng, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
             <div class="control-group">
                 <div class="controls">
                     <%= f.submit "Update", :class => 'btn btn-primary' %>
