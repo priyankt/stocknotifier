@@ -1,0 +1,44 @@
+<% content_for :title do %>
+  <title>Edit Category</title>
+<% end %>
+<div class="row page-category-edit">
+    <div class="span12">
+        <h3>Edit Category</h3>
+        <hr/>
+    </div>
+    <div class="span12">
+        <%= flash_tag(:success, :class => "offset2 span6 alert alert-success") %>
+        <%= flash_tag(:error, :class => "offset2 span6  alert alert-error") %>
+        <% form_for category, url_for(:category, :edit_category, :id => category.id), :class => 'offset2 span6 form-horizontal well', :method => 'POST' do |f| %>
+
+            <legend>Edit Category</legend>
+            
+            <% error = category.errors.key?(:name) && category.errors[:name].count > 0 %>
+            <div class="control-group">
+                <%= f.label :name, :class => "control-label", :for => "inputName", :caption => "Name" %>
+                <div class="controls">
+                    <%= f.text_field :name, :id => "inputName", :placeholder => "Category Name", :required => true, :autofocus => :true %>
+                    <% if error %>
+                        <span class="help-block"><%= f.error_message_on(:name, :class => 'text-error') %></span>
+                    <% end %>
+                </div>
+            </div>
+
+            <% error = category.errors.key?(:active) && category.errors[:active].count > 0 %>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <%= f.check_box :active %> active
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <%= f.submit "Update", :class => 'btn btn-primary' %>
+                </div>
+            </div>
+
+        <% end %>
+    </div>
+</div>
