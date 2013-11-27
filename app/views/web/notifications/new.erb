@@ -8,10 +8,24 @@
     </div>
     <% form_for @notification, :new, :method => 'POST', :multipart => true do |f| %>
     <%= flash_tag(:error, :class => "offset2 span6 alert alert-error text-center") %>
+    
     <div class="span12">
         <label><strong>Title</strong></label>
         <%= f.text_field :title, :class => "span12", :id => 'title', :placeholder => "Enter message title here", :autofocus => :true %>
     </div>
+    
+    <div class="span4">
+        <label><strong>Source Email Address</strong></label>
+        <input type="text" name="source" class="span3" placeholder="Enter email address of your source">
+    </div>
+
+    <% if @publisher.sponsors.count > 0 %>
+    <div class="span4">
+        <label><strong>Sponsor</strong></label>
+        <%= f.select :sponsor_id, :id => 'sponsor', :collection => @publisher.sponsors.all(:active => true), :fields => [:name, :id], :include_blank => 'none' %>
+    </div>
+    <% end %>
+    
     <div class="span12">
         <%= partial 'web/wysiwyg', :locals => { :f => f } %>
         <div id="editor" contenteditable="true">
@@ -26,15 +40,10 @@
 
         <div class="row">
 
-            <div class="span7">
-                <% if @publisher.sponsors.count > 0 %>
-                    <%= f.select :sponsor_id, :id => 'sponsor', :collection => @publisher.sponsors.all(:active => true), :fields => [:name, :id], :include_blank => 'none' %>
-                <% end %>
-            </div>
             <div class="span5">
                 <a href="#schedule-later-modal" class="btn btn-info" data-toggle="modal"><i class="icon-time"></i> Send Message Later</a>
             
-                <%= f.submit "Send Message Now", :class => 'btn btn-success pull-right send-message', :style => 'font-weight: 900;'%>
+                <%= f.submit "Send Message Now", :id => 'sendNow', :class => 'btn btn-success pull-right send-message', :style => 'font-weight: 900;'%>
             </div>
 
         </div>
@@ -118,50 +127,10 @@
 
         <div class="modal-footer">
             <a class="btn" data-dismiss="modal" aria-hidden="true" href="#">Cancel</a>
-            <button class="btn btn-info send-message">Schedule Message</button>
+            <button id="scheduleLater" class="btn btn-info send-message">Schedule Message</button>
         </div>
     </div>
 
-    <%# Modal for uploading videos to youtube %>
-    <div id="attach-video-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;">&times;</button>
-            <h3>Attach Video</h3>
-        </div>
-
-        <div class="modal-body">
-            <div id="video-message-box" class="text-info text-center">
-                <i class="icon-youtube icon-large"></i> This video will be uploaded to your youtube account.
-            </div>
-            <hr/>
-            <div id="widget" class="span3">
-                <i class="icon-spinner icon-large icon-spin"></i> Loading Youtube widget..
-            </div>
-            <div id="widget" class="span2">
-                <ul class="unstyled" id="video-progress-box">
-                    <li class="muted">
-                        <i class="icon-remove-sign"></i> Uploaded
-                    </li>
-                </ul>
-                <small>
-                    <ol>
-                        <li>Select a file</li>
-                        <li>Wait for upload status to go green</li>
-                        <li>Click attach to add video</li>
-                    </ol>
-                </small>
-            </div>
-            <%= f.hidden_field :video1, :id => 'video_id' %>
-        </div>
-
-        <div class="modal-footer">
-            <%#<button class="btn btn-success send-message">Attach Video</button>%>
-            <a class="btn" data-dismiss="modal" aria-hidden="true" href="#">Cancel</a>
-            <a href="#" id="attach-video" class="btn btn-primary disabled"><i class="icon-paper-clip"></i> Attach</a>
-        </div>
-    </div>
-    
     <% end %>
 
 </div>
@@ -231,6 +200,12 @@
                 var htmlText = $.trim(t);
                 var title = $('#title').val();
 
+                console.log(this.id);
+
+                if (this.id == 'sendNow') {
+                    $('#scheduleLater').val(null);
+                }
+
                 if(htmlText.length <= 0 || htmlText == '<br>') {
                     alert("You have not written any message. Please write a message and try again.");
                     return false;
@@ -263,47 +238,6 @@
                 return false;
             });
         });
-
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        
-        var widget;
-
-        function onYouTubeIframeAPIReady() {
-            widget = new YT.UploadWidget('widget', {
-                width: 300,
-                webcamOnly: false,
-                events: {
-                    'onVideoIdAvailable': onVideoIdAvailable
-                }
-            });
-        }
-
-        $('#videoBtn').click(function(){
-            title = $('#title').val();
-            desc = $('#editor').text();
-
-            if(title.length > 0) {
-                widget.setVideoTitle(title);
-            }
-            
-            if(desc.length > 0) {
-                widget.setVideoDescription(desc);
-            }
-            
-            widget.setVideoPrivacy('public');
-        });
-
-        function onVideoIdAvailable(event) {
-            $('#video_id').val(event.data.videoId);
-            $('#video-progress-box').html('<li class="text-success"><i class="icon-ok-sign"></i> Uploaded</li>');
-            $('#attach-video').toggleClass('disabled');
-            $('#attach-video').click(function(){
-                $('#attach-video-modal').modal('hide')
-            });
-        }
 
     </script>
 <% end %>

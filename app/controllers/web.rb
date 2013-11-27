@@ -114,24 +114,6 @@ StockNotifier::App.controllers do
 
     @notification  = Notification.new()
     
-    # params = {
-    #   :title => 'Test Video',
-    #   :description => 'Test Description',
-    #   :category => 'People',
-    #   :keywords => ['community']
-    # }
-
-    # videos_url = url(:new_notification)
-
-    # client = YouTubeIt::Client.new(
-    #   :username => "priyankgt",
-    #   :password =>  "b1uebott!e",
-    #   :dev_key => "AI39si6qE58xznZSd7J7IRSQCni3uEP6TuhaQmU89dXiu8DPF8VWQ0YFZGsXXe_rEFSQUZsGLxb9V_cqXoT_PMW9lC4qibb9lQ"
-    # )
-
-    # @upload_info = client.upload_token(params, videos_url)
-    # puts @upload_info
-    
     render 'web/notifications/new'
 
   end
@@ -142,6 +124,7 @@ StockNotifier::App.controllers do
       params[:notification].delete('sponsor_id')
     end
 
+    puts params.inspect
     @notification = Notification.new(params[:notification])
 
     if params[:notification][:schedule_dttm].blank?
@@ -152,26 +135,39 @@ StockNotifier::App.controllers do
       @notification.sent = false
     end
 
+    # Assign publisher
     @notification.publisher = @publisher
 
-    if @publisher.notifications.count <= @publisher.msg_limit
-      if @notification.valid?
-        @notification.save
-        if @notification.schedule_dttm.nil?
-          Resque.enqueue(SendNotification, @notification.id)
-          flash[:success] = "Message sent successfully."
-        else
-          Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
-          flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
-        end
+    if params[:source].present?
+      source = @publisher.subscribers.first(:email => params[:source])      
+    end
 
-        redirect url(:notifications)
+    if source.present?
+      # Assign Source
+      @notification.subscriber_id = source.id
+    
+      if @publisher.notifications.count <= @publisher.msg_limit
+        if @notification.valid?
+          @notification.save
+          if @notification.schedule_dttm.nil?
+            Resque.enqueue(SendNotification, @notification.id)
+            flash[:success] = "Message sent successfully."
+          else
+            Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
+            flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
+          end
+
+          redirect url(:notifications)
+        else
+          flash.now[:error] = "Error while sending message. Try again."
+          render 'web/notifications/new'
+        end
       else
-        flash.now[:error] = "Error while sending message. Try again."
+        flash.now[:error] = "Limit exceeded. Please contact notifyme team."
         render 'web/notifications/new'
       end
     else
-      flash.now[:error] = "Limit exceeded. Please contact notifyme team."
+      flash.now[:error] = "Invalid source email address."
       render 'web/notifications/new'
     end
   

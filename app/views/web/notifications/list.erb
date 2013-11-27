@@ -26,6 +26,7 @@
                     <th>Scheduled</th>
                     <th>Sent On</th>
                     <th>Sponsor</th>
+                    <th>Source</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,9 +46,16 @@
                         <% end %>
                         <td>
                             <% if notification.sponsor.blank? %>
-                            none
+                            -
                             <% else %>
                             <%= notification.sponsor.name %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <% if notification.subscriber.blank? %>
+                            -
+                            <% else %>
+                            <%= notification.subscriber.name %>
                             <% end %>
                         </td>
                     </tr>

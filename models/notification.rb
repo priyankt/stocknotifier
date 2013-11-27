@@ -25,6 +25,8 @@ class Notification
 
   belongs_to :publisher
   belongs_to :sponsor, :required => false
+  belongs_to :subscriber, :required => false
+  
   has n, :viewedNotifications
   has n, :comments
 
