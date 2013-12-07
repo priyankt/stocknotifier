@@ -8,7 +8,7 @@ namespace :resque do
     require 'resque_scheduler'
     require 'resque/scheduler'
     
-    ENV['QUEUES'] = '*'
+    ENV['QUEUES'] = 'notifyme_send_email,notifyme_send_notification'
     # ENV['VERBOSE']  = '1' # Verbose Logging
     # ENV['VVERBOSE'] = '1' # Very Verbose Logging
   end
