@@ -120,55 +120,61 @@ StockNotifier::App.controllers do
 
   post :new_notification, :map => '/notifications/new' do
 
-    if params[:notification][:sponsor_id].blank?
-      params[:notification].delete('sponsor_id')
-    end
+    begin
+      if params[:notification][:sponsor_id].blank?
+        params[:notification].delete('sponsor_id')
+      end
 
-    puts params.inspect
-    @notification = Notification.new(params[:notification])
+      @notification = Notification.new(params[:notification])
 
-    if params[:notification][:schedule_dttm].blank?
-      @notification.schedule_dttm = nil
-    else
-      # change timezone to IST
-      @notification.schedule_dttm = @notification.schedule_dttm.change(:offset => "+0530")
-      @notification.sent = false
-    end
+      if params[:notification][:schedule_dttm].blank?
+        @notification.schedule_dttm = nil
+      else
+        # change timezone to IST
+        @notification.schedule_dttm = @notification.schedule_dttm.change(:offset => "+0530")
+        @notification.sent = false
+      end
 
-    # Assign publisher
-    @notification.publisher = @publisher
+      # Assign publisher
+      @notification.publisher = @publisher
 
-    if params[:source].present?
-      source = @publisher.subscribers.first(:email => params[:source])      
-    end
+      if params[:source].present?
+        source = @publisher.subscribers.first(:email => params[:source])      
+      end
 
-    if source.present?
-      # Assign Source
-      @notification.subscriber_id = source.id
-    
-      if @publisher.notifications.count <= @publisher.msg_limit
-        if @notification.valid?
-          @notification.save
-          if @notification.schedule_dttm.nil?
-            Resque.enqueue(SendNotification, @notification.id)
-            flash[:success] = "Message sent successfully."
-          else
-            Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
-            flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
-          end
+      if params[:source].present? and source.blank?
+        raise "Source email address is not registered with our app."
+      end
 
-          redirect url(:notifications)
+      if source.present?
+        # Assign Source
+        @notification.subscriber_id = source.id
+      end
+
+      if @publisher.notifications.count > @publisher.msg_limit
+        raise "Limit exceeded. Please contact notifyme team."
+      end
+
+      if @notification.valid?
+        @notification.save
+        if @notification.schedule_dttm.nil?
+          Resque.enqueue(SendNotification, @notification.id)
+          flash[:success] = "Message sent successfully."
         else
-          flash.now[:error] = "Error while sending message. Try again."
-          render 'web/notifications/new'
+          Resque.enqueue_at(@notification.schedule_dttm, SendNotification, @notification.id)
+          flash[:later] = "Your message will be sent on " + format_date(@notification.schedule_dttm)
         end
       else
-        flash.now[:error] = "Limit exceeded. Please contact notifyme team."
-        render 'web/notifications/new'
+        raise "Error while sending message. Please try again."
       end
-    else
-      flash.now[:error] = "Invalid source email address."
-      render 'web/notifications/new'
+
+      redirect url(:notifications)
+      
+    rescue Exception => e
+
+        flash.now[:error] = e.message
+        render 'web/notifications/new'
+
     end
   
   end

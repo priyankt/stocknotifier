@@ -93,7 +93,8 @@ StockNotifier::Api.controllers do
         :display_image => display_image, # stub image when no image is uploaded with message
         :updated_at => n.sent_dttm,
         :comment_count => 0,
-        :sponsor => (n.sponsor.blank? ? nil : n.sponsor.format_for_app)
+        :sponsor => (n.sponsor.blank? ? nil : n.sponsor.format_for_app),
+        :subscriber => (n.subscriber.blank? ? nil : n.subscriber.format_for_app)
       })
 
     end
@@ -161,25 +162,18 @@ StockNotifier::Api.controllers do
 
   get :profile, :map => '/profile' do
 
-    data = {
-      :id => @subscriber.id,
-      :email => @subscriber.email,
-      :name => @subscriber.name,
-      :phone => @subscriber.phone,
-      :occupation => @subscriber.occupation,
-      :city => @subscriber.city
-    }
-
-    data.to_json
+    @subscriber.format_for_app.to_json
 
   end
 
   put :profile, :map => '/profile' do
 
+    @subscriber.email = params[:email] if params.has_key?('email')
     @subscriber.name = params[:name] if params.has_key?('name')
     @subscriber.phone = params[:phone] if params.has_key?('phone')
     @subscriber.occupation = params[:occupation] if params.has_key?('occupation')
     @subscriber.city = params[:city] if params.has_key?('city')
+    @subscriber.profile_pic = params[:profile_pic] if params.has_key?('profile_pic')
     
     if @subscriber.valid?
       @subscriber.save
@@ -244,8 +238,10 @@ StockNotifier::Api.controllers do
 
       ret.push({
         :text => c.text,
+        :subscriber_id => c.subscriber.id,
         :name => c.subscriber.name,
-        :dttm => c.created_at
+        :dttm => c.created_at,
+        :image => (c.subscriber.profile_pic ? {:thumb => c.subscriber.profile_pic.thumb.url, :main => c.subscriber.profile_pic.main.url, :url => c.subscriber.profile_pic.url} : nil)
       })
 
     end
@@ -292,6 +288,22 @@ StockNotifier::Api.controllers do
     #end
 
     ret.to_json
+
+  end
+
+  get :display_profile, :map => '/user/:id/profile' do
+
+    user = Subscriber.get(params[:id])
+    if user.present?
+      ret = user.format_for_app
+      ret[:comments_count] = user.comments.count
+      ret[:news_count] = user.notifications.count
+      ret[:places_count] = user.places.count
+    else
+      ret = {:success => 0, :errors => ['Error: User does not exists.']}
+    end
+
+    return ret.to_json
 
   end
 

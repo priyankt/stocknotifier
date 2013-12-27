@@ -1,8 +1,8 @@
 God.watch do |w|
-	w.name = 'resque'
+	w.name = 'notifyme-resque'
 	w.interval = 30.seconds
 	w.env = { 'RAILS_ENV' => 'production',
-	'QUEUE' => '*' }
+	'QUEUE' => 'notifyme_send_email,notifyme_send_notification', 'BUNDLE_GEMFILE' => "#{padrino_root}/Gemfile" }
 	w.dir = File.expand_path(File.join(File.dirname(__FILE__),'..'))
 	w.start = "bundle exec padrino rake resque:work -e production"
 	w.start_grace = 10.seconds

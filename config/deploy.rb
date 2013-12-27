@@ -81,13 +81,13 @@ end
 
 desc "Hot-reload God configuration for the Resque worker"
 deploy.task :reload_god_config do
-	run "god stop resque"
+	run "god stop notifyme-resque"
 	run "god load #{File.join deploy_to, 'current', 'config', 'resque.god'}"
-	run "god start resque"
+	run "god start notifyme-resque"
 
-	run "god stop resque-scheduler"
+	run "god stop notifyme-resque-scheduler"
 	run "god load #{File.join deploy_to, 'current', 'config', 'resque_scheduler.god'}"
-	run "god start resque-scheduler"
+	run "god start notifyme-resque-scheduler"
 end
 
 after :deploy, "gems:install", "database:upgrade", "deploy:reload_god_config"

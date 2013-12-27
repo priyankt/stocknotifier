@@ -24,15 +24,15 @@ StockNotifier::Api.controllers do
           status 400
         end
       else
-        ret = {:success => 0, :registered_user => 1, :errors => ['Invalid password']}
+        ret = {:success => 0, :registered_user => 1, :errors => ['Invalid password. Please try again.']}
         status 401
       end
     else
-      ret = {:success => 0, :registered_user => 0, :errors => ['Invalid subscriber']}
+      ret = {:success => 0, :registered_user => 0, :errors => ['Invalid email or password. Please try again.']}
       status 400
     end
     
-    ret.to_json
+    return ret.to_json
 
   end
 
@@ -64,7 +64,7 @@ StockNotifier::Api.controllers do
       ret = {:success => 0, :errors => ["Invalid email: #{params[:email]}"]}
     end
 
-    ret.to_json
+    return ret.to_json
 
   end
 
@@ -80,7 +80,8 @@ StockNotifier::Api.controllers do
       :city => params[:city],
       :occupation => params[:occupation],
       :phone => params[:phone],
-      :api_key => api_key
+      :api_key => api_key,
+      :profile_pic => params[:profile_pic]
     )
 
     subscriber.publisher = Publisher.get(params[:publisher_id])
@@ -107,8 +108,15 @@ StockNotifier::Api.controllers do
       status 400
     end
 
-    ret.to_json
+    return ret.to_json
     
+  end
+
+  # Return terms and conditions
+  get :policy, :map => '/policy' do
+
+    return {:success => 1, :policy => 'Sample policy'}.to_json
+
   end
 
 end
