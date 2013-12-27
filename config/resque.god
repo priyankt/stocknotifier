@@ -1,3 +1,5 @@
+padrino_root = File.expand_path(File.join(File.dirname(__FILE__),'..'))
+
 God.watch do |w|
 	w.name = 'notifyme-resque'
 	w.interval = 30.seconds
